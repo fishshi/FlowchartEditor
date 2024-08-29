@@ -188,11 +188,6 @@ background-position: center;</string>
      <widget class="QWidget" name="widget_2" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QWidget" name="StylePanel" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_5"/>
-        </widget>
-       </item>
-       <item>
         <widget class="QScrollArea" name="scrollArea_Painter">
          <property name="widgetResizable">
           <bool>true</bool>
@@ -203,7 +198,7 @@ background-position: center;</string>
             <x>0</x>
             <y>0</y>
             <width>1070</width>
-            <height>741</height>
+            <height>757</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">

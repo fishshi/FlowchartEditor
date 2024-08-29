@@ -39,17 +39,6 @@ void Canvas::resetFlowChartPanel()
     line.reserve(0);
     line.resize(0);
     mouseEventType = MOUSE_EVENT_TYPE::NONE;
-    fileIsOpened = false;
-    fileIsSaved = true;
-    filePath = "";
-}
-
-void Canvas::setFileSetSaved(bool isSaved)
-{
-    if(fileIsSaved != isSaved)
-    {
-        fileIsSaved = isSaved;
-    }
 }
 
 void Canvas::setSelChartLineColor(const QColor &color)
@@ -62,11 +51,6 @@ void Canvas::setSelChartFillColor(const QColor &color)
 {
     curSelecChart->paintChartFillPen.setColor(color);
     curSelecChart->update();
-}
-
-void Canvas::setMousePressedFlag(MOUSE_EVENT_TYPE f)
-{
-    mouseEventType = f;
 }
 
 void Canvas::setPaintChart()
@@ -127,112 +111,6 @@ void Canvas::setSelecChart(FlowchartElement * cb, int x, int y)
     {
         emit sendLineStyle(cl->paintChartDrawPen,cl->getStartLineHeadType(),cl->getEndLineHeadType());
     }
-}
-
-bool Canvas::openChartFile()
-{
-    if(!fileIsSaved)
-    {
-        QMessageBox tmp(QMessageBox::Warning,tr("警告！"),tr("不保存文件就关闭？"),QMessageBox::NoButton,this->parentWidget());
-        QPushButton *saveclose = tmp.addButton(tr("保存并关闭"),QMessageBox::ActionRole);
-        QPushButton *nosaveclose = tmp.addButton(tr("不保存关闭"),QMessageBox::AcceptRole);
-        QPushButton *cancel = tmp.addButton(tr("取消"),QMessageBox::RejectRole);
-        tmp.exec();
-        if(tmp.clickedButton() == saveclose)
-        {
-            if(saveChartFile())
-            {
-                resetFlowChartPanel();
-            }else
-                return false;
-        }else if(tmp.clickedButton() == nosaveclose)
-        {
-            resetFlowChartPanel();
-        }else if(tmp.clickedButton() == cancel)
-        {
-            return true;
-        }
-    }
-    resetFlowChartPanel();
-    QString tmpFilePath = QFileDialog::getOpenFileName(this,tr("打开文件"),"F:",tr("FCT文件(*.fct)"));
-    if(tmpFilePath == "") return false;
-
-    if(loadFile(tmpFilePath) == false)
-    {
-        QMessageBox::critical(this->parentWidget(),tr("错误！"),tr("打开文件失败！\n文件损坏或类型不正确"),QMessageBox::Ok);
-        return false;
-    }else
-    {
-        fileIsOpened = true;
-        this->filePath = tmpFilePath;
-        qDebug()<<"Load File Success"<<fileIsSaved;
-    }
-    qDebug()<<"charts size:"<<charts.size()<<" line size::"<<line.size();
-    return true;
-}
-
-bool Canvas::saveChartFile()
-{
-    if(fileIsSaved)
-    {
-        return true;
-    }else
-    {
-        if(fileIsOpened)
-        {
-            if(saveFile(filePath))
-            {
-                filePath = "";
-            }else
-            {
-                QMessageBox::critical(this->parentWidget(),tr("错误！"),tr("保存文件失败！\n文件已占用或者访问权限不足"),QMessageBox::Ok);
-                return false;
-            }
-        }else{
-            QString tmpFilePath = QFileDialog::getSaveFileName(this,tr("保存文件"),"F:",tr("FCT文件(*.fct)"));
-            if(tmpFilePath == "") return false;
-            if(saveFile(tmpFilePath))
-            {
-                filePath = tmpFilePath;
-                fileIsOpened = true;
-            }else
-            {
-                QMessageBox::critical(this->parentWidget(),tr("错误！"),tr("保存文件失败！\n文件已占用或者访问权限不足"),QMessageBox::Ok);
-                return false;
-            }
-        }
-        setFileSetSaved(true);
-    }
-    return true;
-}
-bool Canvas::newChartFile()
-{
-    if(!fileIsSaved)
-    {
-        QMessageBox tmp(QMessageBox::Warning,tr("警告！"),tr("不保存文件就关闭？"),QMessageBox::NoButton,this->parentWidget());
-        QPushButton *saveclose = tmp.addButton(tr("保存并关闭"),QMessageBox::ActionRole);
-        QPushButton *nosaveclose = tmp.addButton(tr("不保存关闭"),QMessageBox::AcceptRole);
-        QPushButton *cancel = tmp.addButton(tr("取消"),QMessageBox::RejectRole);
-        tmp.exec();
-        if(tmp.clickedButton() == saveclose)
-        {
-            if(saveChartFile())
-            {
-                resetFlowChartPanel();
-            }else{
-                return false;
-            }
-
-        }else if(tmp.clickedButton() == nosaveclose)
-        {
-            resetFlowChartPanel();
-        }else if(tmp.clickedButton() == cancel)
-        {
-        }
-    }else{
-        resetFlowChartPanel();
-    }
-    return true;
 }
 
 void Canvas::addChart(FlowchartElement *cb)
@@ -318,135 +196,12 @@ void Canvas::hideMagSizeAll()
     emit disableStyle();
 }
 
-bool Canvas::saveFile(QString filePath)
-{
-    QFile file(filePath);
-    file.open(QIODevice::WriteOnly);
-    QDataStream fout(&file);
-
-    FlowchartElement::saveStaticValue(fout);
-    unsigned long long i;
-    i = charts.size();
-    fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(unsigned long long));
-    for(auto it = charts.begin(); it!=charts.end(); it++)
-    {
-        fout<<*(*it);
-    }
-    i = line.size();
-    fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(unsigned long long));
-    for(auto it = line.begin(); it!=line.end(); it++)
-    {
-        fout<<*(*it)<<*(reinterpret_cast<const Line*>(*it));
-    }
-    file.close();
-    return true;
-}
-
-bool Canvas::loadFile(QString filePath)
-{
-    QFile file(filePath);
-    file.open(QIODevice::ReadOnly);
-    QDataStream fin(&file);
-    std::map<int,FlowchartElement*> chartMap;
-
-    FlowchartElement::loadStaticValue(fin);
-    unsigned long long cnt;
-    fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    qDebug()<<"图形个数："<<cnt;
-    for(unsigned long long i = 0;i<cnt;i++)
-    {
-        PaintChartType tmp;
-        FlowchartElement *cb;
-        fin.readRawData(reinterpret_cast<char*>(&tmp),sizeof(PaintChartType));
-        switch(tmp)
-        {
-
-            case PaintChartType::RECT:
-            {
-                cb = new ProcessElement(this);
-            }break;
-            case PaintChartType::DIAMOND:
-            {
-                cb = new DecisionElement(this);
-            }break;
-            case PaintChartType::ROUNDRECT:
-            {
-                cb = new StartEndElement(this);
-            }break;
-            case PaintChartType::ELLIPSE:
-            {
-                cb = new ConnectorElement(this);
-            }break;
-            case PaintChartType::PARALLELOGRAM:
-            {
-                cb = new DataElement(this);
-            }break;
-            default:case PaintChartType::NONE:{
-                cb = nullptr;
-            }break;
-        }
-        cb->chartType = tmp;
-        fin>>(*cb);
-        connect(cb,SIGNAL(sendThisClass(FlowchartElement *, int,int)),this,SLOT(setSelecChart(FlowchartElement *, int,int)));
-        connect(cb,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
-        connect(cb,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
-        addChart(cb);
-        cb->applyWidthHeight();
-        cb->update();
-        cb->show();
-        chartMap[cb->getID()] = cb;
-    }
-    fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    qDebug()<<"连线个数："<<cnt;
-    for(unsigned long long i = 0;i<cnt;i++)
-    {
-        PaintChartType tmp;
-        FlowchartElement *cb;
-        Line *cl;
-        int id;
-        fin.readRawData(reinterpret_cast<char*>(&tmp),sizeof(PaintChartType));
-        cb = new Line(this);
-        addLine(cb);
-        if(nullptr == (cl = dynamic_cast<Line*>(cb))) qDebug()<<"error";
-        fin>>(*cb)>>(*cl);
-        try{
-            fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-            if(id>=0)
-            {
-                FlowchartElement *cbs = chartMap.at(id);
-                cbs->addMagiPointStartLine(cl->getStartMagIndex(),cl);
-                cl->setStartChart(cbs);
-            }
-        }catch(std::out_of_range &oor){
-            qDebug()<<oor.what()<<"Not Found Start chart.";
-        }
-        try{
-            fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-            if(id>=0)
-            {
-                FlowchartElement *cbe = chartMap.at(id);
-                cbe->addMagiPointEndLine(cl->getEndMagIndex(),cl);
-                cl->setEndChart(cbe);
-            }
-        }catch(std::out_of_range &oor){
-            qDebug()<<oor.what()<<"Not Found End chart.";
-        }
-        connect(cl,SIGNAL(sendThisClass(FlowchartElement *, int,int)),this,SLOT(setSelecChart(FlowchartElement *, int,int)));
-        connect(cl,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
-        cl->applyWidthHeight();
-        cl->update();
-        cl->show();
-    }
-    hideMagSizeAll();
-    return true;
-}
-
 void Canvas::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
     p.setPen(QColor(150,150,150));
     const int gap = 30;
-    for(int i = 1;i * gap < width(); ++i)
+    for(int i = 0;i * gap < width(); ++i)
         for(int j = 0; j * gap < height(); ++j)
             p.drawPoint(i * gap, j * gap);
 
@@ -644,7 +399,6 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
 
             curPaintChart = nullptr;
             mouseEventType = MOUSE_EVENT_TYPE::NONE;
-            setFileSetSaved(false);
             event->accept();
         }break;
         case MOUSE_EVENT_TYPE::RUNTIME_CHANGE_SIZE:
@@ -691,7 +445,6 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
             }
             mouseEventType = MOUSE_EVENT_TYPE::NONE;
             lineSelectChart = nullptr;
-            setFileSetSaved(false);
             event->accept();
         }break;
         case MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT:
@@ -713,13 +466,11 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
             newLineChart = nullptr;
             newLineFromSelectChart = nullptr;
             newLineToSelectChart = nullptr;
-            setFileSetSaved(false);
             event->accept();
         }break;
         case MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS:
         {
             mouseEventType = MOUSE_EVENT_TYPE::NONE;
-            setFileSetSaved(false);
             event->accept();
         }break;
         default:case MOUSE_EVENT_TYPE::NONE:

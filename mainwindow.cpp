@@ -10,6 +10,5 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    ui->canvas->newChartFile();
     delete ui;
 }

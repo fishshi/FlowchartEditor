@@ -52,13 +52,8 @@ private:
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 
-    bool fileIsOpened = false;      // 是否打开了文件
-    bool fileIsSaved = true;        // 是否保存了文件
-    QString filePath;               // 打开文件的路径
-
     void initVar();             // 变量默认初始化函数
     void resetFlowChartPanel(); // 重置流图画板
-    void setFileSetSaved(bool isSaved);     // 设置文件未保存
     void clearChartsLine(){                 // 释放图形、连线内存
         for(auto it = charts.begin();it!=charts.end();it++) {
             if(*it) delete *it;
@@ -74,7 +69,6 @@ public:
     explicit Canvas(QWidget *parent = nullptr , Qt::WindowFlags f = Qt::WindowFlags());
     virtual ~Canvas()
     {
-        newChartFile();
         clearChartsLine();
     }
 
@@ -85,8 +79,6 @@ public:
     void addLine(FlowchartElement *cb);       // 添加线条到线条容器
     bool delLine(FlowchartElement *&cb);       // 添加图形
     void hideMagSizeAll();              // 隐藏所有元素
-    bool saveFile(QString filePath);    // 保存文件
-    bool loadFile(QString filePath);    // 读取文件
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
@@ -112,7 +104,6 @@ public:
     void setSelChartFillColor(const QColor &color);     // 设置图形填充颜色
 
 public slots:
-    void setMousePressedFlag(MOUSE_EVENT_TYPE);         // 设置鼠标按下事件类型
     void setPaintChart();                           // 设置将要绘制的图形
     void setSelecChart(FlowchartElement *, int ,int);     // 设置选中的画板的图像
 
@@ -133,9 +124,5 @@ public slots:
         magPointFromIndex = i;
         newLineChart = nullptr;
     }
-
-    bool openChartFile();   // 打开文件
-    bool saveChartFile();   // 保存文件
-    bool newChartFile();    // 新建文件
 };
 #endif // FLOWCHART_H

@@ -677,57 +677,6 @@ void FlowchartElement::overlapChartMouseMove(QMouseEvent *event)
         }
     }
 }
-void FlowchartElement::deleteThisChart()
-{
-}
-void FlowchartElement::saveStaticValue(QDataStream &fout)
-{
-    fout.writeRawData(reinterpret_cast<const char*>(&FlowchartElement::magPointWidth),sizeof(int));
-    fout.writeRawData(reinterpret_cast<const char*>(&FlowchartElement::sizePointWidth),sizeof(int));
-    fout.writeRawData(reinterpret_cast<const char*>(&FlowchartElement::pointLineWidth),sizeof(int));
-    //fout.writeRawData(reinterpret_cast<const char*>(&FlowchartElement::chartIDCount),sizeof(int));
-    qDebug()<<magPointWidth<<" "<<sizePointWidth<<" "<<pointLineWidth<<" "<<chartIDCount;
-}
-void FlowchartElement::loadStaticValue(QDataStream &fin)
-{
-    fin.readRawData(reinterpret_cast<char*>(&FlowchartElement::magPointWidth),sizeof(int));
-    fin.readRawData(reinterpret_cast<char*>(&FlowchartElement::sizePointWidth),sizeof(int));
-    fin.readRawData(reinterpret_cast<char*>(&FlowchartElement::pointLineWidth),sizeof(int));
-    //fin.readRawData(reinterpret_cast<char*>(&FlowchartElement::chartIDCount),sizeof(int));
-    qDebug()<<"static value:"<<magPointWidth<<" "<<sizePointWidth<<" "<<pointLineWidth<<" "<<chartIDCount;
-}
-QDataStream &operator<<(QDataStream &fout,  const FlowchartElement &cb)
-{
-    fout.writeRawData(reinterpret_cast<const char*>(&cb.chartType),sizeof(PaintChartType));
-    fout.writeRawData(reinterpret_cast<const char*>(&cb.ID),sizeof(int));
-    fout<<cb.chartText;//<<cb.magPoint;
-    fout<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.paintStart.rx()),sizeof(int));
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.paintEnd.rx()),sizeof(int));
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.widgetStart.rx()),sizeof(int));
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.widgetEnd.rx()),sizeof(int));
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.paintChartDrawPen),sizeof(QPen));
-//    fout.writeRawData(reinterpret_cast<char*>(&cb.paintChartFillPen),sizeof(QBrush));
-    fout.writeRawData(reinterpret_cast<const char*>(&cb.movable),sizeof(bool));
-    qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
-    return fout;
-}
-QDataStream &operator>>(QDataStream &fin, FlowchartElement &cb)
-{
-    //fin.readRawData(reinterpret_cast<char*>(&cb.chartType),sizeof(PaintChartType));
-    fin.readRawData(reinterpret_cast<char*>(&cb.ID),sizeof(int));
-    fin>>cb.chartText;//>>cb.magPoint;
-    fin>>cb.paintStart>>cb.paintEnd>>cb.widgetStart>>cb.widgetEnd>>cb.paintChartDrawPen>>cb.paintChartFillPen;
-   // fin.readRawData(reinterpret_cast<char*>(&cb.paintStart.rx()),sizeof(int));
-   // fin.readRawData(reinterpret_cast<char*>(&cb.paintEnd.rx()),sizeof(int));
-   // fin.readRawData(reinterpret_cast<char*>(&cb.widgetStart.rx()),sizeof(int));
-   // fin.readRawData(reinterpret_cast<char*>(&cb.widgetEnd.rx()),sizeof(int));
-   // fin.readRawData(reinterpret_cast<char*>(&cb.paintChartDrawPen),sizeof(QPen));
-   // fin.readRawData(reinterpret_cast<char*>(&cb.paintChartFillPen),sizeof(QBrush));
-    fin.readRawData(reinterpret_cast<char*>(&cb.movable),sizeof(bool));
-    qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
-    return fin;
-}
 
 void FlowchartElement::showMagSize()
 {
@@ -749,7 +698,6 @@ void FlowchartElement::hideMagSize()
             delete chartText.tmpEdit1;
             chartText.tmpEdit1 = nullptr;
         }
-        //curFlag = MOUSE_EVENT_TYPE::NONE;
         update();
     }
 }
@@ -781,9 +729,6 @@ void FlowchartElement::hideMagOnly()
         update();
     }
 }
-
-
-
 
 void FlowchartElement::paintEvent(QPaintEvent *event)
 {
@@ -836,6 +781,7 @@ void FlowchartElement::mousePressEvent(QMouseEvent *event)
         event->ignore();
     }
 }
+
 void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
 {
     if(curFlag == MOUSE_EVENT_TYPE::NONE)
@@ -921,8 +867,8 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
     {
         event->ignore();
     }
-
 }
+
 void FlowchartElement::mouseReleaseEvent(QMouseEvent *event)
 {
     chartText.textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
@@ -931,6 +877,7 @@ void FlowchartElement::mouseReleaseEvent(QMouseEvent *event)
 
     event->ignore();
 }
+
 void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(inPath(event->pos()))
@@ -946,7 +893,8 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
         chartText.tmpEdit1->setFocus();
 
         this->grabKeyboard();
-    }else{
+    }else
+    {
         event->ignore();
     }
 }

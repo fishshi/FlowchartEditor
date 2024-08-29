@@ -8,7 +8,6 @@ double Line::arrayWidth15 = 0;
 
 void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,const int y,QPainter & p,QPainterPath &linePath, QPainterPath &graphPath)
 {
-
     switch(o)
     {
         case ORIENTION::NORTH:{
@@ -99,7 +98,7 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
         case ORIENTION::NORTHEAST:{
             linePath.moveTo(x + extendWidth45,y - extendWidth45);
             linePath.lineTo(x + arrayLength45,y - arrayLength45);
-            //graphPath.addRect(x,y - containsWidth1_2,-extendWidth,containsWidth);
+
 
             QPolygonF tmp;
             tmp<<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45))
@@ -128,7 +127,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
         case ORIENTION::NORTHWEST:{
             linePath.moveTo(x - extendWidth45,y - extendWidth45);
             linePath.lineTo(x - arrayLength45,y - arrayLength45);
-            //graphPath.addRect(x,y - containsWidth1_2,-extendWidth,containsWidth);
 
             QPolygonF tmp;
             tmp<<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45))
@@ -157,7 +155,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
         case ORIENTION::SOUTHWEST:{
             linePath.moveTo(x - extendWidth45,y + extendWidth45);
             linePath.lineTo(x - arrayLength45,y + arrayLength45);
-            //graphPath.addRect(x,y - containsWidth1_2,-extendWidth,containsWidth);
 
             QPolygonF tmp;
             tmp<<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45))
@@ -187,7 +184,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
         case ORIENTION::SOUTHEAST:{
             linePath.moveTo(x + extendWidth45,y + extendWidth45);
             linePath.lineTo(x + arrayLength45,y + arrayLength45);
-            //graphPath.addRect(x,y - containsWidth1_2,-extendWidth,containsWidth);
 
             QPolygonF tmp;
             tmp<<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45))
@@ -423,7 +419,6 @@ void Line::paintChart(QPainter & p)
                 {
                 }
             }
-            //linePath.lineTo(endPos.rx(),endPos.ry());
         }break;
         case ORIENTION::EAST:{
 
@@ -593,7 +588,6 @@ void Line::paintChart(QPainter & p)
                 {
                 }
             }
-            //linePath.lineTo(endPos.rx(),endPos.ry());
         }break;
         case ORIENTION::SOUTH:
         {
@@ -759,7 +753,6 @@ void Line::paintChart(QPainter & p)
                 {
                 }
             }
-            //linePath.lineTo(endPos.rx(),endPos.ry());
         }break;
         case ORIENTION::WEST:
         {
@@ -1188,34 +1181,13 @@ void Line::paintChart(QPainter & p)
         default:{
         }
     }
-
-//    linePath.lineTo(midx,startPos.ry());
-//    linePath.lineTo(midx,endPos.ry());
-//    linePath.lineTo(endPos.rx(),endPos.ry());
-
-
     p.drawPath(linePath);
-//    graphPath->addRect(startPos.rx(),startPos.ry()-containsWidth1_2,midx-startPos.rx(),containsWidth);
-//    graphPath->addRect(midx-containsWidth1_2,startPos.ry()-containsWidth1_2,containsWidth,endPos.ry()-startPos.ry()+containsWidth);
-//    graphPath->addRect(midx-containsWidth1_2,endPos.ry()-containsWidth1_2,endPos.rx()-midx+containsWidth,containsWidth);
     p.setPen(QPen(QColor(0,0,0,0),0));
     graphPath->setFillRule(Qt::WindingFill);
     p.drawPath(*graphPath);
-    //p.fillPath(*graphPath,QBrush(QColor(255,255,100,200)));
-
     p.setPen(tmp);
 }
 
-void Line::updateMagPointInfo()
-{
-//    magPoint.i_point[0]->setX(startPos.rx());
-//    magPoint.i_point[0]->setY(startPos.ry());
-//    magPoint.i_point[0]->setRotate(ORIENTION::STARTPOINT);
-//    magPoint.i_point[1]->setX(endPos.rx());
-//    magPoint.i_point[1]->setY(endPos.ry());
-//    magPoint.i_point[1]->setRotate(ORIENTION::ENDPOINT);
-
-}
 void Line::updateSizePointInfo()
 {
     if(widgetStart.rx() > widgetEnd.rx())
@@ -1245,6 +1217,7 @@ void Line::updateSizePointInfo()
     sizePoint.i_point[1]->setY(endPos.ry());
     sizePoint.i_point[1]->setRotate(ORIENTION::ENDPOINT);
 }
+
 void Line::specialWidgetUpdate(int &x,int &y, int &w, int &h)
 {
     x -= extendWidth;
@@ -1252,46 +1225,11 @@ void Line::specialWidgetUpdate(int &x,int &y, int &w, int &h)
     w += extendWidth + extendWidth;
     h += extendWidth + extendWidth;
 }
+
 void Line::specialPaintUpdate(QPoint &s, QPoint &e)
 {
     s.setX(s.rx() + extendWidth);
     s.setY(s.ry() + extendWidth);
     e.setX(e.rx() + extendWidth);
     e.setY(e.ry() + extendWidth);
-}
-QDataStream &operator<<(QDataStream &fout, const Line &cl)
-{
-    fout<<cl.startPos<<cl.endPos;
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.startDirect),sizeof(ORIENTION));
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.endDirect),sizeof(ORIENTION));
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.startMagIndex),sizeof(int));
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.endMagIndex),sizeof(int));
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
-    fout.writeRawData(reinterpret_cast<const char*>(&cl.endLineHeadType),sizeof(LINE_HEAD_TYPE));
-    if(cl.startChartMag)
-        fout.writeRawData(reinterpret_cast<const char*>(&cl.startChartMag->getID()),sizeof(int));
-    else{
-        int i = -1;
-        fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(int));
-    }
-    if(cl.endChartMag)
-        fout.writeRawData(reinterpret_cast<const char*>(&cl.endChartMag->getID()),sizeof(int));
-    else{
-        int i = -1;
-        fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(int));
-    }
-
-    return fout;
-}
-QDataStream &operator>>(QDataStream &fin, Line &cl)
-{
-    fin>>cl.startPos>>cl.endPos;
-    fin.readRawData(reinterpret_cast<char*>(&cl.startDirect),sizeof(ORIENTION));
-    fin.readRawData(reinterpret_cast<char*>(&cl.endDirect),sizeof(ORIENTION));
-    fin.readRawData(reinterpret_cast<char*>(&cl.startMagIndex),sizeof(int));
-    fin.readRawData(reinterpret_cast<char*>(&cl.endMagIndex),sizeof(int));
-    fin.readRawData(reinterpret_cast<char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
-    fin.readRawData(reinterpret_cast<char*>(&cl.endLineHeadType),sizeof(LINE_HEAD_TYPE));
-
-    return fin;
 }

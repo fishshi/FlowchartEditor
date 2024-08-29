@@ -15,19 +15,16 @@
 #include <QSizePolicy>
 
 #include <vector>
-#include <algorithm>
 
 #include "../config.h"
 
 #include "label.h"
 
-#include <fstream>
-#include <QDataStream>
-
 class FlowchartElement :public QWidget
 {
     Q_OBJECT
     friend class Canvas;
+    friend class Controller;
 private:
     static int magPointWidth;                   // Padding信息-磁力点宽度
     static int sizePointWidth;                  // Padding信息-大小点宽度
@@ -45,7 +42,6 @@ private:
     ORIENTION curIndex = ORIENTION::NONE;               // 当前选中大小点、磁力点方向
     PaintChartType chartType = PaintChartType::NONE;    // 图形类型
     int ID;         // 图形编号
-
 
     static void resetStaticVal(){
         FlowchartElement::magPointWidth = 7;
@@ -72,7 +68,6 @@ private:
     virtual void updateMagPointLine();  // 更新磁力点上连线的位置信息
     void updateTextInfo();              // 更新显示文本的信息
 
-
     virtual void paintChart(QPainter & p) = 0;  // 绘制图形
     void paintSizePoint(QPainter & p);          // 绘制大小点
     virtual void paintSizeEdge(QPainter & p);   // 绘制大小边界
@@ -83,13 +78,8 @@ private:
     bool inMagPath(const QPointF &p, ORIENTION &b, int &index) const;                                           // 是否在磁力点范围内
     bool inSizePath(const QPointF &p, ORIENTION &b) const;                                                      // 是否在大小点范围内
 
-
-
     void setStartPos(int x,int y);
     void setEndPos(int x,int y);
-
-
-
 
 protected:
     class TextBase {
@@ -118,42 +108,14 @@ protected:
         union{// 鼠标移动标识符
             CHART_LABEL_MOUSE_TYPE textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
         };
-        friend QDataStream &operator<<(QDataStream &fout,  const TextBase &tb)
-        {
-            fout.writeRawData(reinterpret_cast<const char*>(&tb.textType),sizeof(bool));
-
-            QLabel * ql = tb.textType1;
-            fout<<ql->geometry()<<ql->text().toUtf8().length();
-            fout.writeRawData(ql->text().toUtf8().data(),ql->text().toUtf8().length());
-            //fout.writeRawData(reinterpret_cast<char*>(tb.tmpEdit1),sizeof(QLineEdit));
-
-            return fout;
-        }
-        friend QDataStream &operator>>(QDataStream &fin, TextBase &tb)
-        {
-            fin.readRawData(reinterpret_cast<char*>(&tb.textType),sizeof(bool));
-            QRect tmpqr;
-            fin>>tmpqr;
-
-            QLabel * ql = tb.textType1;
-            ql->setGeometry(tmpqr);
-            int len;
-            fin>>len;
-            QByteArray tmp(len+1,'\0');
-            fin.readRawData(tmp.data(),len);
-            ql->setText(QString(tmp));
-            //fin.readRawData(reinterpret_cast<char*>(tb.tmpEdit1),sizeof(QLineEdit));
-
-            return fin;
-        }
     }chartText; // 文本控件
 
     class i_pointbase   // 点基本信息
     {
     public:
-        QPoint *i_pos = nullptr;        // 点位置
-        QPainterPath *i_path = nullptr; // 点范围
-        ORIENTION rotate = ORIENTION::NONE;                 // 点方向
+        QPoint *i_pos = nullptr;            // 点位置
+        QPainterPath *i_path = nullptr;     // 点范围
+        ORIENTION rotate = ORIENTION::NONE; // 点方向
 
         i_pointbase():i_pos(nullptr),i_path(nullptr),rotate(ORIENTION::NONE){
 
@@ -185,12 +147,7 @@ protected:
     public:
         std::vector<FlowchartElement*> i_lineStart; // 每个磁力点连接的线的指针容器
         std::vector<FlowchartElement*> i_lineEnd; // 每个磁力点连接的线的指针容器
-        i_magpointbase() :i_pointbase(){
-
-        }
-        ~i_magpointbase(){
-            // i_line只存储不创建该类指针，因此不能执行析构
-        }
+        i_magpointbase() :i_pointbase(){}
     };
 
     class i_sizepoint{   // 大小点信息类结构
@@ -206,7 +163,6 @@ protected:
             }
         }
     };
-
 
     class i_magpoint{    // 磁力点信息类结构
     public:
@@ -291,12 +247,6 @@ public:
     void overlapChartMouseMove(QMouseEvent *event);     // 鼠标移动事件Z-index检测
     void setMovalbe(bool f);            // 设置可否移动位置
     int & getID(void){return ID;}       // 获得唯一ID值
-    void deleteThisChart();
-
-    static void saveStaticValue(QDataStream &fout); // 保存静态数据成员
-    static void loadStaticValue(QDataStream &fin);  // 加载静态数据成员
-    friend QDataStream &operator<<(QDataStream &fout, const  FlowchartElement &cb);   // 输出运算符重载
-    friend QDataStream &operator>>(QDataStream &fin, FlowchartElement &cb);           // 输入运算符重载
 
 signals:
     void sendThisClass(FlowchartElement *,int x,int y);       // 发送自己给画布

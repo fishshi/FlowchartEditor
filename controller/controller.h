@@ -3,24 +3,27 @@
 
 #include <QFileDialog>
 #include "../mainwindow.h"
-
-#include "model/config.h"
+#include "Drawer.h"
+#include "Updater.h"
 
 class Controller : public QObject
 {
     Q_OBJECT
 public:
     Controller(MainWindow *w);
-    ~Controller();
 
-private:
-    MainWindow *w;
-    void initConnections();
-
-public slots:
     void sendSelChartLineColor();
     void sendSelChartFillColor();
     void showRrightClickMenu(const QPoint &pos);
+
+private:
+    void initConnections();
+
+    MainWindow *w;
+    Drawer *drawer;
+    Updater updater;
+
+    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 };
 
 #endif // CONTROLLER_H

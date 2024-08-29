@@ -30,7 +30,6 @@ private:
 
     virtual void paintChart(QPainter & p);
     virtual void paintSizeEdge(QPainter & p){}
-    virtual void updateMagPointInfo();
     virtual void updateSizePointInfo();
     virtual void updateMagPointLine(){}
     virtual void specialWidgetUpdate(int &x,int &y, int &w, int &h);
@@ -69,6 +68,7 @@ public:
         qDebug()<<qRadiansToDegrees(qAtan(double(arrayWidth)/arrayLength))<<" "<<qDegreesToRadians(45.0)<<" "<<qDegreesToRadians(30.0)<<" "<<qDegreesToRadians(15.0);
         qDebug()<<arrayLength45<<" "<<arrayLength75<<" "<<arrayWidth75<<" "<<arrayLength15<<" "<<arrayWidth15;
     }
+
     Line(Line &cr):FlowchartElement(cr)
     {
         chartText.textType1->setAttribute(Qt::WA_StyledBackground,true);
@@ -76,7 +76,8 @@ public:
         chartText.textType1->setPalette(QPalette(QPalette::Window, QColor(255,255,255,150)));
         chartText.textType1->setStyleSheet("QLabel{background:#00FF00;}");
     }
-    Line( int x1, int y1, int x2, int y2, QWidget *parent = nullptr,PaintChartType type = PaintChartType::LINE) : FlowchartElement(x1,y1,x2,y2,parent,type)
+
+    Line(int x1, int y1, int x2, int y2, QWidget *parent = nullptr,PaintChartType type = PaintChartType::LINE) : FlowchartElement(x1,y1,x2,y2,parent,type)
     {
         chartText.textType1->setAttribute(Qt::WA_StyledBackground,true);
         chartText.textType1->setAutoFillBackground(true);
@@ -99,9 +100,7 @@ public:
     void resetEndChart()                                    // 重置终点指向的图形
     {
         if(endChartMag)
-        {
             endChartMag->delMagiPointEndLine(endMagIndex,this);
-        }
         endChartMag = nullptr;
     }
     FlowchartElement *getEndChart(){return endChartMag;}          // 获取终点指向的图形
@@ -120,11 +119,6 @@ public:
     void resetStartDirect(){startDirect = ORIENTION::NONE;}         // 重置连线起点的朝向
     void setEndDirect(ORIENTION direct){endDirect = direct;}        // 设置连线终点的朝向
     void resetEndDirect(){endDirect = ORIENTION::NONE;}             // 重置连线终点的朝向
-
-
-
-    friend QDataStream &operator<<(QDataStream &fout, const Line &cl);    // 重载输出运算符
-    friend QDataStream &operator>>(QDataStream &fin, Line &cl);           // 重载输入运算符
 
 signals:
     void sendLineStyle(QPen &qp, QBrush &qb, LINE_HEAD_TYPE &startLineHeadType, LINE_HEAD_TYPE &endLineHeadType);   // 发送连线信息

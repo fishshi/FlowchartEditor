@@ -5,6 +5,7 @@ class Updater
 {
 public:
     Updater();
+
 };
 
 #endif // UPDATER_H
