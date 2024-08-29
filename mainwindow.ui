@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item alignment="Qt::AlignmentFlag::AlignHCenter">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color : black;
+font-size : 20px;</string>
+      </property>
+      <property name="title">
+       <string>图源</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="startEndElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-roundedrectangle.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="processElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-rectangular.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="dataElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-parallelogram.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="decisionElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-diamond.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="connectorElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-circle.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="lineBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>34</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-image: url(:/assets/icon/icon-line.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QWidget" name="StylePanel" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_5"/>
+        </widget>
+       </item>
+       <item>
+        <widget class="QScrollArea" name="scrollArea_Painter">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_main">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>1070</width>
+            <height>741</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="Canvas" name="canvas" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件(F)</string>
+    </property>
+    <addaction name="actionNewFile"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionSaveFile"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <action name="actionNewFile">
+   <property name="text">
+    <string>新建项目</string>
+   </property>
+  </action>
+  <action name="actionOpenFile">
+   <property name="text">
+    <string>打开项目</string>
+   </property>
+  </action>
+  <action name="actionSaveFile">
+   <property name="text">
+    <string>保存项目</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Canvas</class>
+   <extends>QWidget</extends>
+   <header>view/canvas.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

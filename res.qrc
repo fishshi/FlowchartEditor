@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/icon/icon-circle.png</file>
+        <file>assets/icon/icon-diamond.png</file>
+        <file>assets/icon/icon-line.png</file>
+        <file>assets/icon/icon-parallelogram.png</file>
+        <file>assets/icon/icon-rectangular.png</file>
+        <file>assets/icon/icon-roundedrectangle.png</file>
+    </qresource>
+</RCC>
