@@ -27,7 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         model/elements/connectorelement.cpp model/elements/connectorelement.h model/elements/dataelement.cpp model/elements/dataelement.h model/elements/decisionelement.cpp model/elements/decisionelement.h model/elements/flowchartelement.cpp model/elements/flowchartelement.h model/elements/label.cpp model/elements/label.h model/elements/line.cpp model/elements/line.h model/elements/processelement.cpp model/elements/processelement.h model/elements/startendelement.cpp model/elements/startendelement.h model/config.h view/canvas.cpp view/canvas.h main.cpp mainwindow.cpp mainwindow.h mainwindow.ui res.qrc
         controller/drawer.h controller/drawer.cpp
         controller/controller.h controller/controller.cpp
-        controller/updater.h controller/updater.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -4,7 +4,6 @@
 #include <QFileDialog>
 #include "../mainwindow.h"
 #include "Drawer.h"
-#include "Updater.h"
 
 class Controller : public QObject
 {
@@ -21,9 +20,9 @@ private:
 
     MainWindow *w;
     Drawer *drawer;
-    Updater updater;
 
-    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
+    void on_escPressed();
+    void on_delPressed();
 };
 
 #endif // CONTROLLER_H

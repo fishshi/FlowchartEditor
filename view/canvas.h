@@ -7,7 +7,6 @@
 #include <QWidget>
 #include <QPainter>
 #include <vector>
-#include <QDebug>
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QStyleOption>
@@ -32,7 +31,24 @@ class Canvas : public QWidget
     Q_OBJECT
     friend class Controller;
 private:
+    std::vector<FlowchartElement*> charts;    // 画板上图形的集合
+    std::vector<FlowchartElement*> line;      // 画板上线的集合
+    void clearChartsLine(){                 // 释放图形、连线内存
+        for(auto it = charts.begin();it!=charts.end();it++) {
+            if(*it) delete *it;
+            *it = nullptr;
+        }
+        for(auto it = line.begin();it!=line.end();it++) {
+            if(*it) delete *it;
+            *it = nullptr;
+        }
+    }
+
+    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
+
+
     PaintChartType curPaintChartType = PaintChartType::NONE;    // 绘制的图形的类型
+
     QPoint curSelecChartPos;                // 选中时指针在图像对象上的位置信息
 
     Line *newLineChart = nullptr;             // 要创建的磁力点的连线的指针
@@ -47,24 +63,6 @@ private:
 
     ORIENTION sizePointDirect = ORIENTION::NONE;    // 选中时要改变大小的大小点的方向类型
 
-    std::vector<FlowchartElement*> charts;    // 画板上图形的集合
-    std::vector<FlowchartElement*> line;      // 画板上线的集合
-
-    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
-
-    void initVar();             // 变量默认初始化函数
-    void resetFlowChartPanel(); // 重置流图画板
-    void clearChartsLine(){                 // 释放图形、连线内存
-        for(auto it = charts.begin();it!=charts.end();it++) {
-            if(*it) delete *it;
-            *it = nullptr;
-        }
-        for(auto it = line.begin();it!=line.end();it++) {
-            if(*it) delete *it;
-            *it = nullptr;
-        }
-    }
-
 public:
     explicit Canvas(QWidget *parent = nullptr , Qt::WindowFlags f = Qt::WindowFlags());
     virtual ~Canvas()
@@ -74,10 +72,8 @@ public:
 
     FlowchartElement *curPaintChart = nullptr;    // 将要放置的图形
     FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
-    void addChart(FlowchartElement *cb);        // 添加图形到图形容器
-    bool delChart(FlowchartElement *&cb);      // 删除图形
-    void addLine(FlowchartElement *cb);       // 添加线条到线条容器
-    bool delLine(FlowchartElement *&cb);       // 添加图形
+    void delChart(FlowchartElement *&cb);      // 删除图形
+    void delLine(FlowchartElement *&cb);       // 添加图形
     void hideMagSizeAll();              // 隐藏所有元素
 
 protected:
@@ -86,19 +82,17 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void keyPressEvent(QKeyEvent *ev);
-    virtual void keyReleaseEvent(QKeyEvent *ev);
 
 signals:
-    void sendChartStyle(QPen &qp, QBrush &qb);                                                          // 发送图形颜色信息
-    void sendLineStyle(QPen &qp, LINE_HEAD_TYPE &startLineHeadType, LINE_HEAD_TYPE &endLineHeadType);   // 发送线条颜色和线头类型信息
-    void disableStyle();                        // 关闭主窗体颜色信息设置
+    void leftClicked();
+    void mouseMoved();
+    void delPressed();
+    void escPressed();
 
 public slots:
     void setPen(QPen &qp){curSelecChart->paintChartDrawPen = qp;}                                                       // 设置笔刷
     void setBrush(QBrush &qb){curSelecChart->paintChartFillPen = qb;}                                                   // 设置填充颜色
-    void setLineWidth(int i){curSelecChart->paintChartDrawPen.setWidth(i);}                                             // 设置线宽
-    void setLineStartStyle(int i){dynamic_cast<Line *>(curSelecChart)->setStartLineHeadType(LINE_HEAD_TYPE(i));}  // 设置起点线头类型
-    void setLineEndStyle(int i){dynamic_cast<Line *>(curSelecChart)->setEndLineHeadType(LINE_HEAD_TYPE(i));}      // 设置终点线头类型
+
 public:
     void setSelChartLineColor(const QColor &color);     // 设置图形线条颜色
     void setSelChartFillColor(const QColor &color);     // 设置图形填充颜色
