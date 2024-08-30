@@ -7,6 +7,8 @@ Controller::Controller(MainWindow *w)
 {
     this->w = w;
     drawer = new Drawer(w->ui->canvas);
+    updater = new Updater(w->ui->canvas);
+    remover = new Remover(w->ui->canvas);
     initConnections();
 }
 
@@ -14,22 +16,22 @@ void Controller::initConnections()
 {
     // 绑定图源选项
     connect(w->ui->processElementBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintProcessElement();
+        drawer->setPaintProcessElement();
     });
     connect(w->ui->decisionElementBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintDecisionElement();
+        drawer->setPaintDecisionElement();
     });
     connect(w->ui->startEndElementBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintStartEndElement();
+        drawer->setPaintStartEndElement();
     });
     connect(w->ui->connectorElementBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintConnectorElement();
+        drawer->setPaintConnectorElement();
     });
     connect(w->ui->lineBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintLine();
+        drawer->setPaintLine();
     });
     connect(w->ui->dataElementBtn, &QPushButton::clicked, [=](){
-        w->ui->canvas->setPaintDataElement();
+        drawer->setPaintDataElement();
     });
 
     //右键菜单
@@ -40,18 +42,6 @@ void Controller::initConnections()
     connect(w->ui->canvas, &Canvas::delPressed, this, &Controller::on_delPressed);
 }
 
-void Controller::sendSelChartLineColor()
-{
-    QColor color = QColorDialog::getColor(Qt::white, w,tr("设置线条颜色"));
-    w->ui->canvas->setSelChartLineColor(color);
-}
-
-void Controller::sendSelChartFillColor()
-{
-    QColor color = QColorDialog::getColor(Qt::white, w,tr("设置填充颜色"));
-    w->ui->canvas->setSelChartFillColor(color);
-}
-
 void Controller::showRrightClickMenu(const QPoint &pos)
 {
     if(w->ui->canvas->curSelecChart == nullptr)
@@ -60,10 +50,16 @@ void Controller::showRrightClickMenu(const QPoint &pos)
     if(dynamic_cast<Line*>(w->ui->canvas->curSelecChart) == nullptr)
     {
         QAction *changeFillColor = menu.addAction("更换填充颜色");
-        connect(changeFillColor, &QAction::triggered, this, &Controller::sendSelChartFillColor);
+        connect(changeFillColor, &QAction::triggered, [=](){
+            QColor color = QColorDialog::getColor(Qt::white, w,tr("设置填充颜色"));
+            updater->setSelChartFillColor(color);
+        });
     }
     QAction *changeLineColor = menu.addAction("更换线条颜色");
-    connect(changeLineColor, &QAction::triggered, this, &Controller::sendSelChartLineColor);
+    connect(changeLineColor, &QAction::triggered, [=](){
+        QColor color = QColorDialog::getColor(Qt::white, w,tr("设置线条颜色"));
+        updater->setSelChartLineColor(color);
+    });
     menu.exec(w->ui->canvas->mapToGlobal(pos));
 }
 
@@ -83,9 +79,9 @@ void Controller::on_delPressed()
     if(csc)
     {
         if(csc->chartType == PaintChartType::LINE)
-            w->ui->canvas->delLine(csc);
+            remover->delLine(csc);
         else
-            w->ui->canvas->delChart(csc);
+            remover->delChart(csc);
         w->ui->canvas->curSelecChart = nullptr;
     }
 }

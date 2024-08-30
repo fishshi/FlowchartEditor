@@ -17,50 +17,6 @@ void Canvas::paintEvent(QPaintEvent *event)
             p.drawPoint(i * gap, j * gap);
 }
 
-void Canvas::setSelChartLineColor(const QColor &color)
-{
-    curSelecChart->paintChartDrawPen.setColor(color);
-    curSelecChart->update();
-}
-
-void Canvas::setSelChartFillColor(const QColor &color)
-{
-    curSelecChart->paintChartFillPen.setColor(color);
-    curSelecChart->update();
-}
-
-void Canvas::setPaintChart()
-{
-    if(curPaintChart != nullptr)
-        delete curPaintChart;
-    switch(curPaintChartType)
-    {
-        case PaintChartType::RECT:
-            curPaintChart = new ProcessElement(this);
-            break;
-        case PaintChartType::DIAMOND:
-            curPaintChart = new DecisionElement(this);
-            break;
-        case PaintChartType::ROUNDRECT:
-            curPaintChart = new StartEndElement(this);
-            break;
-        case PaintChartType::ELLIPSE:
-            curPaintChart = new ConnectorElement(this);
-            break;
-        case PaintChartType::LINE:
-            curPaintChart = new Line(this);
-            break;
-        case PaintChartType::PARALLELOGRAM:
-            curPaintChart = new DataElement(this);
-            break;
-        case PaintChartType::NONE:
-            curPaintChart = nullptr;
-            break;
-    }
-    if(curPaintChart)
-        mouseEventType = MOUSE_EVENT_TYPE::CREATING_CNANGE_SIZE;
-}
-
 void Canvas::setSelecChart(FlowchartElement * cb, int x, int y)
 {
     this->grabKeyboard();
@@ -69,51 +25,6 @@ void Canvas::setSelecChart(FlowchartElement * cb, int x, int y)
     curSelecChart->showMagSize();
     curSelecChartPos = QPoint(x,y);
     mouseEventType = MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS;
-}
-
-void Canvas::delChart(FlowchartElement *&cb)
-{
-    for(int i = 0; i < charts.size(); ++i)
-    {
-        if(charts[i] == cb)
-        {
-            FlowchartElement *tmp = cb;
-            charts.erase(charts.begin() + i);
-            --i;
-            for(auto magit = tmp->magPoint.i_point.begin();magit!=tmp->magPoint.i_point.end();magit++)
-            {
-                for(auto magLineStIt = (*magit)->i_lineStart.begin();magLineStIt != (*magit)->i_lineStart.end();magLineStIt++)
-                {
-                    dynamic_cast<Line*>(*magLineStIt) ->resetEndChart();
-                    delLine(*magLineStIt);
-                }
-                for(auto magLineEnIt = (*magit)->i_lineEnd.begin();magLineEnIt != (*magit)->i_lineEnd.end();magLineEnIt++)
-                {
-                    dynamic_cast<Line*>(*magLineEnIt) ->resetStartChart();
-                    delLine(*magLineEnIt);
-                }
-            }
-            delete tmp;
-            break;
-        }
-    }
-}
-
-void Canvas::delLine(FlowchartElement *&cb)
-{
-    for(auto it = line.begin();it != line.end();it++)
-    {
-        if(*it == cb)
-        {
-            Line *tmp = dynamic_cast<Line*>(*it);
-            cb = nullptr;
-            line.erase(it);
-            tmp->resetEndChart();
-            tmp->resetStartChart();
-            delete tmp;
-            break;
-        }
-    }
 }
 
 void Canvas::hideMagSizeAll()

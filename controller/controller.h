@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include "../mainwindow.h"
 #include "Drawer.h"
+#include "updater.h"
+#include "Remover.h"
 
 class Controller : public QObject
 {
@@ -11,16 +13,15 @@ class Controller : public QObject
 public:
     Controller(MainWindow *w);
 
-    void sendSelChartLineColor();
-    void sendSelChartFillColor();
-    void showRrightClickMenu(const QPoint &pos);
-
 private:
     void initConnections();
 
     MainWindow *w;
     Drawer *drawer;
+    Updater *updater;
+    Remover *remover;
 
+    void showRrightClickMenu(const QPoint &pos);
     void on_escPressed();
     void on_delPressed();
 };

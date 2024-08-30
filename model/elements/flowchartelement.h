@@ -25,6 +25,9 @@ class FlowchartElement :public QWidget
     Q_OBJECT
     friend class Canvas;
     friend class Controller;
+    friend class Drawer;
+    friend class Updater;
+    friend class Remover;
 private:
     static int magPointWidth;                   // Padding信息-磁力点宽度
     static int sizePointWidth;                  // Padding信息-大小点宽度

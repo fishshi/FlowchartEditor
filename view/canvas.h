@@ -30,6 +30,9 @@ class Canvas : public QWidget
 {
     Q_OBJECT
     friend class Controller;
+    friend class Drawer;
+    friend class Updater;
+    friend class Remover;
 private:
     std::vector<FlowchartElement*> charts;    // 画板上图形的集合
     std::vector<FlowchartElement*> line;      // 画板上线的集合
@@ -45,7 +48,6 @@ private:
     }
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
-
 
     PaintChartType curPaintChartType = PaintChartType::NONE;    // 绘制的图形的类型
 
@@ -72,8 +74,6 @@ public:
 
     FlowchartElement *curPaintChart = nullptr;    // 将要放置的图形
     FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
-    void delChart(FlowchartElement *&cb);      // 删除图形
-    void delLine(FlowchartElement *&cb);       // 添加图形
     void hideMagSizeAll();              // 隐藏所有元素
 
 protected:
@@ -93,20 +93,9 @@ public slots:
     void setPen(QPen &qp){curSelecChart->paintChartDrawPen = qp;}                                                       // 设置笔刷
     void setBrush(QBrush &qb){curSelecChart->paintChartFillPen = qb;}                                                   // 设置填充颜色
 
-public:
-    void setSelChartLineColor(const QColor &color);     // 设置图形线条颜色
-    void setSelChartFillColor(const QColor &color);     // 设置图形填充颜色
-
 public slots:
-    void setPaintChart();                           // 设置将要绘制的图形
     void setSelecChart(FlowchartElement *, int ,int);     // 设置选中的画板的图像
 
-    void setPaintProcessElement(){curPaintChartType = PaintChartType::RECT;setPaintChart();}                // 获取一个新的矩形
-    void setPaintDecisionElement(){curPaintChartType = PaintChartType::DIAMOND;setPaintChart();}          // 获取一个新的菱形
-    void setPaintStartEndElement(){curPaintChartType = PaintChartType::ROUNDRECT;setPaintChart();}      // 获取一个新的圆角矩形
-    void setPaintConnectorElement(){curPaintChartType = PaintChartType::ELLIPSE;setPaintChart();}          // 获取一个新的圆形
-    void setPaintLine(){curPaintChartType = PaintChartType::LINE;setPaintChart();}                // 获取一个新的线段
-    void setPaintDataElement(){curPaintChartType = PaintChartType::PARALLELOGRAM;setPaintChart();}      // 获取一个新的梯形
     void resetPaintChartType(){curPaintChartType = PaintChartType::NONE;}                               // 清空类型
 
     void setTypeChangeSize(ORIENTION i){mouseEventType = MOUSE_EVENT_TYPE::RUNTIME_CHANGE_SIZE;sizePointDirect = i; }                                                                                                       // 设置鼠标事件类型为改变大小
