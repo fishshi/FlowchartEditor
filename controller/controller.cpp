@@ -15,32 +15,32 @@ void Controller::initConnections()
     // 绑定图源选项
     connect(w->ui->processElementBtn, &QPushButton::clicked, [=](){
         drawer->setPaintProcessElement();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->decisionElementBtn, &QPushButton::clicked, [=](){
         drawer->setPaintDecisionElement();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->startEndElementBtn, &QPushButton::clicked, [=](){
         drawer->setPaintStartEndElement();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->connectorElementBtn, &QPushButton::clicked, [=](){
         drawer->setPaintConnectorElement();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->lineBtn, &QPushButton::clicked, [=](){
         drawer->setPaintLine();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->dataElementBtn, &QPushButton::clicked, [=](){
         drawer->setPaintDataElement();
-        if(canvas->curPaintChart)
+        if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
 
@@ -123,10 +123,10 @@ void Controller::on_leftPressed(QMouseEvent *event)
 void Controller::on_leftClickToCreate(int x, int y)
 {
     drawer->clickToCreate(x, y);
-    connect(canvas->curPaintChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-    connect(canvas->curPaintChart,SIGNAL(setTypeChangeSize(ORIENTION)), this, SLOT(setTypeChangeSize(ORIENTION)));
-    if(canvas->curPaintChart->chartType != PaintChartType::LINE)
-        connect(canvas->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+    connect(drawer->curPaintChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+    connect(drawer->curPaintChart,SIGNAL(setTypeChangeSize(ORIENTION)), this, SLOT(setTypeChangeSize(ORIENTION)));
+    if(drawer->curPaintChart->chartType != PaintChartType::LINE)
+        connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
 }
 
 void Controller::on_leftClickToSelect(FlowchartElement * cb, int x, int y)
@@ -184,8 +184,8 @@ void Controller::on_moveToLink(int x, int y)
 {
     if(drawer->moveToLink(x, y) == 1)
     {
-        connect(canvas->newLineChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-        connect(canvas->newLineChart,SIGNAL(setTypeChangeSize(ORIENTION)), this,SLOT(setTypeChangeSize(ORIENTION)));
+        connect(drawer->newLineChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+        connect(drawer->newLineChart,SIGNAL(setTypeChangeSize(ORIENTION)), this,SLOT(setTypeChangeSize(ORIENTION)));
     }
 }
 
@@ -204,80 +204,15 @@ void Controller::on_mouseReleased(QMouseEvent *event)
 
 void Controller::on_doneCreate()
 {
-    canvas->curPaintChartType = PaintChartType::NONE;
-    if(canvas->curSelecChart->chartType == PaintChartType::LINE)
-    {
-        Line *cl = reinterpret_cast<Line *>(canvas->curSelecChart);
-        if(canvas->lineSelectChart)
-        {
-            canvas->lineSelectChart->addMagiPointEndLine(canvas->magPointIndex, canvas->curSelecChart);
-            canvas->lineSelectChart->hideMagOnly();
-            cl->setEndChart(canvas->lineSelectChart);
-            cl->setEndMagIndex(canvas->magPointIndex);
-            cl->setEndDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
-            cl->update();
-            canvas->lineSelectChart = nullptr;
-        }
-        else{
-            cl->resetEndChart();
-        }
-    }
-    canvas->curPaintChart = nullptr;
+    drawer->doneCreate();
 }
 
 void Controller::on_doneChangeSize()
 {
-    if(canvas->curSelecChart->chartType == PaintChartType::LINE)
-    {
-        Line *cl = reinterpret_cast<Line *>(canvas->curSelecChart);
-        if(canvas->lineSelectChart)
-        {
-            if(canvas->sizePointDirect == ORIENTION::STARTPOINT)
-            {
-                cl->resetStartChart();
-                canvas->lineSelectChart->addMagiPointStartLine(canvas->magPointIndex, canvas->curSelecChart);
-                canvas->lineSelectChart->hideMagOnly();
-                cl->setStartChart(canvas->lineSelectChart);
-                cl->setStartMagIndex(canvas->magPointIndex);
-                cl->setStartDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
-            }else if(canvas->sizePointDirect == ORIENTION::ENDPOINT)
-            {
-                cl->resetEndChart();
-                canvas->lineSelectChart->addMagiPointEndLine(canvas->magPointIndex, canvas->curSelecChart);
-                canvas->lineSelectChart->hideMagOnly();
-                cl->setEndChart(canvas->lineSelectChart);
-                cl->setEndMagIndex(canvas->magPointIndex);
-                cl->setEndDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
-            }
-            cl->update();
-        }else
-        {
-            if(canvas->sizePointDirect == ORIENTION::STARTPOINT)
-            {
-                cl->resetStartChart();
-            }else if(canvas->sizePointDirect == ORIENTION::ENDPOINT)
-            {
-                cl->resetEndChart();
-            }
-        }
-    }
-    canvas->lineSelectChart = nullptr;
+    updater->doneChangeSize();
 }
 
 void Controller::on_doneLink()
 {
-    if(canvas->newLineToSelectChart)
-    {
-        canvas->newLineToSelectChart->addMagiPointEndLine(canvas->magPointToIndex, canvas->newLineChart);
-        canvas->newLineToSelectChart->hideMagOnly();
-        canvas->newLineChart->setEndChart(canvas->newLineToSelectChart);
-        canvas->newLineChart->setEndMagIndex(canvas->magPointToIndex);
-        canvas->newLineChart->setEndDirect(canvas->newLineToSelectChart->getMagiPointDirect(canvas->magPointToIndex));
-        canvas->newLineChart->update();
-    }else
-        if(canvas->newLineChart)
-            canvas->newLineChart->resetEndChart();
-    canvas->newLineChart = nullptr;
-    canvas->newLineFromSelectChart = nullptr;
-    canvas->newLineToSelectChart = nullptr;
+    drawer->doneLink();
 }

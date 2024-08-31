@@ -6,30 +6,30 @@ Drawer::Drawer(Canvas *canvas) {
 
 void Drawer::setPaintChart()
 {
-    if(canvas->curPaintChart != nullptr)
-        delete canvas->curPaintChart;
-    switch(canvas->curPaintChartType)
+    if(curPaintChart != nullptr)
+        delete curPaintChart;
+    switch(curPaintChartType)
     {
     case PaintChartType::RECT:
-        canvas->curPaintChart = new ProcessElement(canvas);
+        curPaintChart = new ProcessElement(canvas);
         break;
     case PaintChartType::DIAMOND:
-        canvas->curPaintChart = new DecisionElement(canvas);
+        curPaintChart = new DecisionElement(canvas);
         break;
     case PaintChartType::ROUNDRECT:
-        canvas->curPaintChart = new StartEndElement(canvas);
+        curPaintChart = new StartEndElement(canvas);
         break;
     case PaintChartType::ELLIPSE:
-        canvas->curPaintChart = new ConnectorElement(canvas);
+        curPaintChart = new ConnectorElement(canvas);
         break;
     case PaintChartType::LINE:
-        canvas->curPaintChart = new Line(canvas);
+        curPaintChart = new Line(canvas);
         break;
     case PaintChartType::PARALLELOGRAM:
-        canvas->curPaintChart = new DataElement(canvas);
+        curPaintChart = new DataElement(canvas);
         break;
     case PaintChartType::NONE:
-        canvas->curPaintChart = nullptr;
+        curPaintChart = nullptr;
         break;
     }
 }
@@ -38,14 +38,14 @@ void Drawer::clickToCreate(int x, int y)
 {
     if(canvas->curSelecChart)
         canvas->curSelecChart->hideMagSize();
-    canvas->curSelecChart = canvas->curPaintChart;
-    canvas->curPaintChart->setXY(x,y);
-    if(canvas->curPaintChart->chartType == PaintChartType::LINE)
-        canvas->line.push_back(canvas->curPaintChart);
+    canvas->curSelecChart = curPaintChart;
+    curPaintChart->setXY(x,y);
+    if(curPaintChart->chartType == PaintChartType::LINE)
+        canvas->line.push_back(curPaintChart);
     else
-        canvas->charts.push_back(canvas->curPaintChart);
-    canvas->curPaintChart->update();
-    canvas->curPaintChart->show();
+        canvas->charts.push_back(curPaintChart);
+    curPaintChart->update();
+    curPaintChart->show();
 }
 
 void Drawer::moveToCreate(int x, int y)
@@ -63,27 +63,27 @@ void Drawer::moveToCreate(int x, int y)
                 else
                     canvas->lineSelectChart = nullptr;
             }
-        canvas->curPaintChart->setWidthHeight(x,y);
+        curPaintChart->setWidthHeight(x,y);
     }
 }
 
 int Drawer::moveToLink(int x, int y)
 {
     int flag = 0;
-    if(canvas->newLineChart == nullptr)
+    if(newLineChart == nullptr)
     {
-        canvas->newLineChart = new Line(canvas);
+        newLineChart = new Line(canvas);
         if(canvas->curSelecChart)
             canvas->curSelecChart->hideMagSize();
-        canvas->curSelecChart = canvas->newLineChart;
-        canvas->line.push_back(canvas->newLineChart);
-        canvas->newLineChart->setXY(canvas->newLineFromSelectChart->getMagiPointAbsX(canvas->magPointFromIndex),canvas->newLineFromSelectChart->getMagiPointAbsY(canvas->magPointFromIndex));
-        canvas->newLineChart->setStartChart(canvas->newLineFromSelectChart);
-        canvas->newLineChart->setStartMagIndex(canvas->magPointFromIndex);
-        canvas->newLineChart->setStartDirect(canvas->magPointDirect);
-        canvas->newLineChart->update();
-        canvas->newLineChart->show();
-        canvas->newLineFromSelectChart->addMagiPointStartLine(canvas->magPointFromIndex, canvas->newLineChart);
+        canvas->curSelecChart = newLineChart;
+        canvas->line.push_back(newLineChart);
+        newLineChart->setXY(newLineFromSelectChart->getMagiPointAbsX(magPointFromIndex),newLineFromSelectChart->getMagiPointAbsY(magPointFromIndex));
+        newLineChart->setStartChart(newLineFromSelectChart);
+        newLineChart->setStartMagIndex(magPointFromIndex);
+        newLineChart->setStartDirect(magPointDirect);
+        newLineChart->update();
+        newLineChart->show();
+        newLineFromSelectChart->addMagiPointStartLine(magPointFromIndex, newLineChart);
         flag = 1;
     }
 
@@ -91,12 +91,53 @@ int Drawer::moveToLink(int x, int y)
     {
         if((*it)->autoSetMagi(x,y, canvas->magPointToIndex))
         {
-            canvas->newLineToSelectChart = *it;
+            newLineToSelectChart = *it;
             break;
         }else{
-            canvas->newLineToSelectChart = nullptr;
+            newLineToSelectChart = nullptr;
         }
     }
-    canvas->newLineChart->setWidthHeight(x,y,ORIENTION::ENDPOINT);
+    newLineChart->setWidthHeight(x,y,ORIENTION::ENDPOINT);
     return flag;
+}
+
+void Drawer::doneCreate()
+{
+    curPaintChartType = PaintChartType::NONE;
+    if(canvas->curSelecChart->chartType == PaintChartType::LINE)
+    {
+        Line *cl = reinterpret_cast<Line *>(canvas->curSelecChart);
+        if(canvas->lineSelectChart)
+        {
+            canvas->lineSelectChart->addMagiPointEndLine(canvas->magPointIndex, canvas->curSelecChart);
+            canvas->lineSelectChart->hideMagOnly();
+            cl->setEndChart(canvas->lineSelectChart);
+            cl->setEndMagIndex(canvas->magPointIndex);
+            cl->setEndDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
+            cl->update();
+            canvas->lineSelectChart = nullptr;
+        }
+        else{
+            cl->resetEndChart();
+        }
+    }
+    curPaintChart = nullptr;
+}
+
+void Drawer::doneLink()
+{
+    if(newLineToSelectChart)
+    {
+        newLineToSelectChart->addMagiPointEndLine(canvas->magPointToIndex, newLineChart);
+        newLineToSelectChart->hideMagOnly();
+        newLineChart->setEndChart(newLineToSelectChart);
+        newLineChart->setEndMagIndex(canvas->magPointToIndex);
+        newLineChart->setEndDirect(newLineToSelectChart->getMagiPointDirect(canvas->magPointToIndex));
+        newLineChart->update();
+    }else
+        if(newLineChart)
+            newLineChart->resetEndChart();
+    newLineChart = nullptr;
+    newLineFromSelectChart = nullptr;
+    newLineToSelectChart = nullptr;
 }

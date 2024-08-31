@@ -10,7 +10,7 @@ Canvas::Canvas(QWidget *parent, Qt::WindowFlags f) : QWidget(parent,f)
 void Canvas::paintEvent(QPaintEvent *event)
 {
     QPainter p = QPainter(this);
-    p.setPen(QColor(150,150,150));
+    p.setPen(QColor(0,0,0));
     const int gap = 30;
     for(int i = 0;i * gap < width(); ++i)
         for(int j = 0; j * gap < height(); ++j)

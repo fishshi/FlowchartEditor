@@ -19,14 +19,14 @@ public:
     Controller(MainWindow *w);
 
 public slots:
-    void setTypeChangeSize(ORIENTION i){mouseEventType = MOUSE_EVENT_TYPE::CHANGE_SIZE; canvas->sizePointDirect = i; }                                                                                                       // 设置鼠标事件类型为改变大小
+    void setTypeChangeSize(ORIENTION i){mouseEventType = MOUSE_EVENT_TYPE::CHANGE_SIZE; updater->sizePointDirect = i; }                                                                                                       // 设置鼠标事件类型为改变大小
     void setTypeCreateMagPoint(FlowchartElement *cb,ORIENTION d,int i) // 设置鼠标事件类型为创建线段
     {
-        canvas->newLineFromSelectChart = cb;
+        drawer->newLineFromSelectChart = cb;
         mouseEventType = MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT;
-        canvas->magPointDirect = d;
-        canvas->magPointFromIndex = i;
-        canvas->newLineChart = nullptr;
+        drawer->magPointDirect = d;
+        drawer->magPointFromIndex = i;
+        drawer->newLineChart = nullptr;
     }
 
 private:

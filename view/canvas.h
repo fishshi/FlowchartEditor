@@ -1,6 +1,5 @@
 #ifndef FLOWCHART_H
 #define FLOWCHART_H
-#pragma execution_character_set("utf-8")
 #include <QWidget>
 #include <QPainter>
 #include <vector>
@@ -32,26 +31,10 @@ class Canvas : public QWidget
 private:
     std::vector<FlowchartElement*> charts;    // 画板上图形的集合
     std::vector<FlowchartElement*> line;      // 画板上线的集合
-
-    PaintChartType curPaintChartType = PaintChartType::NONE;    // 绘制的图形的类型
-
-    QPoint curSelecChartPos;                // 选中时指针在图像对象上的位置信息
-
-    Line *newLineChart = nullptr;             // 要创建的磁力点的连线的指针
-    FlowchartElement *newLineToSelectChart = nullptr;     // 要连接到的磁力点的图形的指针
-    FlowchartElement *newLineFromSelectChart = nullptr;   // 要创建的磁力点的图形的指针
-    ORIENTION magPointDirect = ORIENTION::NONE;     // 选中时要创建的起始磁力点的方向类型
-    int magPointFromIndex;                          // 要创建的磁力点的索引
     int magPointToIndex;                            // 要创建的磁力点的索引
-
-    FlowchartElement *lineSelectChart = nullptr;  // 运行时线的吸附到的图形的指针
-    int magPointIndex;                      // 运行时线吸附到的图形的磁力点的索引
-
-    ORIENTION sizePointDirect = ORIENTION::NONE;    // 选中时要改变大小的大小点的方向类型
-
-    FlowchartElement *curPaintChart = nullptr;    // 将要放置的图形
     FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
-
+    FlowchartElement *lineSelectChart = nullptr;  // 线的吸附到的图形的指针
+    int magPointIndex;                      // 运行时线吸附到的图形的磁力点的索引
     void clearChartsLine();                      // 释放图形、连线内存
 
 public:
