@@ -2,7 +2,6 @@
 #define DRAWER_H
 
 #include "../view/canvas.h"
-#include "../model/config.h"
 
 class Drawer
 {
@@ -16,6 +15,10 @@ public:
     void setPaintLine(){canvas->curPaintChartType = PaintChartType::LINE;setPaintChart();}                // 获取一个新的线段
     void setPaintDataElement(){canvas->curPaintChartType = PaintChartType::PARALLELOGRAM;setPaintChart();}      // 获取一个新的梯形
     void setPaintChart();
+
+    void clickToCreate(int x, int y);
+    void moveToCreate(int x, int y);
+    int moveToLink(int x, int y);
 
 private:
     Canvas *canvas;

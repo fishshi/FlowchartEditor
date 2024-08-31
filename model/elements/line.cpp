@@ -244,7 +244,7 @@ void Line::paintChart(QPainter & p)
     QPen tmp = p.pen();
     p.setPen(paintChartDrawPen);
 
-    chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+    chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
     int midx,midy;
     int sx,sy,ex,ey;
     QPainterPath linePath;
@@ -270,13 +270,13 @@ void Line::paintChart(QPainter & p)
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(sx,ey - containsWidth1_2,ex-sx,containsWidth);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         linePath.lineTo(ex,sy);
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx,sy + containsWidth1_2,ex - sx,-containsWidth);
                         graphPath->addRect(ex - containsWidth1_2,sy,containsWidth,ey - sy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -291,7 +291,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
 
                         }else{
                             midy = (sy+ey)>>1;
@@ -301,7 +301,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy - containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -313,13 +313,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1)  - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1)  - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(ex,sy);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -336,7 +336,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                         graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         midx = (sx + ex)>>1;
                         linePath.lineTo(midx,sy);
@@ -345,7 +345,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx,sy - containsWidth1_2,midx - sx,containsWidth);
                         graphPath->addRect(midx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(midx,ey - containsWidth1_2,ex - midx,containsWidth);
-                        chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -363,14 +363,14 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy - containsWidth1_2,ex - sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey - midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
 
                         }else{
                             linePath.lineTo(sx,ey);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx,containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -379,7 +379,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy - containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,sy,containsWidth,ey-sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midx = (sx+ex)>>1;
                             linePath.lineTo(midx,sy);
@@ -388,7 +388,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy - containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx - containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey - containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -441,7 +441,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(endPos.rx(),endPos.ry());
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx,containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midx = (sx + ex)>>1;
                             linePath.lineTo(midx,sy);
@@ -451,7 +451,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -463,13 +463,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy - containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(ex,sy);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -483,13 +483,13 @@ void Line::paintChart(QPainter & p)
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                        chartText.textType1->setGeometry(sx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(sx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         linePath.lineTo(ex,sy);
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                        chartText.textType1->setGeometry(ex - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(ex - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
 
@@ -508,13 +508,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(ex,sy);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy + containsWidth1_2,ex - sx,-containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,sy,containsWidth,ey - sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -523,7 +523,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midx = (sx + ex)>>1;
                             linePath.lineTo(midx,sy);
@@ -532,7 +532,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -549,7 +549,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                         graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         midx = (sx + ex)>>1;
                         linePath.lineTo(midx,sy);
@@ -558,7 +558,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx,sy - containsWidth1_2,midx - sx,containsWidth);
                         graphPath->addRect(midx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(midx,ey - containsWidth1_2,ex - midx,containsWidth);
-                        chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -609,7 +609,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx,sy - containsWidth1_2,midx - sx,containsWidth);
                         graphPath->addRect(midx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(midx,ey - containsWidth1_2,ex - midx,containsWidth);
-                        chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         midy = (sy+ey)>>1;
                         linePath.lineTo(sx,midy);
@@ -618,7 +618,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                         graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -636,13 +636,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(ex,sy);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy + containsWidth1_2,ex - sx,-containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,sy,containsWidth,ey - sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
 
                     }else{
@@ -651,7 +651,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midy = (sy+ey)>>1;
                             linePath.lineTo(sx,midy);
@@ -660,7 +660,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -674,13 +674,13 @@ void Line::paintChart(QPainter & p)
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         linePath.lineTo(sx,ey);
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -695,7 +695,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midx = (sx+ex)>>1;
                             linePath.lineTo(midx,sy);
@@ -704,7 +704,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -716,13 +716,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy - containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(sx,ey);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx,containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -776,13 +776,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(sx,ey);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx,containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -791,7 +791,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midy = (sy+ey)>>1;
                             linePath.lineTo(sx,midy);
@@ -800,7 +800,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -817,7 +817,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx,sy - containsWidth1_2,midx - sx,containsWidth);
                         graphPath->addRect(midx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(midx,ey - containsWidth1_2,ex - midx,containsWidth);
-                        chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         midy = (sy+ey)>>1;
                         linePath.lineTo(sx,midy);
@@ -826,7 +826,7 @@ void Line::paintChart(QPainter & p)
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                         graphPath->addRect(sx,midy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                        chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;
@@ -841,7 +841,7 @@ void Line::paintChart(QPainter & p)
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),sy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),sy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             midy = (sy+ey)>>1;
                             linePath.lineTo(sx,midy);
@@ -850,7 +850,7 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,midy - sy);
                             graphPath->addRect(sx,midy - containsWidth1_2,ex-sx,containsWidth);
                             graphPath->addRect(ex - containsWidth1_2,midy,containsWidth,ey-midy);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),midy - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),midy - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }else{
                         if(sx>ex)
@@ -862,13 +862,13 @@ void Line::paintChart(QPainter & p)
                             graphPath->addRect(sx,sy-containsWidth1_2,midx-sx,containsWidth);
                             graphPath->addRect(midx-containsWidth1_2,sy,containsWidth,ey-sy);
                             graphPath->addRect(midx,ey-containsWidth1_2,ex-midx,containsWidth);
-                            chartText.textType1->setGeometry(midx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry(midx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }else{
                             linePath.lineTo(sx,ey);
                             linePath.lineTo(ex,ey);
                             graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                             graphPath->addRect(sx,ey - containsWidth1_2,ex - sx,containsWidth);
-                            chartText.textType1->setGeometry((width()>>1) - (chartText.textType1->width()>>1),ey - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                            chartText.text->setGeometry((width()>>1) - (chartText.text->width()>>1),ey - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                         }
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
@@ -882,13 +882,13 @@ void Line::paintChart(QPainter & p)
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx,sy-containsWidth1_2,ex-sx,containsWidth);
                         graphPath->addRect(ex-containsWidth1_2,sy,containsWidth,ey-sy);
-                        chartText.textType1->setGeometry(ex - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(ex - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }else{
                         linePath.lineTo(sx,ey);
                         linePath.lineTo(ex,ey);
                         graphPath->addRect(sx - containsWidth1_2,sy,containsWidth,ey - sy);
                         graphPath->addRect(sx,ey - containsWidth1_2,ex - sx, containsWidth);
-                        chartText.textType1->setGeometry(sx - (chartText.textType1->width()>>1),(height()>>1) - (chartText.textType1->height()>>1),chartText.textType1->width(),chartText.textType1->height());
+                        chartText.text->setGeometry(sx - (chartText.text->width()>>1),(height()>>1) - (chartText.text->height()>>1),chartText.text->width(),chartText.text->height());
                     }
                     drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
                 }break;

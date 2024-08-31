@@ -38,8 +38,8 @@ private:
     static const int minSizeWH = 40;            // 图形最小宽高
     static const int textBorderWidth = 10;      // 文件边界最小宽高
 
-    bool showAll = true;    // 显示大小控制点和磁力点？ ###
-    bool showMag = false;   // 显示磁力点？ ###
+    bool showAll = true;    // 显示大小控制点和磁力点
+    bool showMag = false;   // 显示磁力点
     ORIENTION lastType = ORIENTION::NONE;               // 改变大小状态切换
     MOUSE_EVENT_TYPE curFlag = MOUSE_EVENT_TYPE::NONE;  // 鼠标事件类型
     ORIENTION curIndex = ORIENTION::NONE;               // 当前选中大小点、磁力点方向
@@ -87,13 +87,13 @@ private:
 protected:
     class TextBase {
     public:
-        TextBase():textType1(nullptr),tmpEdit1(nullptr){
+        TextBase():text(nullptr),tmpEdit1(nullptr){
 
         }
         ~TextBase(){
-            if(textType1){
-                delete textType1;
-                textType1 = nullptr;
+            if(text){
+                delete text;
+                text = nullptr;
             }
             if(tmpEdit1){
                 delete tmpEdit1;
@@ -102,15 +102,11 @@ protected:
         }
         bool textType = 1;
         QPoint chartTextMousePos;           // 保存文字移动时点击的位置
-        union{// 图形显示的文字控件
-            Label *textType1 = nullptr;
-        };
-        union{// 图形编辑时文字输入控件
-            QLineEdit *tmpEdit1 = nullptr;
-        };
-        union{// 鼠标移动标识符
-            CHART_LABEL_MOUSE_TYPE textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
-        };
+        Label *text = nullptr;          // 图形显示的文字控件
+        // 图形编辑时文字输入控件
+        QLineEdit *tmpEdit1 = nullptr;
+        // 鼠标移动标识符
+        CHART_LABEL_MOUSE_TYPE textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
     }chartText; // 文本控件
 
     class i_pointbase   // 点基本信息
@@ -121,7 +117,6 @@ protected:
         ORIENTION rotate = ORIENTION::NONE; // 点方向
 
         i_pointbase():i_pos(nullptr),i_path(nullptr),rotate(ORIENTION::NONE){
-
         }
         ~i_pointbase(){
             if(i_pos){

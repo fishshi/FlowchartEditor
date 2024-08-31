@@ -32,6 +32,71 @@ void Drawer::setPaintChart()
         canvas->curPaintChart = nullptr;
         break;
     }
-    if(canvas->curPaintChart)
-        canvas->mouseEventType = MOUSE_EVENT_TYPE::CREATING_CNANGE_SIZE;
+}
+
+void Drawer::clickToCreate(int x, int y)
+{
+    if(canvas->curSelecChart)
+        canvas->curSelecChart->hideMagSize();
+    canvas->curSelecChart = canvas->curPaintChart;
+    canvas->curPaintChart->setXY(x,y);
+    if(canvas->curPaintChart->chartType == PaintChartType::LINE)
+        canvas->line.push_back(canvas->curPaintChart);
+    else
+        canvas->charts.push_back(canvas->curPaintChart);
+    canvas->curPaintChart->update();
+    canvas->curPaintChart->show();
+}
+
+void Drawer::moveToCreate(int x, int y)
+{
+    if(canvas->curSelecChart)
+    {
+        if(canvas->curSelecChart->chartType == PaintChartType::LINE)
+            for(auto it = canvas->charts.begin();it!=canvas->charts.end();it++)
+            {
+                if((*it)->autoSetMagi(x,y,canvas->magPointIndex))
+                {
+                    canvas->lineSelectChart = *it;
+                    break;
+                }
+                else
+                    canvas->lineSelectChart = nullptr;
+            }
+        canvas->curPaintChart->setWidthHeight(x,y);
+    }
+}
+
+int Drawer::moveToLink(int x, int y)
+{
+    int flag = 0;
+    if(canvas->newLineChart == nullptr)
+    {
+        canvas->newLineChart = new Line(canvas);
+        if(canvas->curSelecChart)
+            canvas->curSelecChart->hideMagSize();
+        canvas->curSelecChart = canvas->newLineChart;
+        canvas->line.push_back(canvas->newLineChart);
+        canvas->newLineChart->setXY(canvas->newLineFromSelectChart->getMagiPointAbsX(canvas->magPointFromIndex),canvas->newLineFromSelectChart->getMagiPointAbsY(canvas->magPointFromIndex));
+        canvas->newLineChart->setStartChart(canvas->newLineFromSelectChart);
+        canvas->newLineChart->setStartMagIndex(canvas->magPointFromIndex);
+        canvas->newLineChart->setStartDirect(canvas->magPointDirect);
+        canvas->newLineChart->update();
+        canvas->newLineChart->show();
+        canvas->newLineFromSelectChart->addMagiPointStartLine(canvas->magPointFromIndex, canvas->newLineChart);
+        flag = 1;
+    }
+
+    for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++)
+    {
+        if((*it)->autoSetMagi(x,y, canvas->magPointToIndex))
+        {
+            canvas->newLineToSelectChart = *it;
+            break;
+        }else{
+            canvas->newLineToSelectChart = nullptr;
+        }
+    }
+    canvas->newLineChart->setWidthHeight(x,y,ORIENTION::ENDPOINT);
+    return flag;
 }

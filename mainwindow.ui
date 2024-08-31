@@ -197,13 +197,20 @@ background-position: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1070</width>
-            <height>757</height>
+            <width>20012</width>
+            <height>20012</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="0" column="0">
-            <widget class="Canvas" name="canvas" native="true"/>
+            <widget class="Canvas" name="canvas" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>10240</width>
+               <height>10240</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

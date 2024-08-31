@@ -16,7 +16,6 @@ FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, bool mo
     pointInit();
     colorInit();
     textInit();
-//    installEventFilter(this);
     setMouseTracking(true);
 }
 
@@ -29,7 +28,6 @@ FlowchartElement::FlowchartElement( int x, int y, int w, int h, QWidget *parent,
     pointInit();
     colorInit();
     textInit();
-//    installEventFilter(this);
     setMouseTracking(true);
 }
 
@@ -46,7 +44,6 @@ FlowchartElement::FlowchartElement(FlowchartElement &cb)
     pointInit();
     colorInit();
     textInit();
-//    installEventFilter(this);
     setMouseTracking(true);
 }
 
@@ -54,7 +51,6 @@ void FlowchartElement::widgetPosInit(int x,int y,int w,int h)
 {
     widgetStart.setX(x);
     widgetStart.setY(y);
-    //widgetPos = widgetStart;
     widgetEnd.setX(x+w);
     widgetEnd.setY(y+h);
     updateWidgetPosInof();
@@ -99,13 +95,12 @@ void FlowchartElement::pointInit()
 
 void FlowchartElement::textInit()
 {
-    chartText.textType1 = new Label(this);
-    chartText.textType1->setText("文本注释");
-    chartText.textType1->setWordWrap(true);
-    chartText.textType1->move(paintStart.rx() + sizePointWidth,paintStart.ry() + sizePointWidth);
-    chartText.textType1->adjustSize();
-    connect(chartText.textType1,SIGNAL(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)),this,SLOT(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)));
-    //chartText.textType1->show();
+    chartText.text = new Label(this);
+    chartText.text->setText("文本注释");
+    chartText.text->setWordWrap(true);
+    chartText.text->move(paintStart.rx() + sizePointWidth,paintStart.ry() + sizePointWidth);
+    chartText.text->adjustSize();
+    connect(chartText.text,SIGNAL(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)),this,SLOT(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)));
 }
 
 void FlowchartElement::colorInit()
@@ -116,9 +111,8 @@ void FlowchartElement::colorInit()
 
 void FlowchartElement::updateWidgetPosInof()
 {
-    int w;// = widgetEnd.rx()-widgetStart.rx();
-    int h;// = widgetEnd.ry()-widgetStart.ry();
-    int x,y;
+    int w, h;
+    int x, y;
     if(widgetEnd.rx() < widgetStart.rx())
     {
         x = widgetEnd.rx() - borderWidth;
@@ -139,7 +133,6 @@ void FlowchartElement::updateWidgetPosInof()
         y = widgetStart.ry() - borderWidth;
         h = widgetEnd.ry() - widgetStart.ry()  + borderWidth + borderWidth;
     }
-    //setGeometry(widgetStart.rx(),widgetStart.ry(),w>minSizeWH?w:minSizeWH,h>minSizeWH?h:minSizeWH);
     specialWidgetUpdate(x,y,w,h);
     setGeometry(x,y,w,h);
 }
@@ -280,22 +273,22 @@ void FlowchartElement::updateTextInfo()
     int w = paintEnd.rx() - paintStart.rx();
     w = w > 0 ? w : 0;
 
-    chartText.textType1->setMaximumWidth(w);
-    chartText.textType1->setMaximumHeight(w);
-    chartText.textType1->adjustSize();
-    if(chartText.textType1->x() + chartText.textType1->width() >paintEnd.rx())
+    chartText.text->setMaximumWidth(w);
+    chartText.text->setMaximumHeight(w);
+    chartText.text->adjustSize();
+    if(chartText.text->x() + chartText.text->width() >paintEnd.rx())
     {
-        if(paintEnd.rx() - chartText.textType1->width()<paintStart.rx())
-            chartText.textType1->move(paintStart.rx(),chartText.textType1->y());
+        if(paintEnd.rx() - chartText.text->width()<paintStart.rx())
+            chartText.text->move(paintStart.rx(),chartText.text->y());
         else
-            chartText.textType1->move(paintEnd.rx() - chartText.textType1->width(),chartText.textType1->y());
+            chartText.text->move(paintEnd.rx() - chartText.text->width(),chartText.text->y());
     }
-    if(chartText.textType1->y() + chartText.textType1->height() >paintEnd.ry())
+    if(chartText.text->y() + chartText.text->height() >paintEnd.ry())
     {
-        if(paintEnd.ry() - chartText.textType1->height()<paintStart.ry())
-            chartText.textType1->move(chartText.textType1->x(),paintStart.ry());
+        if(paintEnd.ry() - chartText.text->height()<paintStart.ry())
+            chartText.text->move(chartText.text->x(),paintStart.ry());
         else
-            chartText.textType1->move(chartText.textType1->x(),paintEnd.ry() - chartText.textType1->height());
+            chartText.text->move(chartText.text->x(),paintEnd.ry() - chartText.text->height());
     }
 }
 
@@ -378,9 +371,6 @@ bool FlowchartElement::inSizePath(const QPointF &p, ORIENTION &b) const
     for(auto it = sizePoint.i_point.begin(),end = sizePoint.i_point.end();it!=end;it++)
     {
         if((*it)->inPath(p))
-        //x = p.x()-(*it)->getX();
-        //y = p.y()-(*it)->getY();
-        //if(x>=0&&x<=sizePointWidth && y>=0&&y<=sizePointWidth)
         {
             b = (*it)->getRotate();
             return true;
@@ -398,45 +388,7 @@ void FlowchartElement::setEndPos(int x,int y)
     widgetEnd.setX(x);
     widgetEnd.setY(y);
 }
-//void FlowchartElement::setGeometryNew(int x,int y,int w, int h)
-//{
-//    int *x1,*y1;
-//    int *x2,*y2;
-//    if(widgetEnd.rx()<widgetStart.rx())
-//    {
-//        x1 = &widgetEnd.rx();
-//        x2 = &widgetStart.rx();
-//    }else{
-//        x1 = &widgetStart.rx();
-//        x2 = &widgetEnd.rx();
-//    }
-//    if(widgetEnd.ry()<widgetStart.ry())
-//    {
-//        y1 = &widgetEnd.ry();
-//        y2 = &widgetStart.ry();
-//    }else{
-//        y1 = &widgetStart.ry();
-//        y2 = &widgetEnd.ry();
-//    }
-//    *x2 = x + w;
-//    *y2 = y + h;
-//    *x1 = x;
-//    *y1 = y;
 
-////    widgetStart.setX(x);
-////    widgetStart.setY(y);
-////    widgetEnd.setX(x+w);
-////    widgetEnd.setY(y+h);
-
-//    updateWidgetPosInof();
-//    updatePaintInfo();
-//    updateSizePointInfo();
-//    updateSizePointPath();
-//    updateMagPointInfo();
-//    updateMagPointPath();
-//    updateMagPointLine();
-//    updateTextInfo();
-//}
 void FlowchartElement::setXY(int x, int y)
 {
     int *x1,*y1;
@@ -462,14 +414,10 @@ void FlowchartElement::setXY(int x, int y)
     *x1 = x;
     *y1 = y;
 
-    //widgetEnd.setX(x+widgetEnd.rx()-widgetStart.rx());
-    //widgetEnd.setY(y+widgetEnd.ry()-widgetStart.ry());
-    //widgetStart.setX(x);
-    //widgetStart.setY(y);
-
     updateWidgetPosInof();
     updateMagPointLine();
 }
+
 void FlowchartElement::setWidthHeight(int x, int y)
 {
     widgetEnd.setX(x);
@@ -693,8 +641,8 @@ void FlowchartElement::hideMagSize()
 
         if(chartText.tmpEdit1)
         {
-            chartText.textType1->setText(chartText.tmpEdit1->text());
-            chartText.textType1->adjustSize();
+            chartText.text->setText(chartText.tmpEdit1->text());
+            chartText.text->adjustSize();
             delete chartText.tmpEdit1;
             chartText.tmpEdit1 = nullptr;
         }
@@ -717,15 +665,13 @@ void FlowchartElement::hideMagOnly()
     {
         this->releaseKeyboard();
         showMag = false;
-
         if(chartText.tmpEdit1)
         {
-            chartText.textType1->setText(chartText.tmpEdit1->text());
-            chartText.textType1->adjustSize();
+            chartText.text->setText(chartText.tmpEdit1->text());
+            chartText.text->adjustSize();
             delete chartText.tmpEdit1;
             chartText.tmpEdit1 = nullptr;
         }
-
         update();
     }
 }
@@ -754,7 +700,7 @@ void FlowchartElement::mousePressEvent(QMouseEvent *event)
     if(showAll&&inSizePath(event->pos(),direct))
     {
         emit setTypeChangeSize(direct);
-        curFlag = MOUSE_EVENT_TYPE::RUNTIME_CHANGE_SIZE;
+        curFlag = MOUSE_EVENT_TYPE::CHANGE_SIZE;
         curIndex = direct;
         raise();
 
@@ -859,8 +805,8 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
         {
             emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
 
-            chartText.textType1->move(event->pos().rx()-chartText.chartTextMousePos.rx(),event->pos().ry()-chartText.chartTextMousePos.ry());
-            chartText.textType1->adjustSize();
+            chartText.text->move(event->pos().rx()-chartText.chartTextMousePos.rx(),event->pos().ry()-chartText.chartTextMousePos.ry());
+            chartText.text->adjustSize();
         }
     }
     else
@@ -884,11 +830,11 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
     {
         emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
 
-        chartText.tmpEdit1 = new QLineEdit(chartText.textType1->text(),this);
-        chartText.textType1->setText("");
+        chartText.tmpEdit1 = new QLineEdit(chartText.text->text(),this);
+        chartText.text->setText("");
         chartText.tmpEdit1->adjustSize();
         chartText.tmpEdit1->setStyleSheet("background:transparent;");
-        chartText.tmpEdit1->setGeometry(chartText.textType1->x(),chartText.textType1->y(),chartText.textType1->width() + (textBorderWidth<<1),chartText.textType1->height() + (textBorderWidth<<1));
+        chartText.tmpEdit1->setGeometry(chartText.text->x(),chartText.text->y(),chartText.text->width() + (textBorderWidth<<1),chartText.text->height() + (textBorderWidth<<1));
         chartText.tmpEdit1->show();
         chartText.tmpEdit1->setFocus();
 

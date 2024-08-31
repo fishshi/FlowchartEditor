@@ -1,26 +1,19 @@
 ﻿#include "dataelement.h"
 
-
 void DataElement::paintChart(QPainter & p)
 {
     QPen tmp = p.pen();
     p.setPen(paintChartDrawPen);
-
     int sx = paintStart.rx(),sy = paintStart.ry(),ex = paintEnd.rx(),ey = paintEnd.ry();
-
     if(graphPath) delete graphPath;
     graphPath = new QPainterPath;
-    //graphPath->addRect(sx,sy,ex-sx,ey-sy);
-    //graphPath->addRoundedRect(sx,sy,ex,ey,20,20);
     graphPath->moveTo(sx+((ex - sx) / 4),sy);
     graphPath->lineTo(ex, sy);
     graphPath->lineTo(ex - ((ex - sx) / 4),ey);
     graphPath->lineTo(sx,ey);
     graphPath->lineTo(sx+((ex - sx) / 4),sy);
-
     p.fillPath(*graphPath,paintChartFillPen);
     p.drawPath(*graphPath);
-
     p.setPen(tmp);
 }
 
@@ -56,5 +49,4 @@ void DataElement::updateMagPointInfo()
     magPoint.i_point[7]->setX((x1 + x1 + ext)>>1);
     magPoint.i_point[7]->setY(midy);
     magPoint.i_point[7]->setRotate(ORIENTION::WEST);
-
 }
