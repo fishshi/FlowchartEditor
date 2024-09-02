@@ -61,6 +61,9 @@ private:
     void on_doneCreate();
     void on_doneChangeSize();
     void on_doneLink();
+
+    void on_saveFile();
+    void on_openFile();
 };
 
 #endif // CONTROLLER_H

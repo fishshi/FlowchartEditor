@@ -2,13 +2,13 @@
 #define FILER_H
 
 #include "../view/canvas.h"
-
+#include <QFile>
 class Filer
 {
 public:
     Filer(Canvas *canvas);
-    void openFile();
-    void saveFile();
+    void openFile(QString filePath);
+    void saveFile(QString filePath);
 
 private:
     Canvas *canvas;

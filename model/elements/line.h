@@ -5,6 +5,42 @@
 
 class Line : public FlowchartElement
 {
+    friend QDataStream &operator<<(QDataStream &fout, const Line &cl)
+    {
+        fout<<cl.startPos<<cl.endPos;
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.startDirect),sizeof(ORIENTION));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.endDirect),sizeof(ORIENTION));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.startMagIndex),sizeof(int));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.endMagIndex),sizeof(int));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.endLineHeadType),sizeof(LINE_HEAD_TYPE));
+        if(cl.startChartMag)
+            fout.writeRawData(reinterpret_cast<const char*>(&cl.startChartMag->getID()),sizeof(int));
+        else{
+            int i = -1;
+            fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(int));
+        }
+        if(cl.endChartMag)
+            fout.writeRawData(reinterpret_cast<const char*>(&cl.endChartMag->getID()),sizeof(int));
+        else{
+            int i = -1;
+            fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(int));
+        }
+        return fout;
+    }
+
+    friend QDataStream &operator>>(QDataStream &fin, Line &cl)
+    {
+        fin>>cl.startPos>>cl.endPos;
+        fin.readRawData(reinterpret_cast<char*>(&cl.startDirect),sizeof(ORIENTION));
+        fin.readRawData(reinterpret_cast<char*>(&cl.endDirect),sizeof(ORIENTION));
+        fin.readRawData(reinterpret_cast<char*>(&cl.startMagIndex),sizeof(int));
+        fin.readRawData(reinterpret_cast<char*>(&cl.endMagIndex),sizeof(int));
+        fin.readRawData(reinterpret_cast<char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
+        fin.readRawData(reinterpret_cast<char*>(&cl.endLineHeadType),sizeof(LINE_HEAD_TYPE));
+        return fin;
+    }
+
 private:
 
     const static int containsWidth = 20;                    // 可选范围长度

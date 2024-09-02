@@ -55,6 +55,10 @@ void Controller::initConnections()
     //键盘按键
     connect(canvas, &Canvas::escPressed, this, &Controller::on_escPressed);
     connect(canvas, &Canvas::delPressed, this, &Controller::on_delPressed);
+
+    //文件操作
+    connect(w->ui->actionSaveFile, &QAction::triggered, this, &Controller::on_saveFile);
+    connect(w->ui->actionOpenFile, &QAction::triggered, this, &Controller::on_openFile);
 }
 
 void Controller::showRrightClickMenu(const QPoint &pos)
@@ -256,4 +260,31 @@ void Controller::on_doneChangeSize()
 void Controller::on_doneLink()
 {
     drawer->doneLink();
+}
+
+void Controller::on_saveFile()
+{
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("保存文件"), "C:", tr("FY文件(*.fy)"));
+    if(tmpFilePath == "") return;
+    filer->saveFile(tmpFilePath);
+}
+
+void Controller::on_openFile()
+{
+    canvas->charts.clear();
+    canvas->line.clear();
+    QString tmpFilePath = QFileDialog::getOpenFileName(w,tr("打开文件"),"C:",tr("FY文件(*.fy)"));
+    if(tmpFilePath == "") return;
+    filer->openFile(tmpFilePath);
+    for(auto x : canvas->charts)
+    {
+        connect(x, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+        connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
+        connect(x,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+    }
+    for(auto x : canvas->line)
+    {
+        connect(x,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+        connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
+    }
 }

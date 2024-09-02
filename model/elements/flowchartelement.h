@@ -30,15 +30,22 @@ class FlowchartElement :public QWidget
     friend class Remover;
     friend class Filer;
 
-    // 定义序列化运算符
-    friend QDataStream& operator<<(QDataStream& out, const FlowchartElement& fc) {
-        out << fc.ID << fc.chartType << fc.widgetStart << fc.widgetEnd;
-        return out;
+    friend QDataStream &operator<<(QDataStream &fout,  const FlowchartElement &cb)
+    {
+        fout.writeRawData(reinterpret_cast<const char*>(&cb.chartType),sizeof(PaintChartType));
+        fout.writeRawData(reinterpret_cast<const char*>(&cb.ID),sizeof(int));
+        fout<<cb.chartText;//<<cb.magPoint;
+        fout<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
+        qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
+        return fout;
     }
-
-    friend QDataStream& operator>>(QDataStream& in, FlowchartElement& fc) {
-        in >> fc.ID >> fc.chartType >> fc.widgetStart >> fc.widgetEnd;
-        return in;
+    friend QDataStream &operator>>(QDataStream &fin, FlowchartElement &cb)
+    {
+        fin.readRawData(reinterpret_cast<char*>(&cb.ID),sizeof(int));
+        fin>>cb.chartText;//>>cb.magPoint;
+        fin>>cb.paintStart>>cb.paintEnd>>cb.widgetStart>>cb.widgetEnd>>cb.paintChartDrawPen>>cb.paintChartFillPen;
+        qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
+        return fin;
     }
 
 private:
@@ -107,13 +114,33 @@ protected:
                 tmpEdit = nullptr;
             }
         }
-        bool textType = 1;
         QPoint chartTextMousePos;           // 保存文字移动时点击的位置
         Label *text = nullptr;          // 图形显示的文字控件
         // 图形编辑时文字输入控件
         QLineEdit *tmpEdit = nullptr;
         // 鼠标移动标识符
         CHART_LABEL_MOUSE_TYPE textMouseType = CHART_LABEL_MOUSE_TYPE::NONE;
+        //重写输入输出操作符
+        friend QDataStream &operator<<(QDataStream &fout,  const TextBase &tb)
+        {
+            QLabel * ql = tb.text;
+            fout<<ql->geometry()<<ql->text().toUtf8().length();
+            fout.writeRawData(ql->text().toUtf8().data(),ql->text().toUtf8().length());
+            return fout;
+        }
+        friend QDataStream &operator>>(QDataStream &fin, TextBase &tb)
+        {
+            QRect tmpqr;
+            fin>>tmpqr;
+            QLabel * ql = tb.text;
+            ql->setGeometry(tmpqr);
+            long long len;
+            fin>>len;
+            QByteArray tmp(len,'\0');
+            fin.readRawData(tmp.data(),len);
+            ql->setText(QString(tmp));
+            return fin;
+        }
     }chartText; // 文本控件
 
     class i_pointbase   // 点基本信息
