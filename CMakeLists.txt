@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         controller/updater.h controller/updater.cpp
         controller/remover.h controller/remover.cpp
         controller/filer.h controller/filer.cpp
+        controller/redoundoer.h controller/redoundoer.cpp
 
 
     )

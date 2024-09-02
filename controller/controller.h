@@ -12,6 +12,7 @@
 #include "updater.h"
 #include "Remover.h"
 #include "filer.h"
+#include "redoundoer.h"
 
 class Controller : public QObject
 {
@@ -39,6 +40,7 @@ private:
     Updater *updater;
     Remover *remover;
     Filer *filer;
+    RedoUndoer *redoUndoer;
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 

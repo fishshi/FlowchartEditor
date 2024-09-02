@@ -36,7 +36,7 @@ private:
     void drawStraightLine(int sx, int sy, int ex, int ey,QPainterPath &linePath, QPainterPath &graphPath);          // 直连线绘制
 
 public:
-    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,false,0,2){}
+    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,0,2){}
 
     Line(Line &cr):FlowchartElement(cr)
     {

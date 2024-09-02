@@ -94,7 +94,7 @@ private:
 protected:
     class TextBase {
     public:
-        TextBase():text(nullptr),tmpEdit1(nullptr){
+        TextBase():text(nullptr),tmpEdit(nullptr){
 
         }
         ~TextBase(){
@@ -102,18 +102,18 @@ protected:
                 delete text;
                 text = nullptr;
             }
-            if(tmpEdit1){
-                delete tmpEdit1;
-                tmpEdit1 = nullptr;
+            if(tmpEdit){
+                delete tmpEdit;
+                tmpEdit = nullptr;
             }
         }
         bool textType = 1;
         QPoint chartTextMousePos;           // 保存文字移动时点击的位置
         Label *text = nullptr;          // 图形显示的文字控件
         // 图形编辑时文字输入控件
-        QLineEdit *tmpEdit1 = nullptr;
+        QLineEdit *tmpEdit = nullptr;
         // 鼠标移动标识符
-        CHART_LABEL_MOUSE_TYPE textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
+        CHART_LABEL_MOUSE_TYPE textMouseType = CHART_LABEL_MOUSE_TYPE::NONE;
     }chartText; // 文本控件
 
     class i_pointbase   // 点基本信息
@@ -199,10 +199,8 @@ protected:
     static QPen paintDrawPen;       // 图形大小点、磁力点画笔
     static QBrush paintFillPen;     // 图形大小点、磁力点填充
 
-    bool movable = true;    // 图形位置可改变
-
 public:
-    explicit FlowchartElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::NONE, bool mov = true, int mpc=4, int spc=4);
+    explicit FlowchartElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::NONE, int mpc=4, int spc=4);
     FlowchartElement( int x, int y, int w, int h, QWidget *parent = nullptr, PaintChartType type = PaintChartType::NONE);
     explicit FlowchartElement(FlowchartElement &);
     virtual ~FlowchartElement()
@@ -263,7 +261,7 @@ public slots:
     void hideMagSize(); // 隐藏磁力点、大小点
     void showMagOnly(); // 显示磁力点
     void hideMagOnly(); // 隐藏磁力点
-    void setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE t,int x,int y){chartText.textMouseT1 = t;chartText.chartTextMousePos.setX(x);chartText.chartTextMousePos.setY(y);} // 设置文本位置
+    void setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE t,int x,int y){chartText.textMouseType = t;chartText.chartTextMousePos.setX(x);chartText.chartTextMousePos.setY(y);} // 设置文本位置
 
 protected:// 事件
     virtual void paintEvent(QPaintEvent *event);            // 绘制控件事件

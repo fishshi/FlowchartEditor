@@ -7,7 +7,7 @@ int FlowchartElement::chartIDCount = 0;
 QPen FlowchartElement::paintDrawPen  = QPen(QColor(150,80,80),pointLineWidth);
 QBrush FlowchartElement::paintFillPen  = QBrush(QColor(255,255,255));
 
-FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, bool mov, int mpc, int spc):QWidget(parent),magPoint(mpc),sizePoint(spc),movable(mov),chartText()
+FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc, int spc):QWidget(parent),magPoint(mpc),sizePoint(spc),chartText()
 {
     chartType = type;
     widgetPosInit();
@@ -627,12 +627,12 @@ void FlowchartElement::hideMagSize()
         this->releaseKeyboard();
         showAll = false;
 
-        if(chartText.tmpEdit1)
+        if(chartText.tmpEdit)
         {
-            chartText.text->setText(chartText.tmpEdit1->text());
+            chartText.text->setText(chartText.tmpEdit->text());
             chartText.text->adjustSize();
-            delete chartText.tmpEdit1;
-            chartText.tmpEdit1 = nullptr;
+            delete chartText.tmpEdit;
+            chartText.tmpEdit = nullptr;
         }
         update();
     }
@@ -653,12 +653,12 @@ void FlowchartElement::hideMagOnly()
     {
         this->releaseKeyboard();
         showMag = false;
-        if(chartText.tmpEdit1)
+        if(chartText.tmpEdit)
         {
-            chartText.text->setText(chartText.tmpEdit1->text());
+            chartText.text->setText(chartText.tmpEdit->text());
             chartText.text->adjustSize();
-            delete chartText.tmpEdit1;
-            chartText.tmpEdit1 = nullptr;
+            delete chartText.tmpEdit;
+            chartText.tmpEdit = nullptr;
         }
         update();
     }
@@ -789,7 +789,7 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
                 event->ignore();
             }
         }
-        if(chartText.textMouseT1 == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
+        if(chartText.textMouseType == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
         {
             emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
 
@@ -805,7 +805,7 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
 
 void FlowchartElement::mouseReleaseEvent(QMouseEvent *event)
 {
-    chartText.textMouseT1 = CHART_LABEL_MOUSE_TYPE::NONE;
+    chartText.textMouseType = CHART_LABEL_MOUSE_TYPE::NONE;
 
     curFlag = MOUSE_EVENT_TYPE::NONE;
 
@@ -818,13 +818,13 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
     {
         emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
 
-        chartText.tmpEdit1 = new QLineEdit(chartText.text->text(),this);
+        chartText.tmpEdit = new QLineEdit(chartText.text->text(),this);
         chartText.text->setText("");
-        chartText.tmpEdit1->adjustSize();
-        chartText.tmpEdit1->setStyleSheet("background:transparent;");
-        chartText.tmpEdit1->setGeometry(chartText.text->x(),chartText.text->y(),chartText.text->width() + (textBorderWidth<<1),chartText.text->height() + (textBorderWidth<<1));
-        chartText.tmpEdit1->show();
-        chartText.tmpEdit1->setFocus();
+        chartText.tmpEdit->adjustSize();
+        chartText.tmpEdit->setStyleSheet("background:transparent;");
+        chartText.tmpEdit->setGeometry(chartText.text->x(),chartText.text->y(),chartText.text->width() + (textBorderWidth<<1),chartText.text->height() + (textBorderWidth<<1));
+        chartText.tmpEdit->show();
+        chartText.tmpEdit->setFocus();
 
         this->grabKeyboard();
     }else

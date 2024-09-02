@@ -7,6 +7,8 @@ Controller::Controller(MainWindow *w)
     drawer = new Drawer(canvas);
     updater = new Updater(canvas);
     remover = new Remover(canvas);
+    filer = new Filer(canvas);
+    redoUndoer = new RedoUndoer(canvas);
     initConnections();
 }
 
