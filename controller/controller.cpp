@@ -271,8 +271,14 @@ void Controller::on_saveFile()
 
 void Controller::on_openFile()
 {
+    for(auto x : canvas->charts)
+        x->close();
+    for(auto x : canvas->line)
+        x->close();
+
     canvas->charts.clear();
     canvas->line.clear();
+
     QString tmpFilePath = QFileDialog::getOpenFileName(w,tr("打开文件"),"C:",tr("FY文件(*.fy)"));
     if(tmpFilePath == "") return;
     filer->openFile(tmpFilePath);
