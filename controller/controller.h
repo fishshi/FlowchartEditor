@@ -11,6 +11,7 @@
 #include "Drawer.h"
 #include "updater.h"
 #include "Remover.h"
+#include "filer.h"
 
 class Controller : public QObject
 {
@@ -37,6 +38,7 @@ private:
     Drawer *drawer;
     Updater *updater;
     Remover *remover;
+    Filer *filer;
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 

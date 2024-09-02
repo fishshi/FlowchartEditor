@@ -49,6 +49,8 @@ FlowchartElement::FlowchartElement(FlowchartElement &cb)
 
 void FlowchartElement::widgetPosInit(int x,int y,int w,int h)
 {
+    if(this->chartType == PaintChartType::ELLIPSE)
+        w = minSizeW;
     widgetStart.setX(x);
     widgetStart.setY(y);
     widgetEnd.setX(x+w);
@@ -413,23 +415,11 @@ void FlowchartElement::setXY(int x, int y)
     *y1 = y;
 
     updateWidgetPosInof();
-    updateMagPointLine();
-}
-
-void FlowchartElement::setWidthHeight(int x, int y)
-{
-    widgetEnd.setX(x);
-    widgetEnd.setY(y);
-
-    updateWidgetPosInof();
-    updatePaintInfo();
-    updateSizePointInfo();
-    updateSizePointPath();
     updateMagPointInfo();
     updateMagPointPath();
     updateMagPointLine();
-    updateTextInfo();
 }
+
 void FlowchartElement::setWidthHeight(int x, int y, ORIENTION type)
 {
     int *x1,*y1;

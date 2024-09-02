@@ -28,33 +28,39 @@ class FlowchartElement :public QWidget
     friend class Drawer;
     friend class Updater;
     friend class Remover;
+    friend class Filer;
+
+    // 定义序列化运算符
+    friend QDataStream& operator<<(QDataStream& out, const FlowchartElement& fc) {
+        out << fc.ID << fc.chartType << fc.widgetStart << fc.widgetEnd;
+        return out;
+    }
+
+    friend QDataStream& operator>>(QDataStream& in, FlowchartElement& fc) {
+        in >> fc.ID >> fc.chartType >> fc.widgetStart >> fc.widgetEnd;
+        return in;
+    }
+
 private:
-    static int magPointWidth;                   // Padding信息-磁力点宽度
-    static int sizePointWidth;                  // Padding信息-大小点宽度
-    static int pointLineWidth;                  // Padding信息-大小点、磁力点线宽度
+    static int magPointWidth;                   // 磁力点宽度
+    static int sizePointWidth;                  // 大小点宽度
+    static int pointLineWidth;                  // 大小点、磁力点线宽度
     static int chartIDCount;                    // 总ID计数
     static const int magPointAutoMagiRange = 10;// 磁力点自动吸附范围
-    static const int borderWidth = 20;          // Border信息-禁止绘画区域宽度
-    static const int minSizeW = 100;            // 图形最小宽高
+    static const int borderWidth = 20;          // 禁止绘画区域宽度
+    static const int minSizeW = 40;            // 图形最小宽高
     static const int minSizeH = 40;            // 图形最小宽高
     static const int textBorderWidth = 10;      // 文件边界最小宽高
 
     bool showAll = true;    // 显示大小控制点和磁力点
     bool showMag = false;   // 显示磁力点
-    ORIENTION lastType = ORIENTION::NONE;               // 改变大小状态切换
     MOUSE_EVENT_TYPE curFlag = MOUSE_EVENT_TYPE::NONE;  // 鼠标事件类型
     ORIENTION curIndex = ORIENTION::NONE;               // 当前选中大小点、磁力点方向
     PaintChartType chartType = PaintChartType::NONE;    // 图形类型
     int ID;         // 图形编号
 
-    static void resetStaticVal(){
-        FlowchartElement::magPointWidth = 7;
-        FlowchartElement::sizePointWidth = 9;
-        FlowchartElement::pointLineWidth = 2;
-        FlowchartElement::chartIDCount = 0;
-    }
     void varInit(int mpw=7,int spw=9,int plw=2,bool sa=true, bool smo=false);// 变量默认初始化函数
-    void widgetPosInit(int x=0,int y=0,int w=minSizeW,int h=minSizeH);    // 窗体位置信息默认初始化函数
+    void widgetPosInit(int x=0,int y=0,int w = 100,int h=minSizeH);    // 窗体位置信息默认初始化函数
     void paintInit();        // 图形绘制信息默认初始化
     void pointInit();        // 大小点和控制点默认初始化
     void textInit();         // 文字内容默认初始化
@@ -209,12 +215,11 @@ public:
     }
 
     void setXY(int x, int y);                           // 设置位置
-    void setWidthHeight(int x, int y);                  // 设置大小、更新数据，用于创建时
-    void setWidthHeight(int x, int y, ORIENTION type);  // 设置大小、更新数据，用于创建好之后
+    void setWidthHeight(int x, int y, ORIENTION type);  // 设置大小、更新数据
     void applyWidthHeight();                            // 更新数据，用于读取时
     bool autoSetMagi(int &x, int &y, int &index);   // 磁力点吸附函数
-    int getMagiPointAbsX(int i){;return magPoint.i_point[i]->getX() + x();} // 获取磁力点绝对坐标
-    int getMagiPointAbsY(int i){;return magPoint.i_point[i]->getY() + y();} // 获取磁力点相对坐标
+    int getMagiPointAbsX(int i){;return magPoint.i_point[i]->getX() + x();} // 获取磁力点坐标
+    int getMagiPointAbsY(int i){;return magPoint.i_point[i]->getY() + y();} // 获取磁力点坐标
     void addMagiPointStartLine(int i,FlowchartElement *cb){magPoint.i_point[i]->i_lineStart.push_back(cb);}   // 增加连线到相应的磁力点的起始连线容器
     void delMagiPointStartLine(int i,FlowchartElement *cb)                                                    // 删除磁力点的起始连线容器中相应的连线
     {
@@ -244,7 +249,6 @@ public:
     ORIENTION getMagiPointDirect(int i){return magPoint.i_point[i]->getRotate();}       // 获取磁力点的索引位置
     void overlapChartMousePressed(QMouseEvent *event);  // 鼠标点击事件Z-index检测
     void overlapChartMouseMove(QMouseEvent *event);     // 鼠标移动事件Z-index检测
-    void setMovalbe(bool f);            // 设置可否移动位置
     int & getID(void){return ID;}       // 获得唯一ID值
 
 signals:
