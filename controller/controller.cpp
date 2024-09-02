@@ -103,18 +103,37 @@ void Controller::on_delPressed()
 
 void Controller::on_leftPressed(QMouseEvent *event)
 {
-    for(auto x : canvas->charts)
+    if(updater->isFrameSelected == false && canvas->curSelecChart == nullptr)
     {
-        x->overlapChartMousePressed(event);
-        if(event->isAccepted()) return;
+        mouseEventType = MOUSE_EVENT_TYPE::FRAME_SELECTING;
+        updater->frameX = event->pos().rx();
+        updater->frameY = event->pos().ry();
     }
-    for(auto x : canvas->line)
+    else if(updater->isFrameSelected == true)
     {
-        x->overlapChartMousePressed(event);
-        if(event->isAccepted()) return;
+        if(event->pos().rx() > canvas->x1 && event->pos().rx() < canvas->x2 && event->pos().ry() > canvas->y1 && event->pos().ry() < canvas->y2)
+        {
+            mouseEventType = MOUSE_EVENT_TYPE::CHANGE_FRAME_POS;
+            updater->curSelecFramePos = event->pos();
+        }
+        else
+            updater->clearFrameSelect();
     }
-    canvas->hideMagSizeAll();
-    mouseEventType = MOUSE_EVENT_TYPE::NONE;
+    else
+    {
+        for(auto x : canvas->charts)
+        {
+            x->overlapChartMousePressed(event);
+            if(event->isAccepted()) return;
+        }
+        for(auto x : canvas->line)
+        {
+            x->overlapChartMousePressed(event);
+            if(event->isAccepted()) return;
+        }
+        canvas->hideMagSizeAll();
+        mouseEventType = MOUSE_EVENT_TYPE::NONE;
+    }
 }
 
 void Controller::on_leftClickToSelect(FlowchartElement * cb, int x, int y)
@@ -140,6 +159,24 @@ void Controller::on_mouseMoved(QMouseEvent *event)
     else if (mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS)
     {
         on_moveToChangePos(event->pos().rx(), event->pos().ry());
+    }
+    else if (mouseEventType == MOUSE_EVENT_TYPE::FRAME_SELECTING)
+    {
+        updater->frameSelect(event->pos().rx(), event->pos().ry());
+    }
+    else if(updater->isFrameSelected)
+    {
+        if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_FRAME_POS)
+        {
+            updater->moveToChangeFramePos(event->pos().rx(), event->pos().ry());
+        }
+        else
+        {
+            if(event->pos().rx() > canvas->x1 && event->pos().rx() < canvas->x2 && event->pos().ry() > canvas->y1 && event->pos().ry() < canvas->y2)
+                canvas->setCursor(QCursor(Qt::SizeAllCursor));
+            else
+                canvas->setCursor(QCursor(Qt::ArrowCursor));
+        }
     }
     else
     {
@@ -201,6 +238,8 @@ void Controller::on_mouseReleased(QMouseEvent *event)
         on_doneLink();
     else if(mouseEventType == MOUSE_EVENT_TYPE::NONE)
         event->ignore();
+    else if(mouseEventType == MOUSE_EVENT_TYPE::FRAME_SELECTING)
+        updater->doneFrameSelect();
     mouseEventType = MOUSE_EVENT_TYPE::NONE;
 }
 

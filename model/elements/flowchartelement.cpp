@@ -331,10 +331,10 @@ void FlowchartElement::paintSizeEdge(QPainter & p)
     int sx2 = sx+sizePointWidth / 2, sy2 = sy+sizePointWidth / 2;
     int ex1 = ex-sizePointWidth / 2, ey1 = ey-sizePointWidth / 2;
 
-    p.drawLine(sx2,sy,ex1,sy);
-    p.drawLine(ex,sy2,ex,ey1);
-    p.drawLine(ex1,ey,sx2,ey);
-    p.drawLine(sx,ey1,sx,sy2);
+    p.drawLine(sx2, sy, ex1, sy);
+    p.drawLine(ex, sy2, ex, ey1);
+    p.drawLine(ex1, ey, sx2, ey);
+    p.drawLine(sx, ey1, sx, sy2);
 
     p.setPen(tmp);
 }

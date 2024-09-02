@@ -3,6 +3,8 @@
 
 #include "../view/canvas.h"
 
+#include <unordered_set>
+
 class Updater
 {
     friend class Controller;
@@ -18,7 +20,18 @@ public:
 
     void doneChangeSize();
 
+    void frameSelect(int x, int y);
+    void doneFrameSelect();
+    void clearFrameSelect();
+
 private:
+    bool isFrameSelected = false;
+    int frameX;
+    int frameY;
+    std::unordered_set<FlowchartElement*> frameSelCharts;
+    QPoint curSelecFramePos;                // 选中时指针在框架上的位置信息
+    void moveToChangeFramePos(int x, int y);
+
     QPoint curSelecChartPos;                // 选中时指针在图像对象上的位置信息
     Canvas *canvas;
     ORIENTION sizePointDirect = ORIENTION::NONE;    // 选中时要改变大小的大小点的方向类型

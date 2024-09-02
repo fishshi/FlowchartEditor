@@ -45,6 +45,12 @@ public:
     }
     void hideMagSizeAll();              // 隐藏所有大小、磁力点
 
+    bool isframe = false;
+    int x1, y1, x2, y2;
+    void setDrawFrame(int x1, int y1, int x2, int y2);
+    void moveFrameBy(int x, int y);
+    void unsetDrawFrame();
+
 protected:
     virtual void paintEvent(QPaintEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);

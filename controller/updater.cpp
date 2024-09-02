@@ -85,3 +85,41 @@ void Updater::doneChangeSize()
     }
     canvas->lineSelectChart = nullptr;
 }
+
+void Updater::frameSelect(int x, int y)
+{
+    canvas->setDrawFrame(frameX, frameY, x, y);
+    for(auto fce : canvas->charts)
+    {
+        if(frameSelCharts.find(fce) == frameSelCharts.end() && fce->x() > frameX && fce->x() < x && fce->y() > frameY && fce->y() < y)
+        {
+            fce->showMagSize();
+            frameSelCharts.insert(fce);
+        }
+    }
+}
+
+void Updater::doneFrameSelect()
+{
+    isFrameSelected = true;
+}
+
+void Updater::clearFrameSelect()
+{
+    frameSelCharts.clear();
+    isFrameSelected = false;
+    canvas->unsetDrawFrame();
+    canvas->hideMagSizeAll();
+}
+
+void Updater::moveToChangeFramePos(int x, int y)
+{
+    int moveX = x - curSelecFramePos.rx();
+    int moveY = y - curSelecFramePos.ry();
+    for(auto fce : frameSelCharts)
+    {
+        fce->setXY(fce->widgetStart.rx() + moveX, fce->widgetStart.ry() + moveY);
+    }
+    canvas->moveFrameBy(moveX, moveY);
+    curSelecFramePos = QPoint(x, y);
+}
