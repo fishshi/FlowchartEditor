@@ -35,7 +35,8 @@ private:
     static int chartIDCount;                    // 总ID计数
     static const int magPointAutoMagiRange = 10;// 磁力点自动吸附范围
     static const int borderWidth = 20;          // Border信息-禁止绘画区域宽度
-    static const int minSizeWH = 40;            // 图形最小宽高
+    static const int minSizeW = 100;            // 图形最小宽高
+    static const int minSizeH = 40;            // 图形最小宽高
     static const int textBorderWidth = 10;      // 文件边界最小宽高
 
     bool showAll = true;    // 显示大小控制点和磁力点
@@ -52,8 +53,8 @@ private:
         FlowchartElement::pointLineWidth = 2;
         FlowchartElement::chartIDCount = 0;
     }
-    void varInit(int mpw=7,int spw=9,int plw=2,bool sa=true,bool smo=false);// 变量默认初始化函数
-    void widgetPosInit(int x=0,int y=0,int w=minSizeWH,int h=minSizeWH);    // 窗体位置信息默认初始化函数
+    void varInit(int mpw=7,int spw=9,int plw=2,bool sa=true, bool smo=false);// 变量默认初始化函数
+    void widgetPosInit(int x=0,int y=0,int w=minSizeW,int h=minSizeH);    // 窗体位置信息默认初始化函数
     void paintInit();        // 图形绘制信息默认初始化
     void pointInit();        // 大小点和控制点默认初始化
     void textInit();         // 文字内容默认初始化

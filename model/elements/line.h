@@ -3,13 +3,6 @@
 #include "flowchartelement.h"
 #include <QtMath>
 
-const static double sin45Val = 0.707106781;
-const static double cos45Val = 0.707106781;
-const static double sin75Val = 0.9659258262890;
-const static double cos75Val = 0.25881904510;
-const static double sin15Val = 0.2588190;
-const static double cos15Val = 0.965925826;
-
 class Line : public FlowchartElement
 {
 private:
@@ -19,14 +12,6 @@ private:
     const static int extendWidth = 30;              // 边界线段延伸长度
     const static int arrayLength = 18;              // 线头绘制范围 - 长度
     const static int arrayWidth = 9;                // 线头绘制范围 - 宽度
-    const static int arrayLineHeadLenM2 = arrayLength * arrayLength + arrayWidth * arrayWidth;
-    static double extendWidth45;
-    static double arrayLength45;
-    static double arrayLength75;
-    static double arrayWidth75;
-    static double arrayLength15;
-    static double arrayWidth15;
-
 
     virtual void paintChart(QPainter & p);
     virtual void paintSizeEdge(QPainter & p){}
@@ -51,23 +36,7 @@ private:
     void drawStraightLine(int sx, int sy, int ex, int ey,QPainterPath &linePath, QPainterPath &graphPath);          // 直连线绘制
 
 public:
-    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,false,0,2)
-    {
-        extendWidth45 = extendWidth * sin45Val;
-        arrayLength45 = arrayLength * sin45Val;
-
-        double tmpRad45AddX = qDegreesToRadians(45.0) + qAtan(double(arrayWidth)/arrayLength);
-        double tmpRad45SubX = qDegreesToRadians(45.0) - qAtan(double(arrayWidth)/arrayLength);
-        double arrayLineHeadLen = sqrt(arrayLineHeadLenM2);
-        arrayLength75 = arrayLineHeadLen * qCos(tmpRad45AddX);
-        arrayWidth75 = arrayLineHeadLen * qSin(tmpRad45AddX);
-        arrayLength15 = arrayLineHeadLen * qCos(tmpRad45SubX);
-        arrayWidth15 = arrayLineHeadLen * qSin(tmpRad45SubX);
-        qDebug()<<arrayLength<<" "<<sqrt((arrayLength * arrayLength + arrayWidth * arrayWidth))*qCos(qAtan(double(arrayWidth)/arrayLength));
-
-        qDebug()<<qRadiansToDegrees(qAtan(double(arrayWidth)/arrayLength))<<" "<<qDegreesToRadians(45.0)<<" "<<qDegreesToRadians(30.0)<<" "<<qDegreesToRadians(15.0);
-        qDebug()<<arrayLength45<<" "<<arrayLength75<<" "<<arrayWidth75<<" "<<arrayLength15<<" "<<arrayWidth15;
-    }
+    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,false,0,2){}
 
     Line(Line &cr):FlowchartElement(cr)
     {

@@ -13,11 +13,9 @@ public:
     void setPaintDecisionElement(){curPaintChartType = PaintChartType::DIAMOND;setPaintChart();}          // 获取一个新的菱形
     void setPaintStartEndElement(){curPaintChartType = PaintChartType::ROUNDRECT;setPaintChart();}      // 获取一个新的圆角矩形
     void setPaintConnectorElement(){curPaintChartType = PaintChartType::ELLIPSE;setPaintChart();}          // 获取一个新的圆形
-    void setPaintLine(){curPaintChartType = PaintChartType::LINE;setPaintChart();}                // 获取一个新的线段
     void setPaintDataElement(){curPaintChartType = PaintChartType::PARALLELOGRAM;setPaintChart();}      // 获取一个新的梯形
     void setPaintChart();
 
-    void clickToCreate(int x, int y);
     void moveToCreate(int x, int y);
     int moveToLink(int x, int y);
 

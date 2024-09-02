@@ -1,14 +1,8 @@
 ﻿#include "line.h"
-double Line::extendWidth45 = 0;
-double Line::arrayLength45 = 0;
-double Line::arrayLength75 = 0;
-double Line::arrayWidth75 = 0;
-double Line::arrayLength15 = 0;
-double Line::arrayWidth15 = 0;
 
-void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,const int y,QPainter & p,QPainterPath &linePath, QPainterPath &graphPath)
+void Line::drawLineHead(const ORIENTION oriention,const LINE_HEAD_TYPE lht,const int x,const int y,QPainter & p,QPainterPath &linePath, QPainterPath &graphPath)
 {
-    switch(o)
+    switch(oriention)
     {
         case ORIENTION::NORTH:{
             linePath.moveTo(x,y - extendWidth);
@@ -25,9 +19,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
                 }break;
                 case LINE_HEAD_TYPE::ARROW0:{
                     linePath.lineTo(x,y);
-                }break;
-                default:{
-
                 }break;
             }
         }break;
@@ -46,9 +37,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
                 }break;
                 case LINE_HEAD_TYPE::ARROW0:{
                     linePath.lineTo(x,y);
-                }break;
-                default:{
-
                 }break;
             }
 
@@ -69,9 +57,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
                 case LINE_HEAD_TYPE::ARROW0:{
                     linePath.lineTo(x,y);
                 }break;
-                default:{
-
-                }break;
             }
         }break;
         case ORIENTION::WEST:{
@@ -89,124 +74,6 @@ void Line::drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,c
                 }break;
                 case LINE_HEAD_TYPE::ARROW0:{
                     linePath.lineTo(x,y);
-                }break;
-                default:{
-
-                }break;
-            }
-        }break;
-        case ORIENTION::NORTHEAST:{
-            linePath.moveTo(x + extendWidth45,y - extendWidth45);
-            linePath.lineTo(x + arrayLength45,y - arrayLength45);
-
-
-            QPolygonF tmp;
-            tmp<<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45))
-              <<QPointF(x + extendWidth45+(arrayLength15 - arrayLength45),y - extendWidth45+(arrayLength45 - arrayWidth15))
-             <<QPointF(x+(arrayLength15 - arrayLength45),y+(arrayLength45 - arrayWidth15))
-            <<QPointF(x-(arrayLength45 - arrayLength75),y-(arrayWidth75 - arrayLength45))
-            <<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45));
-            graphPath.addPolygon(tmp);
-
-            switch(lht)
-            {
-                case LINE_HEAD_TYPE::ARROW1:{
-                    linePath.lineTo(x,y);
-                    linePath.lineTo(x+arrayLength75,y-arrayWidth75);
-                    linePath.moveTo(x,y);
-                    linePath.lineTo(x+arrayLength15,y-arrayWidth15);
-                    linePath.moveTo(x,y);
-                }break;
-                case LINE_HEAD_TYPE::ARROW0:{
-                    linePath.lineTo(x,y);
-                }break;
-                default:
-                    break;
-            }
-        }break;
-        case ORIENTION::NORTHWEST:{
-            linePath.moveTo(x - extendWidth45,y - extendWidth45);
-            linePath.lineTo(x - arrayLength45,y - arrayLength45);
-
-            QPolygonF tmp;
-            tmp<<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45))
-              <<QPointF(x - extendWidth45-(arrayLength15 - arrayLength45),y - extendWidth45+(arrayLength45 - arrayWidth15))
-             <<QPointF(x-(arrayLength15 - arrayLength45),y+(arrayLength45 - arrayWidth15))
-            <<QPointF(x+(arrayLength45 - arrayLength75),y-(arrayWidth75 - arrayLength45))
-            <<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y - extendWidth45-(arrayWidth75 - arrayLength45));
-            graphPath.addPolygon(tmp);
-
-            switch(lht)
-            {
-                case LINE_HEAD_TYPE::ARROW1:{
-                    linePath.lineTo(x,y);
-                    linePath.lineTo(x-arrayLength75,y-arrayWidth75);
-                    linePath.moveTo(x,y);
-                    linePath.lineTo(x-arrayLength15,y-arrayWidth15);
-                    linePath.moveTo(x,y);
-                }break;
-                case LINE_HEAD_TYPE::ARROW0:{
-                    linePath.lineTo(x,y);
-                }break;
-                default:
-                    break;
-            }
-        }break;
-        case ORIENTION::SOUTHWEST:{
-            linePath.moveTo(x - extendWidth45,y + extendWidth45);
-            linePath.lineTo(x - arrayLength45,y + arrayLength45);
-
-            QPolygonF tmp;
-            tmp<<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45))
-              <<QPointF(x - extendWidth45-(arrayLength15 - arrayLength45),y + extendWidth45-(arrayLength45 - arrayWidth15))
-             <<QPointF(x-(arrayLength15 - arrayLength45),y-(arrayLength45 - arrayWidth15))
-            <<QPointF(x+(arrayLength45 - arrayLength75),y+(arrayWidth75 - arrayLength45))
-            <<QPointF(x - extendWidth45+(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45));
-            graphPath.addPolygon(tmp);
-
-            switch(lht)
-            {
-                case LINE_HEAD_TYPE::ARROW1:{
-                    linePath.lineTo(x,y);
-                    linePath.lineTo(x-arrayLength75,y+arrayWidth75);
-                    linePath.moveTo(x,y);
-                    linePath.lineTo(x-arrayLength15,y+arrayWidth15);
-                    linePath.moveTo(x,y);
-                }break;
-                case LINE_HEAD_TYPE::ARROW0:{
-                    linePath.lineTo(x,y);
-                }break;
-                default:{
-
-                }break;
-            }
-        }break;
-        case ORIENTION::SOUTHEAST:{
-            linePath.moveTo(x + extendWidth45,y + extendWidth45);
-            linePath.lineTo(x + arrayLength45,y + arrayLength45);
-
-            QPolygonF tmp;
-            tmp<<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45))
-              <<QPointF(x + extendWidth45+(arrayLength15 - arrayLength45),y + extendWidth45-(arrayLength45 - arrayWidth15))
-             <<QPointF(x+(arrayLength15 - arrayLength45),y-(arrayLength45 - arrayWidth15))
-            <<QPointF(x-(arrayLength45 - arrayLength75),y+(arrayWidth75 - arrayLength45))
-            <<QPointF(x + extendWidth45-(arrayLength45 - arrayLength75),y + extendWidth45+(arrayWidth75 - arrayLength45));
-            graphPath.addPolygon(tmp);
-
-            switch(lht)
-            {
-                case LINE_HEAD_TYPE::ARROW1:{
-                    linePath.lineTo(x,y);
-                    linePath.lineTo(x+arrayLength75,y+arrayWidth75);
-                    linePath.moveTo(x,y);
-                    linePath.lineTo(x+arrayLength15,y+arrayWidth15);
-                    linePath.moveTo(x,y);
-                }break;
-                case LINE_HEAD_TYPE::ARROW0:{
-                    linePath.lineTo(x,y);
-                }break;
-                default:{
-
                 }break;
             }
         }break;
@@ -396,28 +263,6 @@ void Line::paintChart(QPainter & p)
                 case ORIENTION::ENDPOINT:{
                     drawStraightLine(sx,sy,endPos.rx(),endPos.ry(),linePath,*graphPath);
                 }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                default:
-                {
-                }
             }
         }break;
         case ORIENTION::EAST:{
@@ -565,28 +410,6 @@ void Line::paintChart(QPainter & p)
                 case ORIENTION::ENDPOINT:{
                     drawStraightLine(sx,sy,endPos.rx(),endPos.ry(),linePath,*graphPath);
                 }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                default:
-                {
-                }
             }
         }break;
         case ORIENTION::SOUTH:
@@ -730,28 +553,6 @@ void Line::paintChart(QPainter & p)
                 case ORIENTION::ENDPOINT:{
                     drawStraightLine(sx,sy,endPos.rx(),endPos.ry(),linePath,*graphPath);
                 }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                default:
-                {
-                }
             }
         }break;
         case ORIENTION::WEST:
@@ -895,28 +696,8 @@ void Line::paintChart(QPainter & p)
                 case ORIENTION::ENDPOINT:{
                     drawStraightLine(sx,sy,endPos.rx(),endPos.ry(),linePath,*graphPath);
                 }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
                 default:
                 {
-
                 }
             }
         }break;
@@ -925,260 +706,30 @@ void Line::paintChart(QPainter & p)
             sy = startPos.ry();
             ex = endPos.rx();
             ey = endPos.ry();
-            switch(endDirect)
+            if (endDirect == ORIENTION::NORTH)
             {
-                case ORIENTION::NORTH:{
-                    drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::EAST:{
-                    drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTH:{
-                    drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::WEST:{
-                    drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::ENDPOINT:{
-                    drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,endPos.rx() + extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,endPos.rx() - extendWidth45,endPos.ry() + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
-                }break;
-            };
-        }break;
-        case ORIENTION::NORTHEAST:{
-            sx = startPos.rx() + extendWidth45;
-            sy = startPos.ry() - extendWidth45;
-            ex = endPos.rx();
-            ey = endPos.ry();
-            drawLineHead(startDirect,startLineHeadType,startPos.rx(),startPos.ry(),p,linePath,*graphPath);
-            linePath.moveTo(sx,sy);
-            switch(endDirect)
+                drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
+                drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
+            }
+            else if (endDirect == ORIENTION::EAST)
             {
-                case ORIENTION::NORTH:{
-                    drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::EAST:{
-                    drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTH:{
-                    drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::WEST:{
-                    drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::ENDPOINT:{
-                    drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:{
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-            };
-        }break;
-        case ORIENTION::NORTHWEST:{
-            sx = startPos.rx() - extendWidth45;
-            sy = startPos.ry() - extendWidth45;
-            ex = endPos.rx();
-            ey = endPos.ry();
-            drawLineHead(startDirect,startLineHeadType,startPos.rx(),startPos.ry(),p,linePath,*graphPath);
-            switch(endDirect)
+                drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
+                drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
+            }
+            else if (endDirect == ORIENTION::SOUTH)
             {
-                case ORIENTION::NORTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::EAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::WEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::ENDPOINT:
-                {
-                    drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-            };
-        }break;
-        case ORIENTION::SOUTHWEST:{
-            sx = startPos.rx() - extendWidth45;
-            sy = startPos.ry() + extendWidth45;
-            ex = endPos.rx();
-            ey = endPos.ry();
-            drawLineHead(startDirect,startLineHeadType,startPos.rx(),startPos.ry(),p,linePath,*graphPath);
-            switch(endDirect)
+                drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
+                drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
+            }
+            else if (endDirect == ORIENTION::WEST)
             {
-                case ORIENTION::NORTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::EAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::WEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::ENDPOINT:
-                {
-                    drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-            };
-        }break;
-        case ORIENTION::SOUTHEAST:{
-            sx = startPos.rx() + extendWidth45;
-            sy = startPos.ry() + extendWidth45;
-            ex = endPos.rx();
-            ey = endPos.ry();
-            drawLineHead(startDirect,startLineHeadType,startPos.rx(),startPos.ry(),p,linePath,*graphPath);
-            switch(endDirect)
+                drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
+                drawLineHead(endDirect,endLineHeadType,endPos.rx(),endPos.ry(),p,linePath,*graphPath);
+            }
+            else if(endDirect == ORIENTION::ENDPOINT)
             {
-                case ORIENTION::NORTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey - extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::EAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTH:
-                {
-                    drawStraightLine(sx,sy,ex,ey + extendWidth,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::WEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth,ey,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::ENDPOINT:
-                {
-                    drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::NORTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey - extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHEAST:
-                {
-                    drawStraightLine(sx,sy,ex + extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-                case ORIENTION::SOUTHWEST:
-                {
-                    drawStraightLine(sx,sy,ex - extendWidth45,ey + extendWidth45,linePath,*graphPath);
-                    drawLineHead(endDirect,endLineHeadType,ex,ey,p,linePath,*graphPath);
-                }break;
-            };
-        }break;
-        default:{
+                drawStraightLine(sx,sy,ex,ey,linePath,*graphPath);
+            }
         }
     }
     p.drawPath(linePath);

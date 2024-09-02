@@ -22,9 +22,6 @@ void Drawer::setPaintChart()
     case PaintChartType::ELLIPSE:
         curPaintChart = new ConnectorElement(canvas);
         break;
-    case PaintChartType::LINE:
-        curPaintChart = new Line(canvas);
-        break;
     case PaintChartType::PARALLELOGRAM:
         curPaintChart = new DataElement(canvas);
         break;
@@ -34,37 +31,13 @@ void Drawer::setPaintChart()
     }
 }
 
-void Drawer::clickToCreate(int x, int y)
-{
-    if(canvas->curSelecChart)
-        canvas->curSelecChart->hideMagSize();
-    canvas->curSelecChart = curPaintChart;
-    curPaintChart->setXY(x,y);
-    if(curPaintChart->chartType == PaintChartType::LINE)
-        canvas->line.push_back(curPaintChart);
-    else
-        canvas->charts.push_back(curPaintChart);
-    curPaintChart->update();
-    curPaintChart->show();
-}
-
 void Drawer::moveToCreate(int x, int y)
 {
-    if(canvas->curSelecChart)
-    {
-        if(canvas->curSelecChart->chartType == PaintChartType::LINE)
-            for(auto it = canvas->charts.begin();it!=canvas->charts.end();it++)
-            {
-                if((*it)->autoSetMagi(x,y,canvas->magPointIndex))
-                {
-                    canvas->lineSelectChart = *it;
-                    break;
-                }
-                else
-                    canvas->lineSelectChart = nullptr;
-            }
-        curPaintChart->setWidthHeight(x,y);
-    }
+    curPaintChart->setXY(x, y);
+    if(!curPaintChart->isVisible())
+        curPaintChart->show();
+    else
+        curPaintChart->update();
 }
 
 int Drawer::moveToLink(int x, int y)
@@ -104,23 +77,9 @@ int Drawer::moveToLink(int x, int y)
 void Drawer::doneCreate()
 {
     curPaintChartType = PaintChartType::NONE;
-    if(canvas->curSelecChart->chartType == PaintChartType::LINE)
-    {
-        Line *cl = reinterpret_cast<Line *>(canvas->curSelecChart);
-        if(canvas->lineSelectChart)
-        {
-            canvas->lineSelectChart->addMagiPointEndLine(canvas->magPointIndex, canvas->curSelecChart);
-            canvas->lineSelectChart->hideMagOnly();
-            cl->setEndChart(canvas->lineSelectChart);
-            cl->setEndMagIndex(canvas->magPointIndex);
-            cl->setEndDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
-            cl->update();
-            canvas->lineSelectChart = nullptr;
-        }
-        else{
-            cl->resetEndChart();
-        }
-    }
+    curPaintChart->updateMagPointInfo();
+    canvas->charts.push_back(curPaintChart);
+    canvas->curSelecChart = curPaintChart;
     curPaintChart = nullptr;
 }
 

@@ -157,30 +157,6 @@ background-position: center;</string>
          </property>
         </widget>
        </item>
-       <item alignment="Qt::AlignmentFlag::AlignHCenter">
-        <widget class="QPushButton" name="lineBtn">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>34</width>
-           <height>34</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-image: url(:/assets/icon/icon-line.png);
-background-repeat: no-repeat;
-background-position: center;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -197,8 +173,8 @@ background-position: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>20012</width>
-            <height>20012</height>
+            <width>10252</width>
+            <height>10252</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -227,7 +203,7 @@ background-position: center;</string>
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>17</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

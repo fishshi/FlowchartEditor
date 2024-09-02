@@ -45,7 +45,6 @@ private:
     void on_delPressed();
 
     void on_leftPressed(QMouseEvent *event);
-    void on_leftClickToCreate(int x, int y);
     void on_leftClickToSelect(FlowchartElement * cb, int x, int y);
 
     void on_mouseMoved(QMouseEvent *event);

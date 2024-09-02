@@ -14,31 +14,31 @@ void Controller::initConnections()
 {
     // 绑定图源选项
     connect(w->ui->processElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
         drawer->setPaintProcessElement();
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->decisionElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
         drawer->setPaintDecisionElement();
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->startEndElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
         drawer->setPaintStartEndElement();
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
     connect(w->ui->connectorElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
         drawer->setPaintConnectorElement();
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
-    connect(w->ui->lineBtn, &QPushButton::clicked, [=](){
-        drawer->setPaintLine();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING;
-    });
     connect(w->ui->dataElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
         drawer->setPaintDataElement();
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
@@ -101,32 +101,18 @@ void Controller::on_delPressed()
 
 void Controller::on_leftPressed(QMouseEvent *event)
 {
-    if(mouseEventType == MOUSE_EVENT_TYPE::CREATING)
-        on_leftClickToCreate(event->pos().rx(), event->pos().ry());
-    else
+    for(auto x : canvas->charts)
     {
-        for(auto x : canvas->charts)
-        {
-            x->overlapChartMousePressed(event);
-            if(event->isAccepted()) return;
-        }
-        for(auto x : canvas->line)
-        {
-            x->overlapChartMousePressed(event);
-            if(event->isAccepted()) return;
-        }
-        canvas->hideMagSizeAll();
-        mouseEventType = MOUSE_EVENT_TYPE::NONE;
+        x->overlapChartMousePressed(event);
+        if(event->isAccepted()) return;
     }
-}
-
-void Controller::on_leftClickToCreate(int x, int y)
-{
-    drawer->clickToCreate(x, y);
-    connect(drawer->curPaintChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-    connect(drawer->curPaintChart,SIGNAL(setTypeChangeSize(ORIENTION)), this, SLOT(setTypeChangeSize(ORIENTION)));
-    if(drawer->curPaintChart->chartType != PaintChartType::LINE)
-        connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+    for(auto x : canvas->line)
+    {
+        x->overlapChartMousePressed(event);
+        if(event->isAccepted()) return;
+    }
+    canvas->hideMagSizeAll();
+    mouseEventType = MOUSE_EVENT_TYPE::NONE;
 }
 
 void Controller::on_leftClickToSelect(FlowchartElement * cb, int x, int y)
@@ -138,13 +124,21 @@ void Controller::on_leftClickToSelect(FlowchartElement * cb, int x, int y)
 void Controller::on_mouseMoved(QMouseEvent *event)
 {
     if (mouseEventType == MOUSE_EVENT_TYPE::CREATING)
+    {
         on_moveToCreate(event->pos().rx(), event->pos().ry());
+    }
     else if (mouseEventType == MOUSE_EVENT_TYPE::CHANGE_SIZE)
+    {
         on_moveToChangeSize(event->pos().rx(), event->pos().ry());
+    }
     else if (mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
+    {
         on_moveToLink(event->pos().rx(), event->pos().ry());
+    }
     else if (mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS)
+    {
         on_moveToChangePos(event->pos().rx(), event->pos().ry());
+    }
     else
     {
         for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++)
@@ -192,7 +186,13 @@ void Controller::on_moveToLink(int x, int y)
 void Controller::on_mouseReleased(QMouseEvent *event)
 {
     if(mouseEventType == MOUSE_EVENT_TYPE::CREATING)
+    {
+        connect(drawer->curPaintChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+        connect(drawer->curPaintChart,SIGNAL(setTypeChangeSize(ORIENTION)), this, SLOT(setTypeChangeSize(ORIENTION)));
+        if(drawer->curPaintChart->chartType != PaintChartType::LINE)
+            connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
         on_doneCreate();
+    }
     else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_SIZE)
         on_doneChangeSize();
     else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)

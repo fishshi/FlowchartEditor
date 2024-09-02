@@ -65,7 +65,6 @@ void FlowchartElement::varInit(int mpw,int spw,int plw,bool sa,bool smo)
     FlowchartElement::pointLineWidth = plw;
     showAll = sa;
     showMag = smo;
-    qDebug()<<"Create ";
 }
 
 void FlowchartElement::paintInit()
@@ -92,11 +91,10 @@ void FlowchartElement::pointInit()
     updateMagPointPath();
 }
 
-
 void FlowchartElement::textInit()
 {
     chartText.text = new Label(this);
-    chartText.text->setText("文本注释");
+    chartText.text->setText("双击以输入");
     chartText.text->setWordWrap(true);
     chartText.text->move(paintStart.rx() + sizePointWidth,paintStart.ry() + sizePointWidth);
     chartText.text->adjustSize();
@@ -168,7 +166,7 @@ void FlowchartElement::updateSizePointInfo()
 
 void FlowchartElement::updateMagPointInfo()
 {
-    if(magPoint.i_point.size()>=4)
+    if(magPoint.i_point.size()==4)
     {
         int x1 = paintStart.rx(),y1 = paintStart.ry();
         int x2 = paintEnd.rx(),y2 = paintEnd.ry();
@@ -456,33 +454,33 @@ void FlowchartElement::setWidthHeight(int x, int y, ORIENTION type)
     {
         case ORIENTION::NORTHWEST:
         {
-            if(*x2-x<minSizeWH) *x1 = *x2-minSizeWH;
+            if(*x2-x<minSizeW) *x1 = *x2-minSizeW;
             else *x1 = x;
-            if(*y2-y<minSizeWH) *y1 = *y2-minSizeWH;
+            if(*y2-y<minSizeH) *y1 = *y2-minSizeH;
             else *y1 = y;
             //widgetPos = widgetStart;
         }break;
         case ORIENTION::NORTHEAST:
         {
-            if(x-*x1<minSizeWH) *x2 = *x1+minSizeWH;
+            if(x-*x1<minSizeW) *x2 = *x1+minSizeW;
             else *x2 = x;
-            if(*y2-y<minSizeWH) *y1 = *y2-minSizeWH;
+            if(*y2-y<minSizeH) *y1 = *y2-minSizeH;
             else *y1 = y;
             //widgetPos = widgetStart;
         }break;
         case ORIENTION::SOUTHEAST:
         {
-            if(x-*x1<minSizeWH) *x2 = *x1+minSizeWH;
+            if(x-*x1<minSizeW) *x2 = *x1+minSizeW;
             else *x2 = x;
-            if(y-*y1<minSizeWH) *y2 = *y1+minSizeWH;
+            if(y-*y1<minSizeH) *y2 = *y1+minSizeH;
             else *y2 = y;
             //widgetPos = widgetStart;
         }break;
         case ORIENTION::SOUTHWEST:
         {
-            if(*x2-x<minSizeWH) *x1 = *x2-minSizeWH;
+            if(*x2-x<minSizeW) *x1 = *x2-minSizeW;
             else *x1 = x;
-            if(y-*y1<minSizeWH) *y2 = *y1+minSizeWH;
+            if(y-*y1<minSizeH) *y2 = *y1+minSizeH;
             else *y2 = y;
             //widgetPos = widgetStart;
         }break;
