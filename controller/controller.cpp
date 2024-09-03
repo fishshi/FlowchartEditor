@@ -10,7 +10,7 @@ Controller::Controller(MainWindow *w)
     filer = new Filer(canvas);
     redoUndoer = new RedoUndoer(canvas);
     initConnections();
-    initCashe();
+    initCache();
 }
 
 void Controller::initConnections()
@@ -366,12 +366,9 @@ void Controller::on_redo(){
     }
     else{
         remover->clear();
-        qDebug()<<666;
         redoUndoer->redo();
-        qDebug()<<667;
-        filer->openFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(redoUndoer->reNo)+".fy");
+        filer->openFile(QDir::current().filePath("assets/cache/Redo/")+QString::number(redoUndoer->reNo)+".fy");
         connectAll();
-        qDebug()<<668;
     }
 }
 
@@ -384,7 +381,7 @@ void Controller::on_undo(){
     else{
         remover->clear();
         redoUndoer->undo();
-        filer->openFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(redoUndoer->reNo)+".fy");
+        filer->openFile(QDir::current().filePath("assets/cache/Redo/")+QString::number(redoUndoer->reNo)+".fy");
         connectAll();
     }
 }
@@ -432,20 +429,35 @@ void Controller::on_replace(){
 
 void Controller::to_saveChange(int now){
     if(now==0){
-        remover->clearCasheRe();
-        remover->clearCasheUn();
-        filer->saveFile(QDir::current().filePath("../../assets/cashe/Redo/")+"0"+".fy");
+        remover->clearCacheRe();
+        remover->clearCacheUn();
+        filer->saveFile(QDir::current().filePath("assets/cache/Redo/")+"0"+".fy");
         redoUndoer->reNo=0;
         redoUndoer->unNo=-1;
     }
     else{
-        filer->saveFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(now)+".fy");
+        filer->saveFile(QDir::current().filePath("assets/cache/Redo/")+QString::number(now)+".fy");
         redoUndoer->reNo+=1;
-        remover->clearCasheUn();
+        remover->clearCacheUn();
         redoUndoer->unNo=-1;
     }
 }
 
-void Controller::initCashe(){
+void Controller::initCache(){
+    QString folderPath = QDir::current().filePath("assets/cache/Redo/");
+
+    // 检查文件夹是否存在，如果不存在则创建
+    QDir dir(folderPath);
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
+    QString folderPath2 = QDir::current().filePath("assets/cache/Undo/");
+
+    // 检查文件夹是否存在，如果不存在则创建
+    QDir dir2(folderPath2);
+    if (!dir2.exists()) {
+        dir2.mkpath(".");
+    }
+
     to_saveChange(0);
 }

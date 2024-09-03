@@ -24,8 +24,8 @@ class Controller : public QObject
 public:
     Controller(MainWindow *w);
     ~Controller(){
-        remover->clearCasheRe();
-        remover->clearCasheUn();
+        remover->clearCacheRe();
+        remover->clearCacheUn();
         delete drawer;
         delete updater;
         delete remover;
@@ -46,7 +46,7 @@ public slots:
 
 private:
     void initConnections();
-    void initCashe();
+    void initCache();
 
     MainWindow *w;
     Canvas *canvas;

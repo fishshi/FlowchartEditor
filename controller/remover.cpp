@@ -63,23 +63,23 @@ void Remover::clear()
     }
     canvas->charts.clear();
      qDebug()<<6;
-    //qDebug() << "Redo directory:" << QDir::current().filePath("../../assets/cashe/Redo");
-    //qDebug() << "Undo directory:" << QDir::current().filePath("../../assets/cashe/Uedo");
+    //qDebug() << "Redo directory:" << QDir::current().filePath("assets/cache/Redo");
+    //qDebug() << "Undo directory:" << QDir::current().filePath("assets/cache/Uedo");
     canvas->line.clear();
 }
 
-void Remover::clearCasheRe()
+void Remover::clearCacheRe()
 {
-    QDir dir(QDir::current().filePath("../../assets/cashe/Redo"));
+    QDir dir(QDir::current().filePath("assets/cache/Redo"));
     foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
         QFile::remove(file.absoluteFilePath());
     }
 
 }
 
-void Remover::clearCasheUn()
+void Remover::clearCacheUn()
 {
-    QDir dir2(QDir::current().filePath("../../assets/cashe/Undo"));
+    QDir dir2(QDir::current().filePath("assets/cache/Undo"));
     foreach (QFileInfo file, dir2.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
         QFile::remove(file.absoluteFilePath());
     }
