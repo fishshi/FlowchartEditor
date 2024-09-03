@@ -34,8 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         model/elements/subprocesselement.h model/elements/subprocesselement.cpp
         view/replacedialog.h view/replacedialog.cpp
         model/elements/documentelement.h model/elements/documentelement.cpp
-
-
+        README.md
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlowchartEditor APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
