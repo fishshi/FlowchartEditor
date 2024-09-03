@@ -24,7 +24,6 @@ public:
     void doneLink();
 
     void copy();
-    void cut();
     void paste(int x, int y);
 
 private:

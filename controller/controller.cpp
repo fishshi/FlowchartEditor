@@ -66,7 +66,6 @@ void Controller::initConnections()
     connect(w->ui->actionSaveFile, &QAction::triggered, this, &Controller::on_saveFile);
     connect(w->ui->actionOpenFile, &QAction::triggered, this, &Controller::on_openFile);
     connect(w->ui->actionNewFile, &QAction::triggered, this, &Controller::on_newFile);
-    connect(w->ui->actionRename, &QAction::triggered, this, &Controller::on_rename);
 
     //编辑操作
     connect(w->ui->actionRedo, &QAction::triggered, this, &Controller::on_redo);
@@ -111,14 +110,21 @@ void Controller::on_escPressed()
 
 void Controller::on_delPressed()
 {
-    FlowchartElement *csc = canvas->curSelecChart;
-    if(csc)
+    if(canvas->curSelecChart)
     {
-        if(csc->chartType == PaintChartType::LINE)
-            remover->delLine(csc);
+        if(canvas->curSelecChart->chartType == PaintChartType::LINE)
+            remover->delLine(canvas->curSelecChart);
         else
-            remover->delChart(csc);
+            remover->delChart(canvas->curSelecChart);
         canvas->curSelecChart = nullptr;
+        // To saveChange
+    }
+    else if(updater->isFrameSelected)
+    {
+        for(auto x : updater->frameSelCharts)
+            remover->delChart(x);
+        updater->clearFrameSelect();
+        // To saveChange
     }
 }
 
@@ -165,6 +171,7 @@ void Controller::on_leftClickToSelect(FlowchartElement * fce, int x, int y)
 
 void Controller::on_mouseMoved(QMouseEvent *event)
 {
+    mousePos = event->pos();
     if (mouseEventType == MOUSE_EVENT_TYPE::CREATING)
     {
         on_moveToCreate(event->pos().rx(), event->pos().ry());
@@ -251,11 +258,18 @@ void Controller::on_mouseReleased(QMouseEvent *event)
         if(drawer->curPaintChart->chartType != PaintChartType::LINE)
             connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
         on_doneCreate();
+        // To saveChange
     }
     else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_SIZE)
+    {
         on_doneChangeSize();
+        // To saveChange
+    }
     else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
+    {
         on_doneLink();
+        // To saveChange
+    }
     else if(mouseEventType == MOUSE_EVENT_TYPE::NONE)
         event->ignore();
     else if(mouseEventType == MOUSE_EVENT_TYPE::FRAME_SELECTING)
@@ -292,9 +306,9 @@ void Controller::on_saveFile()
 
 void Controller::on_openFile()
 {
-    remover->clear();
     QString tmpFilePath = QFileDialog::getOpenFileName(w,tr("打开文件"),"C:",tr("FY文件(*.fy)"));
     if(tmpFilePath == "") return;
+    remover->clear();
     filer->openFile(tmpFilePath);
     for(auto x : canvas->charts)
     {
@@ -310,15 +324,9 @@ void Controller::on_openFile()
 }
 
 void Controller::on_newFile(){
-    QMessageBox msgBox;
-    msgBox.setText("新建文件");
-    msgBox.exec();
-}
-
-void Controller::on_rename(){
-    QMessageBox msgBox;
-    msgBox.setText("重命名");
-    msgBox.exec();
+    if(!canvas->charts.empty())
+        on_saveFile();
+    remover->clear();
 }
 
 void Controller::on_redo(){
@@ -334,31 +342,42 @@ void Controller::on_undo(){
 }
 
 void Controller::on_copy(){
-    QMessageBox msgBox;
-    msgBox.setText("复制");
-    msgBox.exec();
+    drawer->copy();
 }
 
 void Controller::on_cut(){
-    QMessageBox msgBox;
-    msgBox.setText("剪切");
-    msgBox.exec();
+    if(canvas->curSelecChart == nullptr)
+        return;
+    drawer->copy();
+    remover->delChart(canvas->curSelecChart);
+    canvas->curSelecChart = nullptr;
+    // To saveChange
 }
 
 void Controller::on_paste(){
-    QMessageBox msgBox;
-    msgBox.setText("粘贴");
-    msgBox.exec();
+    drawer->paste(mousePos.rx(), mousePos.ry());
+    connect(canvas->curSelecChart, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
+    connect(canvas->curSelecChart, SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
+    connect(canvas->curSelecChart, SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+    // To saveChange
 }
 
 void Controller::on_search(){
-    QMessageBox msgBox;
-    msgBox.setText("查找");
-    msgBox.exec();
+    bool ok;
+    QString searchText = QInputDialog::getText(w, tr("查找"),
+            tr("请输入查找内容:"), QLineEdit::Normal,"", &ok);
+    if (ok && !searchText.isEmpty())
+        updater->search(searchText);
 }
 
 void Controller::on_replace(){
-    QMessageBox msgBox;
-    msgBox.setText("替换");
-    msgBox.exec();
+    ReplaceDialog dialog(w);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        QString findText = dialog.getFindText();       // 获取查找内容
+        QString replaceText = dialog.getReplaceText(); // 获取替换内容
+        if (!findText.isEmpty())
+            updater->replace(findText, replaceText);
+    }
+    // To saveChange
 }

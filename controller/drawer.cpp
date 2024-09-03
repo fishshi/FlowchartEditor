@@ -141,12 +141,6 @@ void Drawer::copy()
     curPasteChart->chartText.text->setGeometry(canvas->curSelecChart->chartText.text->geometry());
 }
 
-void Drawer::cut()
-{
-    copy();
-    //remover->delChart(canvas->curSelecChart);
-}
-
 void Drawer::paste(int x, int y)
 {
     if(curPasteChart == nullptr)
@@ -156,5 +150,5 @@ void Drawer::paste(int x, int y)
     canvas->hideMagSizeAll();
     canvas->charts.push_back(curPasteChart);
     canvas->curSelecChart = curPasteChart;
-    // connect......
+    copy();
 }

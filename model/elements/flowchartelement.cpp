@@ -96,7 +96,7 @@ void FlowchartElement::pointInit()
 void FlowchartElement::textInit()
 {
     chartText.text = new Label(this);
-    chartText.text->setText("双击以输入");
+    chartText.text->setText("双击输入");
     chartText.text->setWordWrap(true);
     chartText.text->move(paintStart.rx() + sizePointWidth,paintStart.ry() + sizePointWidth);
     chartText.text->adjustSize();

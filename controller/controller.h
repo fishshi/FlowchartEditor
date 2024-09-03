@@ -3,6 +3,7 @@
 
 #include <QMenu>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
@@ -14,6 +15,7 @@
 #include "Remover.h"
 #include "filer.h"
 #include "redoundoer.h"
+#include "../view/replacedialog.h"
 
 class Controller : public QObject
 {
@@ -42,6 +44,7 @@ private:
     Remover *remover;
     Filer *filer;
     RedoUndoer *redoUndoer;
+    QPoint mousePos;
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 
@@ -67,7 +70,6 @@ private:
     void on_saveFile();
     void on_openFile();
     void on_newFile();
-    void on_rename();
 
     //编辑操作
     void on_redo();
