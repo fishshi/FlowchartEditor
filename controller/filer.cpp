@@ -42,9 +42,6 @@ void Filer::openFile(QString filePath)
         case PaintChartType::DOCUMENTELEMENT:
             cb = new DocumentElement(canvas);
             break;
-        default:case PaintChartType::NONE:
-            cb = nullptr;
-            break;
         }
         cb->chartType = tmp;
         fin>>(*cb);
@@ -115,4 +112,26 @@ void Filer::saveFile(QString filePath)
         fout<<*(*it)<<*(reinterpret_cast<const Line*>(*it));
     }
     file.close();
+}
+
+void Filer::saveAsSVG(QString filename) {
+    // 创建 QSvgGenerator 对象
+    QSvgGenerator generator;
+    generator.setFileName(filename);
+    int width = 0, height = 0;
+    for(auto x : canvas->charts)
+    {
+        if(x->widgetEnd.rx() > width)
+            width = x->widgetEnd.rx();
+        if(x->widgetEnd.ry() > height)
+            height = x->widgetEnd.ry();
+    }
+    generator.setSize(QSize(width + 50, height + 50));
+    generator.setViewBox(QRect(0, 0, width + 50, height + 50));
+    // 创建 QPainter 并设置到生成器上
+    QPainter painter(&generator);
+    // 渲染父部件及其子部件到 SVG 生成器
+    canvas->render(&painter);
+    // 结束绘图
+    painter.end();
 }

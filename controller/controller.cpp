@@ -73,6 +73,7 @@ void Controller::initConnections()
     connect(w->ui->actionSaveFile, &QAction::triggered, this, &Controller::on_saveFile);
     connect(w->ui->actionOpenFile, &QAction::triggered, this, &Controller::on_openFile);
     connect(w->ui->actionNewFile, &QAction::triggered, this, &Controller::on_newFile);
+    connect(w->ui->actionSaveAsSVG, &QAction::triggered, this, &Controller::on_saveAsSVG);
 
     //编辑操作
     connect(w->ui->actionRedo, &QAction::triggered, this, &Controller::on_redo);
@@ -343,6 +344,13 @@ void Controller::on_newFile(){
         on_saveFile();
     remover->clear();
     to_saveChange(0);
+}
+
+void Controller::on_saveAsSVG()
+{
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("保存文件"), "C:", tr("SVG文件(*.svg)"));
+    if(tmpFilePath == "") return;
+    filer->saveAsSVG(tmpFilePath);
 }
 
 void Controller::on_redo(){
