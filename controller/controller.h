@@ -23,6 +23,15 @@ class Controller : public QObject
     Q_OBJECT
 public:
     Controller(MainWindow *w);
+    ~Controller(){
+        remover->clearCasheRe();
+        remover->clearCasheUn();
+        delete drawer;
+        delete updater;
+        delete remover;
+        delete filer;
+        delete redoUndoer;
+    }
 
 public slots:
     void setTypeChangeSize(ORIENTION i){mouseEventType = MOUSE_EVENT_TYPE::CHANGE_SIZE; updater->sizePointDirect = i; }                                                                                                       // 设置鼠标事件类型为改变大小

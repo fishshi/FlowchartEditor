@@ -73,17 +73,14 @@ void Remover::clearCasheRe()
     QDir dir(QDir::current().filePath("../../assets/cashe/Redo"));
     foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
         QFile::remove(file.absoluteFilePath());
-
     }
 
 }
 
 void Remover::clearCasheUn()
 {
-
     QDir dir2(QDir::current().filePath("../../assets/cashe/Undo"));
     foreach (QFileInfo file, dir2.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
         QFile::remove(file.absoluteFilePath());
-
     }
 }

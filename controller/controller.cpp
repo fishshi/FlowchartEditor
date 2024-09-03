@@ -273,7 +273,7 @@ void Controller::on_mouseReleased(QMouseEvent *event)
     else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_SIZE)
     {
         on_doneChangeSize();
-        to_saveChange(redoUndoer->reNo+1);
+        to_saveChange(redoUndoer->reNo + 1);
     }
     else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
     {
@@ -290,6 +290,11 @@ void Controller::on_mouseReleased(QMouseEvent *event)
             updater->clearFrameSelect();
         else
             updater->doneFrameSelect();
+    }
+    else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_FRAME_POS)
+    {
+        updater->clearFrameSelect();
+        to_saveChange(redoUndoer->reNo + 1);
     }
     mouseEventType = MOUSE_EVENT_TYPE::NONE;
 }
@@ -437,6 +442,7 @@ void Controller::to_saveChange(int now){
         filer->saveFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(now)+".fy");
         redoUndoer->reNo+=1;
         remover->clearCasheUn();
+        redoUndoer->unNo=-1;
     }
 }
 
