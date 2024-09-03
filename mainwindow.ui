@@ -172,7 +172,7 @@ background-position: center;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">
+          <string notr="true">background-image: url(:/assets/icon/icon-documentelement.png);
 background-repeat: no-repeat;
 background-position: center;</string>
          </property>
