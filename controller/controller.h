@@ -4,6 +4,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QDir>
 
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
@@ -36,6 +37,7 @@ public slots:
 
 private:
     void initConnections();
+    void initCashe();
 
     MainWindow *w;
     Canvas *canvas;
@@ -45,6 +47,9 @@ private:
     Filer *filer;
     RedoUndoer *redoUndoer;
     QPoint mousePos;
+    //int ReNo=0;
+    //int UnNo=0;
+    //int NowSta=0;
 
     MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
 
@@ -79,6 +84,9 @@ private:
     void on_paste();
     void on_search();
     void on_replace();
+
+    void to_saveChange(int now);
+    void connectAll();
 
 };
 

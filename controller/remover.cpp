@@ -1,4 +1,6 @@
 #include "remover.h"
+#include <QDir>
+#include <QDebug>
 
 Remover::Remover(Canvas *canvas) {
     this->canvas = canvas;
@@ -60,5 +62,28 @@ void Remover::clear()
         *it = nullptr;
     }
     canvas->charts.clear();
+     qDebug()<<6;
+    //qDebug() << "Redo directory:" << QDir::current().filePath("../../assets/cashe/Redo");
+    //qDebug() << "Undo directory:" << QDir::current().filePath("../../assets/cashe/Uedo");
     canvas->line.clear();
+}
+
+void Remover::clearCasheRe()
+{
+    QDir dir(QDir::current().filePath("../../assets/cashe/Redo"));
+    foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+        QFile::remove(file.absoluteFilePath());
+
+    }
+
+}
+
+void Remover::clearCasheUn()
+{
+
+    QDir dir2(QDir::current().filePath("../../assets/cashe/Undo"));
+    foreach (QFileInfo file, dir2.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+        QFile::remove(file.absoluteFilePath());
+
+    }
 }

@@ -31,6 +31,7 @@ class Canvas : public QWidget
     friend class Updater;
     friend class Remover;
     friend class Filer;
+    friend class RedoUndoer;
 private:
     std::vector<FlowchartElement*> charts;    // 画板上图形的集合
     std::vector<FlowchartElement*> line;      // 画板上线的集合

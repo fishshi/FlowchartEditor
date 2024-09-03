@@ -10,6 +10,8 @@ public:
     void delChart(FlowchartElement *&fce);      // 删除图形
     void delLine(FlowchartElement *&fce);       // 删除线
     void clear();                              //清屏
+    void clearCasheRe();
+    void clearCasheUn();
 private:
     Canvas *canvas;
 };

@@ -10,6 +10,7 @@ Controller::Controller(MainWindow *w)
     filer = new Filer(canvas);
     redoUndoer = new RedoUndoer(canvas);
     initConnections();
+    initCashe();
 }
 
 void Controller::initConnections()
@@ -124,6 +125,7 @@ void Controller::on_delPressed()
             remover->delChart(canvas->curSelecChart);
         canvas->curSelecChart = nullptr;
         // To saveChange
+        to_saveChange(redoUndoer->reNo+1);
     }
     else if(updater->isFrameSelected)
     {
@@ -131,6 +133,7 @@ void Controller::on_delPressed()
             remover->delChart(x);
         updater->clearFrameSelect();
         // To saveChange
+        to_saveChange(redoUndoer->reNo+1);
     }
 }
 
@@ -264,18 +267,20 @@ void Controller::on_mouseReleased(QMouseEvent *event)
         if(drawer->curPaintChart->chartType != PaintChartType::LINE)
             connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
         on_doneCreate();
-        // To saveChange
+        to_saveChange(redoUndoer->reNo+1);
     }
     else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_SIZE)
     {
         on_doneChangeSize();
-        // To saveChange
+        to_saveChange(redoUndoer->reNo+1);
     }
     else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
     {
         on_doneLink();
-        // To saveChange
+        to_saveChange(redoUndoer->reNo+1);
     }
+    else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS)
+        to_saveChange(redoUndoer->reNo+1);
     else if(mouseEventType == MOUSE_EVENT_TYPE::NONE)
         event->ignore();
     else if(mouseEventType == MOUSE_EVENT_TYPE::FRAME_SELECTING)
@@ -316,6 +321,11 @@ void Controller::on_openFile()
     if(tmpFilePath == "") return;
     remover->clear();
     filer->openFile(tmpFilePath);
+    connectAll();
+    to_saveChange(0);
+}
+
+void Controller::connectAll(){
     for(auto x : canvas->charts)
     {
         connect(x, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
@@ -328,23 +338,42 @@ void Controller::on_openFile()
         connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
     }
 }
-
 void Controller::on_newFile(){
     if(!canvas->charts.empty())
         on_saveFile();
     remover->clear();
+    to_saveChange(0);
 }
 
 void Controller::on_redo(){
-    QMessageBox msgBox;
-    msgBox.setText("恢复");
-    msgBox.exec();
+    if(redoUndoer->unNo < 0){
+        QMessageBox msgBox;
+        msgBox.setText("重写失败，没有更早！");
+        msgBox.exec();
+    }
+    else{
+        remover->clear();
+        qDebug()<<666;
+        redoUndoer->redo();
+        qDebug()<<667;
+        filer->openFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(redoUndoer->reNo)+".fy");
+        connectAll();
+        qDebug()<<668;
+    }
 }
 
 void Controller::on_undo(){
-    QMessageBox msgBox;
-    msgBox.setText("撤销");
-    msgBox.exec();
+    if(redoUndoer->reNo <= 0){
+        QMessageBox msgBox;
+        msgBox.setText("撤销失败，没有更早！");
+        msgBox.exec();
+    }
+    else{
+        remover->clear();
+        redoUndoer->undo();
+        filer->openFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(redoUndoer->reNo)+".fy");
+        connectAll();
+    }
 }
 
 void Controller::on_copy(){
@@ -357,7 +386,7 @@ void Controller::on_cut(){
     drawer->copy();
     remover->delChart(canvas->curSelecChart);
     canvas->curSelecChart = nullptr;
-    // To saveChange
+    to_saveChange(redoUndoer->reNo+1);
 }
 
 void Controller::on_paste(){
@@ -365,7 +394,7 @@ void Controller::on_paste(){
     connect(canvas->curSelecChart, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
     connect(canvas->curSelecChart, SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
     connect(canvas->curSelecChart, SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
-    // To saveChange
+    to_saveChange(redoUndoer->reNo+1);
 }
 
 void Controller::on_search(){
@@ -385,5 +414,24 @@ void Controller::on_replace(){
         if (!findText.isEmpty())
             updater->replace(findText, replaceText);
     }
-    // To saveChange
+    to_saveChange(redoUndoer->reNo+1);
+}
+
+void Controller::to_saveChange(int now){
+    if(now==0){
+        remover->clearCasheRe();
+        remover->clearCasheUn();
+        filer->saveFile(QDir::current().filePath("../../assets/cashe/Redo/")+"0"+".fy");
+        redoUndoer->reNo=0;
+        redoUndoer->unNo=-1;
+    }
+    else{
+        filer->saveFile(QDir::current().filePath("../../assets/cashe/Redo/")+QString::number(now)+".fy");
+        redoUndoer->reNo+=1;
+        remover->clearCasheUn();
+    }
+}
+
+void Controller::initCashe(){
+    to_saveChange(0);
 }
