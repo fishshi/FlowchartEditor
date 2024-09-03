@@ -59,6 +59,20 @@ void Controller::initConnections()
     //文件操作
     connect(w->ui->actionSaveFile, &QAction::triggered, this, &Controller::on_saveFile);
     connect(w->ui->actionOpenFile, &QAction::triggered, this, &Controller::on_openFile);
+    connect(w->ui->actionNewFile, &QAction::triggered, this, &Controller::on_newFile);
+    connect(w->ui->actionRename, &QAction::triggered, this, &Controller::on_rename);
+
+    //编辑操作
+    connect(w->ui->actionRedo, &QAction::triggered, this, &Controller::on_redo);
+    connect(w->ui->actionUndo, &QAction::triggered, this, &Controller::on_undo);
+    connect(w->ui->actionCopy, &QAction::triggered, this, &Controller::on_copy);
+    connect(w->ui->actionCut, &QAction::triggered, this, &Controller::on_cut);
+    connect(w->ui->actionPaste, &QAction::triggered, this, &Controller::on_paste);
+    connect(w->ui->actionSearch, &QAction::triggered, this, &Controller::on_search);
+    connect(w->ui->actionReplace, &QAction::triggered, this, &Controller::on_replace);
+
+    //帮助操作
+
 }
 
 void Controller::showRrightClickMenu(const QPoint &pos)
@@ -286,4 +300,58 @@ void Controller::on_openFile()
         connect(x,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
         connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
     }
+}
+
+void Controller::on_newFile(){
+    QMessageBox msgBox;
+    msgBox.setText("新建文件");
+    msgBox.exec();
+}
+
+void Controller::on_rename(){
+    QMessageBox msgBox;
+    msgBox.setText("重命名");
+    msgBox.exec();
+}
+
+void Controller::on_redo(){
+    QMessageBox msgBox;
+    msgBox.setText("恢复");
+    msgBox.exec();
+}
+
+void Controller::on_undo(){
+    QMessageBox msgBox;
+    msgBox.setText("撤销");
+    msgBox.exec();
+}
+
+void Controller::on_copy(){
+    QMessageBox msgBox;
+    msgBox.setText("复制");
+    msgBox.exec();
+}
+
+void Controller::on_cut(){
+    QMessageBox msgBox;
+    msgBox.setText("剪切");
+    msgBox.exec();
+}
+
+void Controller::on_paste(){
+    QMessageBox msgBox;
+    msgBox.setText("粘贴");
+    msgBox.exec();
+}
+
+void Controller::on_search(){
+    QMessageBox msgBox;
+    msgBox.setText("查找");
+    msgBox.exec();
+}
+
+void Controller::on_replace(){
+    QMessageBox msgBox;
+    msgBox.setText("替换");
+    msgBox.exec();
 }

@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include <QMenu>
+#include <QMessageBox>
 
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
@@ -62,8 +63,21 @@ private:
     void on_doneChangeSize();
     void on_doneLink();
 
+    //文件操作
     void on_saveFile();
     void on_openFile();
+    void on_newFile();
+    void on_rename();
+
+    //编辑操作
+    void on_redo();
+    void on_undo();
+    void on_copy();
+    void on_cut();
+    void on_paste();
+    void on_search();
+    void on_replace();
+
 };
 
 #endif // CONTROLLER_H

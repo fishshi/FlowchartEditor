@@ -173,8 +173,8 @@ background-position: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>10252</width>
-            <height>10252</height>
+            <width>10262</width>
+            <height>10262</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -203,32 +203,143 @@ background-position: center;</string>
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>18</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>文件(F)</string>
+     <string>文件(&amp;F)</string>
     </property>
     <addaction name="actionNewFile"/>
     <addaction name="actionOpenFile"/>
     <addaction name="actionSaveFile"/>
+    <addaction name="actionRename"/>
+   </widget>
+   <widget class="QMenu" name="menu_E">
+    <property name="title">
+     <string>编辑(&amp;E)</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionSearch"/>
+    <addaction name="actionReplace"/>
+   </widget>
+   <widget class="QMenu" name="menu_H">
+    <property name="title">
+     <string>帮助(&amp;H)</string>
+    </property>
+    <addaction name="actionAboutus"/>
+    <addaction name="actionHelp"/>
+    <addaction name="actionkaiyuanxieyi"/>
    </widget>
    <addaction name="menu"/>
+   <addaction name="menu_E"/>
+   <addaction name="menu_H"/>
   </widget>
   <action name="actionNewFile">
    <property name="text">
     <string>新建项目</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpenFile">
    <property name="text">
     <string>打开项目</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSaveFile">
    <property name="text">
     <string>保存项目</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>撤销</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>恢复</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>复制</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>剪切</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>粘贴</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>重命名</string>
+   </property>
+  </action>
+  <action name="actionSearch">
+   <property name="text">
+    <string>查找</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="text">
+    <string>替换</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionAboutus">
+   <property name="text">
+    <string>关于我们</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>操作说明</string>
+   </property>
+  </action>
+  <action name="actionkaiyuanxieyi">
+   <property name="text">
+    <string>开源协议</string>
    </property>
   </action>
  </widget>
