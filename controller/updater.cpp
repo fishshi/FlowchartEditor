@@ -107,6 +107,7 @@ void Updater::doneFrameSelect()
 void Updater::clearFrameSelect()
 {
     frameSelCharts.clear();
+    canvas->setDrawFrame(0, 0, 0, 0);
     isFrameSelected = false;
     canvas->unsetDrawFrame();
     canvas->hideMagSizeAll();
@@ -122,4 +123,31 @@ void Updater::moveToChangeFramePos(int x, int y)
     }
     canvas->moveFrameBy(moveX, moveY);
     curSelecFramePos = QPoint(x, y);
+}
+
+void Updater::search(QString target)
+{
+    for(auto x : canvas->charts)
+    {
+        if(x->chartText.text->text().contains(target))
+            x->showMagSize();
+    }
+}
+
+void Updater::replace(QString target, QString newTarget)
+{
+    for(auto x : canvas->charts)
+    {
+        if(x->chartText.text->text().contains(target))
+        {
+            QString tmp = x->chartText.text->text();
+            QStringList tmpSplit = tmp.split(target);
+            tmp = tmpSplit[0];
+            for(int i = 1; i < tmpSplit.size(); ++i)
+                tmp += (newTarget + tmpSplit[i]);
+            x->chartText.text->setText(tmp);
+            x->updateTextInfo();
+            x->showMagSize();
+        }
+    }
 }

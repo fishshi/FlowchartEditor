@@ -24,6 +24,10 @@ public:
     void doneFrameSelect();
     void clearFrameSelect();
 
+    void search(QString target);
+    void replace(QString target, QString newTarget);
+
+
 private:
     bool isFrameSelected = false;
     int frameX;

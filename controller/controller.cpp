@@ -84,12 +84,9 @@ void Controller::showRrightClickMenu(const QPoint &pos)
 
 void Controller::on_escPressed()
 {
-    FlowchartElement *csc = canvas->curSelecChart;
-    if(csc)
-    {
-        csc->hideMagSize();
-        csc = nullptr;
-    }
+    canvas->hideMagSizeAll();
+    canvas->curSelecChart = nullptr;
+    updater->clearFrameSelect();
 }
 
 void Controller::on_delPressed()
@@ -197,7 +194,6 @@ void Controller::on_mouseMoved(QMouseEvent *event)
         if(canvas->curSelecChart == nullptr)
         {
             canvas->setCursor(QCursor(Qt::ArrowCursor));
-            canvas->hideMagSizeAll();
             mouseEventType = MOUSE_EVENT_TYPE::NONE;
         }
     }
@@ -243,7 +239,12 @@ void Controller::on_mouseReleased(QMouseEvent *event)
     else if(mouseEventType == MOUSE_EVENT_TYPE::NONE)
         event->ignore();
     else if(mouseEventType == MOUSE_EVENT_TYPE::FRAME_SELECTING)
-        updater->doneFrameSelect();
+    {
+        if(event->pos().rx() - 1 < updater->frameX || event->pos().ry() - 1 < updater->frameY)
+            updater->clearFrameSelect();
+        else
+            updater->doneFrameSelect();
+    }
     mouseEventType = MOUSE_EVENT_TYPE::NONE;
 }
 
