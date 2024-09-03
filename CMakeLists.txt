@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         controller/redoundoer.h controller/redoundoer.cpp
         model/elements/subprocesselement.h model/elements/subprocesselement.cpp
         view/replacedialog.h view/replacedialog.cpp
+        model/elements/documentelement.h model/elements/documentelement.cpp
 
 
     )

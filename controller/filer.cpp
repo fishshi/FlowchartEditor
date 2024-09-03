@@ -39,6 +39,9 @@ void Filer::openFile(QString filePath)
         case PaintChartType::SUBPROCESSELEMENT:
             cb = new SubprocessElement(canvas);
             break;
+        case PaintChartType::DOCUMENTELEMENT:
+            cb = new DocumentElement(canvas);
+            break;
         default:case PaintChartType::NONE:
             cb = nullptr;
             break;

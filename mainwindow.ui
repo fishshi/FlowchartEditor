@@ -47,8 +47,8 @@ font-size : 20px;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>50</width>
+           <height>50</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -71,8 +71,8 @@ background-position: center;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>50</width>
+           <height>50</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -119,8 +119,8 @@ background-position: center;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>50</width>
+           <height>50</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -143,12 +143,36 @@ background-position: center;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>50</width>
+           <height>50</height>
           </size>
          </property>
          <property name="styleSheet">
           <string notr="true">background-image: url(:/assets/icon/icon-diamond.png);
+background-repeat: no-repeat;
+background-position: center;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
+        <widget class="QPushButton" name="documentElementBtn">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
 background-repeat: no-repeat;
 background-position: center;</string>
          </property>
@@ -167,8 +191,8 @@ background-position: center;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>50</width>
+           <height>50</height>
           </size>
          </property>
          <property name="styleSheet">

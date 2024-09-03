@@ -28,6 +28,9 @@ void Drawer::setPaintChart()
     case PaintChartType::SUBPROCESSELEMENT:
         curPaintChart = new SubprocessElement(canvas);
         break;
+    case PaintChartType::DOCUMENTELEMENT:
+        curPaintChart = new DocumentElement(canvas);
+        break;
     case PaintChartType::NONE:
         curPaintChart = nullptr;
         break;
@@ -127,6 +130,9 @@ void Drawer::copy()
         break;
     case PaintChartType::SUBPROCESSELEMENT:
         curPasteChart = new SubprocessElement(canvas);
+        break;
+    case PaintChartType::DOCUMENTELEMENT:
+        curPasteChart = new DocumentElement(canvas);
         break;
     default:
         break;

@@ -19,6 +19,7 @@
 #include "../model/elements/connectorelement.h"
 #include "../model/elements/dataelement.h"
 #include "../model/elements/subprocesselement.h"
+#include "../model/elements/documentelement.h"
 
 #include "../model/config.h"
 

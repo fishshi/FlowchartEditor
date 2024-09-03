@@ -15,6 +15,7 @@ public:
     void setPaintConnectorElement(){curPaintChartType = PaintChartType::ELLIPSE;setPaintChart();}          // 获取一个新的圆形
     void setPaintDataElement(){curPaintChartType = PaintChartType::PARALLELOGRAM;setPaintChart();}      // 获取一个新的梯形
     void setPaintSubprocessElement(){curPaintChartType = PaintChartType::SUBPROCESSELEMENT;setPaintChart();}
+    void setPaintDocumentElement(){curPaintChartType = PaintChartType::DOCUMENTELEMENT;setPaintChart();}
     void setPaintChart();
 
     void moveToCreate(int x, int y);
