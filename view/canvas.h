@@ -18,6 +18,7 @@
 #include "../model/elements/startendelement.h"
 #include "../model/elements/connectorelement.h"
 #include "../model/elements/dataelement.h"
+#include "../model/elements/subprocesselement.h"
 
 #include "../model/config.h"
 

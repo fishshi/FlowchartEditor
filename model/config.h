@@ -7,7 +7,7 @@ enum class ORIENTION{NONE, NORTHWEST, NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, 
     // 箭头类型             0默认无  1箭头
 enum class LINE_HEAD_TYPE{ARROW0,ARROW1};
     // 图形类型             无   矩形  菱形      圆角矩形    圆形  线性    平行四边形
-enum class PaintChartType{NONE,RECT,DIAMOND,ROUNDRECT,ELLIPSE,LINE,PARALLELOGRAM};
+enum class PaintChartType{NONE,RECT,DIAMOND,ROUNDRECT,ELLIPSE,LINE,PARALLELOGRAM, SUBPROCESSELEMENT};
 
 enum class CHART_LABEL_MOUSE_TYPE{NONE,CHANGE_POS};
 

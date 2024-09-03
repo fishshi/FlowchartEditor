@@ -22,28 +22,26 @@ void Filer::openFile(QString filePath)
         switch(tmp)
         {
         case PaintChartType::RECT:
-        {
             cb = new ProcessElement(canvas);
-        }break;
+            break;
         case PaintChartType::DIAMOND:
-        {
             cb = new DecisionElement(canvas);
-        }break;
+            break;
         case PaintChartType::ROUNDRECT:
-        {
             cb = new StartEndElement(canvas);
-        }break;
+            break;
         case PaintChartType::ELLIPSE:
-        {
             cb = new ConnectorElement(canvas);
-        }break;
+            break;
         case PaintChartType::PARALLELOGRAM:
-        {
             cb = new DataElement(canvas);
-        }break;
-        default:case PaintChartType::NONE:{
+            break;
+        case PaintChartType::SUBPROCESSELEMENT:
+            cb = new SubprocessElement(canvas);
+            break;
+        default:case PaintChartType::NONE:
             cb = nullptr;
-        }break;
+            break;
         }
         cb->chartType = tmp;
         fin>>(*cb);

@@ -45,6 +45,12 @@ void Controller::initConnections()
         if(drawer->curPaintChart)
             mouseEventType = MOUSE_EVENT_TYPE::CREATING;
     });
+    connect(w->ui->subprocessElementBtn, &QPushButton::clicked, [=](){
+        canvas->hideMagSizeAll();
+        drawer->setPaintSubprocessElement();
+        if(drawer->curPaintChart)
+            mouseEventType = MOUSE_EVENT_TYPE::CREATING;
+    });
 
     //鼠标事件
     connect(canvas, &Canvas::leftPressed, this, &Controller::on_leftPressed);

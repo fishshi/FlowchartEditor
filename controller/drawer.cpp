@@ -25,6 +25,9 @@ void Drawer::setPaintChart()
     case PaintChartType::PARALLELOGRAM:
         curPaintChart = new DataElement(canvas);
         break;
+    case PaintChartType::SUBPROCESSELEMENT:
+        curPaintChart = new SubprocessElement(canvas);
+        break;
     case PaintChartType::NONE:
         curPaintChart = nullptr;
         break;
@@ -99,4 +102,59 @@ void Drawer::doneLink()
     newLineChart = nullptr;
     newLineFromSelectChart = nullptr;
     newLineToSelectChart = nullptr;
+}
+
+void Drawer::copy()
+{
+    if(canvas->curSelecChart == nullptr)
+        return;
+    switch(canvas->curSelecChart->chartType)
+    {
+    case PaintChartType::RECT:
+        curPasteChart = new ProcessElement(canvas);
+        break;
+    case PaintChartType::DIAMOND:
+        curPasteChart = new DecisionElement(canvas);
+        break;
+    case PaintChartType::ROUNDRECT:
+        curPasteChart = new StartEndElement(canvas);
+        break;
+    case PaintChartType::ELLIPSE:
+        curPasteChart = new ConnectorElement(canvas);
+        break;
+    case PaintChartType::PARALLELOGRAM:
+        curPasteChart = new DataElement(canvas);
+        break;
+    case PaintChartType::SUBPROCESSELEMENT:
+        curPasteChart = new SubprocessElement(canvas);
+        break;
+    default:
+        break;
+    }
+    curPasteChart->widgetStart = canvas->curSelecChart->widgetStart;
+    curPasteChart->widgetEnd = canvas->curSelecChart->widgetEnd;
+    curPasteChart->paintStart = canvas->curSelecChart->paintStart;
+    curPasteChart->paintEnd = canvas->curSelecChart->paintEnd;
+    curPasteChart->paintChartDrawPen = canvas->curSelecChart->paintChartDrawPen;
+    curPasteChart->paintChartFillPen = canvas->curSelecChart->paintChartFillPen;
+    curPasteChart->chartText.text->setText(canvas->curSelecChart->chartText.text->text());
+    curPasteChart->chartText.text->setGeometry(canvas->curSelecChart->chartText.text->geometry());
+}
+
+void Drawer::cut()
+{
+    copy();
+    //remover->delChart(canvas->curSelecChart);
+}
+
+void Drawer::paste(int x, int y)
+{
+    if(curPasteChart == nullptr)
+        return;
+    curPasteChart->setXY(x, y);
+    curPasteChart->show();
+    canvas->hideMagSizeAll();
+    canvas->charts.push_back(curPasteChart);
+    canvas->curSelecChart = curPasteChart;
+    // connect......
 }
