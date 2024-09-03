@@ -70,6 +70,7 @@ private:
     void on_saveFile();
     void on_openFile();
     void on_newFile();
+    void on_saveAsSVG();
 
     //编辑操作
     void on_redo();

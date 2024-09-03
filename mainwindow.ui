@@ -261,6 +261,7 @@ background-position: center;</string>
     <addaction name="actionNewFile"/>
     <addaction name="actionOpenFile"/>
     <addaction name="actionSaveFile"/>
+    <addaction name="actionSaveAsSVG"/>
    </widget>
    <widget class="QMenu" name="menu_E">
     <property name="title">
@@ -382,6 +383,11 @@ background-position: center;</string>
   <action name="actionkaiyuanxieyi">
    <property name="text">
     <string>开源协议</string>
+   </property>
+  </action>
+  <action name="actionSaveAsSVG">
+   <property name="text">
+    <string>导出为SVG</string>
    </property>
   </action>
  </widget>

@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QSizePolicy>
+#include <QGraphicsItem>
 
 #include <vector>
 
@@ -101,9 +102,7 @@ private:
 protected:
     class TextBase {
     public:
-        TextBase():text(nullptr),tmpEdit(nullptr){
-
-        }
+        TextBase(){}
         ~TextBase(){
             if(text){
                 delete text;
