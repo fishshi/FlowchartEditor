@@ -7,8 +7,9 @@ class Remover
 public:
     Remover(Canvas *canvas);
 
-    void delChart(FlowchartElement *&cb);      // 删除图形
-    void delLine(FlowchartElement *&cb);       // 删除线
+    void delChart(FlowchartElement *&fce);      // 删除图形
+    void delLine(FlowchartElement *&fce);       // 删除线
+    void clear();                              //清屏
 private:
     Canvas *canvas;
 };

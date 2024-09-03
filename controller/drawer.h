@@ -27,6 +27,7 @@ private:
 
     PaintChartType curPaintChartType = PaintChartType::NONE;    // 绘制的图形的类型
     FlowchartElement *curPaintChart = nullptr;    // 将要放置的图形
+    int magPointToIndex;                            // 要创建的磁力点的索引
     Line *newLineChart = nullptr;             // 要创建的磁力点的连线的指针
     FlowchartElement *newLineToSelectChart = nullptr;     // 要连接到的磁力点的图形的指针
     FlowchartElement *newLineFromSelectChart = nullptr;   // 要创建的磁力点的图形的指针

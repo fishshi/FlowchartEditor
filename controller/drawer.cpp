@@ -62,7 +62,7 @@ int Drawer::moveToLink(int x, int y)
 
     for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++)
     {
-        if((*it)->autoSetMagi(x,y, canvas->magPointToIndex))
+        if((*it)->autoSetMagi(x,y, magPointToIndex))
         {
             newLineToSelectChart = *it;
             break;
@@ -87,11 +87,11 @@ void Drawer::doneLink()
 {
     if(newLineToSelectChart)
     {
-        newLineToSelectChart->addMagiPointEndLine(canvas->magPointToIndex, newLineChart);
+        newLineToSelectChart->addMagiPointEndLine(magPointToIndex, newLineChart);
         newLineToSelectChart->hideMagOnly();
         newLineChart->setEndChart(newLineToSelectChart);
-        newLineChart->setEndMagIndex(canvas->magPointToIndex);
-        newLineChart->setEndDirect(newLineToSelectChart->getMagiPointDirect(canvas->magPointToIndex));
+        newLineChart->setEndMagIndex(magPointToIndex);
+        newLineChart->setEndDirect(newLineToSelectChart->getMagiPointDirect(magPointToIndex));
         newLineChart->update();
     }else
         if(newLineChart)

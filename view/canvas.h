@@ -32,18 +32,13 @@ class Canvas : public QWidget
 private:
     std::vector<FlowchartElement*> charts;    // 画板上图形的集合
     std::vector<FlowchartElement*> line;      // 画板上线的集合
-    int magPointToIndex;                            // 要创建的磁力点的索引
     FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
     FlowchartElement *lineSelectChart = nullptr;  // 线的吸附到的图形的指针
-    int magPointIndex;                      // 运行时线吸附到的图形的磁力点的索引
+    int magPointIndex;                      // 线吸附到的图形的磁力点的索引
     void clearChartsLine();                      // 释放图形、连线内存
 
 public:
     explicit Canvas(QWidget *parent = nullptr , Qt::WindowFlags f = Qt::WindowFlags());
-    virtual ~Canvas()
-    {
-        clearChartsLine();
-    }
     void hideMagSizeAll();              // 隐藏所有大小、磁力点
 
     bool isframe = false;

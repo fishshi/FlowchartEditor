@@ -4,13 +4,13 @@ Remover::Remover(Canvas *canvas) {
     this->canvas = canvas;
 }
 
-void Remover::delChart(FlowchartElement *&cb)
+void Remover::delChart(FlowchartElement *&fce)
 {
     for(int i = 0; i < canvas->charts.size(); ++i)
     {
-        if(canvas->charts[i] == cb)
+        if(canvas->charts[i] == fce)
         {
-            FlowchartElement *tmp = cb;
+            FlowchartElement *tmp = fce;
             canvas->charts.erase(canvas->charts.begin() + i);
             --i;
             for(auto magit = tmp->magPoint.i_point.begin();magit!=tmp->magPoint.i_point.end();magit++)
@@ -32,14 +32,14 @@ void Remover::delChart(FlowchartElement *&cb)
     }
 }
 
-void Remover::delLine(FlowchartElement *&cb)
+void Remover::delLine(FlowchartElement *&fce)
 {
     for(auto it = canvas->line.begin();it != canvas->line.end();it++)
     {
-        if(*it == cb)
+        if(*it == fce)
         {
             Line *tmp = dynamic_cast<Line*>(*it);
-            cb = nullptr;
+            fce = nullptr;
             canvas->line.erase(it);
             tmp->resetEndChart();
             tmp->resetStartChart();
@@ -47,4 +47,18 @@ void Remover::delLine(FlowchartElement *&cb)
             break;
         }
     }
+}
+
+void Remover::clear()
+{
+    for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++) {
+        if(*it) delete *it;
+        *it = nullptr;
+    }
+    for(auto it = canvas->line.begin();it!= canvas->line.end();it++) {
+        if(*it) delete *it;
+        *it = nullptr;
+    }
+    canvas->charts.clear();
+    canvas->line.clear();
 }

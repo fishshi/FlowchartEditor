@@ -140,9 +140,9 @@ void Controller::on_leftPressed(QMouseEvent *event)
     }
 }
 
-void Controller::on_leftClickToSelect(FlowchartElement * cb, int x, int y)
+void Controller::on_leftClickToSelect(FlowchartElement * fce, int x, int y)
 {
-    updater->setSelecChart(cb, x, y);
+    updater->setSelecChart(fce, x, y);
     mouseEventType = MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS;
 }
 
@@ -271,14 +271,7 @@ void Controller::on_saveFile()
 
 void Controller::on_openFile()
 {
-    for(auto x : canvas->charts)
-        x->close();
-    for(auto x : canvas->line)
-        x->close();
-
-    canvas->charts.clear();
-    canvas->line.clear();
-
+    remover->clear();
     QString tmpFilePath = QFileDialog::getOpenFileName(w,tr("打开文件"),"C:",tr("FY文件(*.fy)"));
     if(tmpFilePath == "") return;
     filer->openFile(tmpFilePath);
