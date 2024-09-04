@@ -109,7 +109,7 @@ void Drawer::doneLink()
 
 void Drawer::copy()
 {
-    if(canvas->curSelecChart == nullptr)
+    if(canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
         return;
     switch(canvas->curSelecChart->chartType)
     {

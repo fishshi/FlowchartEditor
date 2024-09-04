@@ -8,5 +8,6 @@
         <file>assets/icon/icon-roundedrectangle.png</file>
         <file>assets/icon/icon-subprocesselement.png</file>
         <file>assets/icon/icon-documentelement.png</file>
+        <file>LICENSE</file>
     </qresource>
 </RCC>

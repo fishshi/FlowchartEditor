@@ -221,8 +221,8 @@ background-position: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>10262</width>
-            <height>10262</height>
+            <width>10252</width>
+            <height>10252</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -251,7 +251,7 @@ background-position: center;</string>
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>24</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -278,13 +278,16 @@ background-position: center;</string>
     <addaction name="separator"/>
     <addaction name="actionSearch"/>
     <addaction name="actionReplace"/>
+    <addaction name="separator"/>
+    <addaction name="actionFillColor"/>
+    <addaction name="actionLineColor"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
      <string>帮助(&amp;H)</string>
     </property>
     <addaction name="actionAboutus"/>
-    <addaction name="actionHelp"/>
+    <addaction name="actionReadMe"/>
     <addaction name="actionkaiyuanxieyi"/>
    </widget>
    <addaction name="menu"/>
@@ -376,9 +379,12 @@ background-position: center;</string>
     <string>关于我们</string>
    </property>
   </action>
-  <action name="actionHelp">
+  <action name="actionReadMe">
    <property name="text">
-    <string>操作说明</string>
+    <string>项目说明</string>
+   </property>
+   <property name="toolTip">
+    <string>项目说明</string>
    </property>
   </action>
   <action name="actionkaiyuanxieyi">
@@ -394,6 +400,16 @@ background-position: center;</string>
   <action name="actionSetBack">
    <property name="text">
     <string>导入背景图片</string>
+   </property>
+  </action>
+  <action name="actionFillColor">
+   <property name="text">
+    <string>设置填充颜色</string>
+   </property>
+  </action>
+  <action name="actionLineColor">
+   <property name="text">
+    <string>设置线条颜色</string>
    </property>
   </action>
  </widget>
