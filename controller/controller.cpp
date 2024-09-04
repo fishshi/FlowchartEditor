@@ -293,7 +293,6 @@ void Controller::on_mouseReleased(QMouseEvent *event)
     }
     else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_FRAME_POS)
     {
-        updater->clearFrameSelect();
         to_saveChange(redoUndoer->reNo + 1);
     }
     mouseEventType = MOUSE_EVENT_TYPE::NONE;
@@ -359,6 +358,7 @@ void Controller::on_saveAsSVG()
 }
 
 void Controller::on_redo(){
+    updater->clearFrameSelect();
     if(redoUndoer->unNo < 0){
         QMessageBox msgBox;
         msgBox.setText("重写失败，没有更早！");
@@ -373,6 +373,7 @@ void Controller::on_redo(){
 }
 
 void Controller::on_undo(){
+    updater->clearFrameSelect();
     if(redoUndoer->reNo <= 0){
         QMessageBox msgBox;
         msgBox.setText("撤销失败，没有更早！");

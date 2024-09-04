@@ -88,9 +88,11 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
 
 void Canvas::keyPressEvent(QKeyEvent *event)
 {
-    event->ignore();
-    if(event->key() == Qt::Key_Escape)
+    if (event->key() == Qt::Key_Escape)
         emit escPressed();
     else if (event->key() == Qt::Key_Delete)
         emit delPressed();
+    else
+        QWidget::keyPressEvent(event);  // 调用基类的处理函数，确保传递事件
 }
+

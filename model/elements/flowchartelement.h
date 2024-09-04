@@ -296,5 +296,6 @@ protected:// 事件
     virtual void mouseMoveEvent(QMouseEvent *event);        // 鼠标移动事件
     virtual void mouseReleaseEvent(QMouseEvent *event);     // 鼠标释放事件
     virtual void mouseDoubleClickEvent(QMouseEvent *event); // 鼠标双击事件
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 #endif // FLOWCHARTELEMENT_H

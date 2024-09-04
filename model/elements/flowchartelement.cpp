@@ -17,6 +17,7 @@ FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc
     colorInit();
     textInit();
     setMouseTracking(true);
+    this->installEventFilter(this);
 }
 
 FlowchartElement::FlowchartElement( int x, int y, int w, int h, QWidget *parent, PaintChartType type):QWidget(parent),magPoint(4),sizePoint(4)
@@ -814,21 +815,58 @@ void FlowchartElement::mouseReleaseEvent(QMouseEvent *event)
 
 void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(inPath(event->pos()))
+    // 判断鼠标双击的点是否在路径范围内
+    if (inPath(event->pos()))
     {
-        emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
+        // 发送信号，传递当前对象和点击位置
+        emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
 
-        chartText.tmpEdit = new QLineEdit(chartText.text->text(),this);
-        chartText.text->setText("");
+        // 创建 QLineEdit 控件，用于输入文字
+        chartText.tmpEdit = new QLineEdit(chartText.text->text(), this);
+        chartText.tmpEdit->setFrame(false);  // 去除边框
+        chartText.text->setText("");         // 清空 QLabel 的文字
+
+        // 设置 QLineEdit 的大小和位置
         chartText.tmpEdit->adjustSize();
-        chartText.tmpEdit->setStyleSheet("background:transparent;");
-        chartText.tmpEdit->setGeometry(chartText.text->x(),chartText.text->y(),chartText.text->width() + (textBorderWidth<<1),chartText.text->height() + (textBorderWidth<<1));
+        chartText.tmpEdit->setStyleSheet("background:transparent;");  // 设置透明背景
+        chartText.tmpEdit->setGeometry(
+            chartText.text->x(),
+            chartText.text->y(),
+            chartText.text->width() + (textBorderWidth << 1),
+            chartText.text->height() + (textBorderWidth << 1)
+            );
+        // 显示 QLineEdit 并使其获得焦点
         chartText.tmpEdit->show();
-        chartText.tmpEdit->setFocus();
 
-        this->grabKeyboard();
-    }else
+        // 捕获键盘输入事件
+        chartText.tmpEdit->grabKeyboard();
+
+        // 连接 QLineEdit 的信号槽
+        connect(chartText.tmpEdit, &QLineEdit::editingFinished, [this]() {
+            // 将输入文本设置回 QLabel 并销毁 QLineEdit
+            chartText.text->setText(chartText.tmpEdit->text());
+            chartText.text->adjustSize();
+            chartText.tmpEdit->deleteLater();  // 删除 QLineEdit
+            chartText.tmpEdit = nullptr;       // 重置指针
+        });
+    }
+    else
     {
+        // 如果点击不在路径范围内，则忽略事件
         event->ignore();
     }
+}
+
+void FlowchartElement::keyPressEvent(QKeyEvent *event)
+{
+    // 检查 tmpEdit 是否存在，并且已经聚焦
+    if (chartText.tmpEdit && chartText.tmpEdit->hasFocus()) {
+        // 如果事件是回车键，发射编辑完成信号
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+            chartText.tmpEdit->editingFinished();  // 失去焦点，以触发 editingFinished 信号
+            return;  // 返回，避免事件进一步传播
+        }
+    }
+    // 确保事件继续传递
+    QWidget::keyPressEvent(event);
 }
