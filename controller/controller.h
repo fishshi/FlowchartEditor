@@ -85,6 +85,7 @@ private:
     void on_openFile();
     void on_newFile();
     void on_saveAsSVG();
+    void on_setBack();
 
     //编辑操作
     void on_redo();

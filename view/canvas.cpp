@@ -35,6 +35,12 @@ void Canvas::unsetDrawFrame()
 void Canvas::paintEvent(QPaintEvent *event)
 {
     QPainter p = QPainter(this);
+
+    // 绘制背景图片
+    if (!backgroundImage.isNull()) {
+        p.drawPixmap(0, 0, backgroundImage);
+    }
+
     p.setPen(QColor(0,0,0));
     const int gap = 30;
     for(int i = 0;i * gap < width(); ++i)

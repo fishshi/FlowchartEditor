@@ -221,8 +221,8 @@ background-position: center;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>10252</width>
-            <height>10252</height>
+            <width>10262</width>
+            <height>10262</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -251,7 +251,7 @@ background-position: center;</string>
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>18</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -262,6 +262,7 @@ background-position: center;</string>
     <addaction name="actionOpenFile"/>
     <addaction name="actionSaveFile"/>
     <addaction name="actionSaveAsSVG"/>
+    <addaction name="actionSetBack"/>
    </widget>
    <widget class="QMenu" name="menu_E">
     <property name="title">
@@ -388,6 +389,11 @@ background-position: center;</string>
   <action name="actionSaveAsSVG">
    <property name="text">
     <string>导出为SVG</string>
+   </property>
+  </action>
+  <action name="actionSetBack">
+   <property name="text">
+    <string>导入背景图片</string>
    </property>
   </action>
  </widget>

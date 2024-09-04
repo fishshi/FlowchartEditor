@@ -40,6 +40,8 @@ private:
     int magPointIndex;                      // 线吸附到的图形的磁力点的索引
     void clearChartsLine();                      // 释放图形、连线内存
 
+    QPixmap backgroundImage;                // 背景图片
+
 public:
     explicit Canvas(QWidget *parent = nullptr , Qt::WindowFlags f = Qt::WindowFlags());
     void hideMagSizeAll();              // 隐藏所有大小、磁力点
