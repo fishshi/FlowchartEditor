@@ -27,14 +27,14 @@ void DataElement::updateMagPointInfo()
 
     magPoint.i_point[0]->setX(midx);
     magPoint.i_point[0]->setY(y1);
-    magPoint.i_point[0]->setRotate(ORIENTION::NORTH);
+    magPoint.i_point[0]->setRotate(DIRECTION::NORTH);
     magPoint.i_point[1]->setX((x2 + x2 -ext)>>1);
     magPoint.i_point[1]->setY(midy);
-    magPoint.i_point[1]->setRotate(ORIENTION::EAST);
+    magPoint.i_point[1]->setRotate(DIRECTION::EAST);
     magPoint.i_point[2]->setX(midx);
     magPoint.i_point[2]->setY(y2);
-    magPoint.i_point[2]->setRotate(ORIENTION::SOUTH);
+    magPoint.i_point[2]->setRotate(DIRECTION::SOUTH);
     magPoint.i_point[3]->setX((x1 + x1 + ext)>>1);
     magPoint.i_point[3]->setY(midy);
-    magPoint.i_point[3]->setRotate(ORIENTION::WEST);
+    magPoint.i_point[3]->setRotate(DIRECTION::WEST);
 }

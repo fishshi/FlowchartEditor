@@ -76,7 +76,7 @@ int Drawer::moveToLink(int x, int y)
             newLineToSelectChart = nullptr;
         }
     }
-    newLineChart->setWidthHeight(x,y,ORIENTION::ENDPOINT);
+    newLineChart->setWidthHeight(x,y,DIRECTION::ENDPOINT);
     return flag;
 }
 

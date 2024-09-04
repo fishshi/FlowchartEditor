@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QMouseEvent>
-#include <qDebug>
 #include "../config.h"
 
 class Label : public QLabel

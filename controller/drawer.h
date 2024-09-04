@@ -37,7 +37,7 @@ private:
     Line *newLineChart = nullptr;             // 要创建的磁力点的连线的指针
     FlowchartElement *newLineToSelectChart = nullptr;     // 要连接到的磁力点的图形的指针
     FlowchartElement *newLineFromSelectChart = nullptr;   // 要创建的磁力点的图形的指针
-    ORIENTION magPointDirect = ORIENTION::NONE;     // 选中时要创建的起始磁力点的方向类型
+    DIRECTION magPointDirect = DIRECTION::NONE;     // 选中时要创建的起始磁力点的方向类型
     int magPointFromIndex;                          // 要创建的磁力点的索引
 };
 

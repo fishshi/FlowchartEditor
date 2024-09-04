@@ -32,18 +32,17 @@ void DocumentElement::updateMagPointInfo()
     int x2 = paintEnd.rx(),y2 = paintEnd.ry();
     int midx = ((paintStart.rx() + paintEnd.rx())>>1);
     int midy = ((paintStart.ry() + paintEnd.ry())>>1);
-    int ext = (x2-x1)>>2;
 
     magPoint.i_point[0]->setX(midx);
     magPoint.i_point[0]->setY(y1);
-    magPoint.i_point[0]->setRotate(ORIENTION::NORTH);
+    magPoint.i_point[0]->setRotate(DIRECTION::NORTH);
     magPoint.i_point[1]->setX(x2);
     magPoint.i_point[1]->setY(midy);
-    magPoint.i_point[1]->setRotate(ORIENTION::EAST);
+    magPoint.i_point[1]->setRotate(DIRECTION::EAST);
     magPoint.i_point[2]->setX(midx);
     magPoint.i_point[2]->setY(y1 + (y2 - y1) / 10 * 9);
-    magPoint.i_point[2]->setRotate(ORIENTION::SOUTH);
+    magPoint.i_point[2]->setRotate(DIRECTION::SOUTH);
     magPoint.i_point[3]->setX(x1);
     magPoint.i_point[3]->setY(midy);
-    magPoint.i_point[3]->setRotate(ORIENTION::WEST);
+    magPoint.i_point[3]->setRotate(DIRECTION::WEST);
 }

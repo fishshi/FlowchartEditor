@@ -13,7 +13,6 @@ void Filer::openFile(QString filePath)
 
     unsigned long long cnt;
     fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    qDebug()<<"图形个数："<<cnt;
     for(unsigned long long i = 0;i<cnt;i++)
     {
         PaintChartType tmp;
@@ -52,7 +51,6 @@ void Filer::openFile(QString filePath)
         chartMap[cb->getID()] = cb;
     }
     fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    qDebug()<<"连线个数："<<cnt;
     for(unsigned long long i = 0;i<cnt;i++)
     {
         PaintChartType tmp;
@@ -62,30 +60,25 @@ void Filer::openFile(QString filePath)
         fin.readRawData(reinterpret_cast<char*>(&tmp),sizeof(PaintChartType));
         cb = new Line(canvas);
         canvas->line.push_back(cb);
-        if(nullptr == (cl = dynamic_cast<Line*>(cb))) qDebug()<<"error";
+        cl = dynamic_cast<Line*>(cb);
         fin>>(*cb)>>(*cl);
-        try{
-            fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-            if(id>=0)
-            {
-                FlowchartElement *cbs = chartMap.at(id);
-                cbs->addMagiPointStartLine(cl->getStartMagIndex(),cl);
-                cl->setStartChart(cbs);
-            }
-        }catch(std::out_of_range &oor){
-            qDebug()<<oor.what()<<"Not Found Start chart.";
+
+        fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
+        if(id>=0)
+        {
+            FlowchartElement *cbs = chartMap.at(id);
+            cbs->addMagiPointStartLine(cl->getStartMagIndex(),cl);
+            cl->setStartChart(cbs);
         }
-        try{
-            fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-            if(id>=0)
-            {
-                FlowchartElement *cbe = chartMap.at(id);
-                cbe->addMagiPointEndLine(cl->getEndMagIndex(),cl);
-                cl->setEndChart(cbe);
-            }
-        }catch(std::out_of_range &oor){
-            qDebug()<<oor.what()<<"Not Found End chart.";
+
+        fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
+        if(id>=0)
+        {
+            FlowchartElement *cbe = chartMap.at(id);
+            cbe->addMagiPointEndLine(cl->getEndMagIndex(),cl);
+            cl->setEndChart(cbe);
         }
+
         cl->applyWidthHeight();
         cl->update();
         cl->show();

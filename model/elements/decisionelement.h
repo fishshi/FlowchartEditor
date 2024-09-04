@@ -8,8 +8,6 @@ private:
     virtual void paintChart(QPainter & p);
 public:
     DecisionElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::DIAMOND) : FlowchartElement(parent,type){}
-    DecisionElement(DecisionElement &cr):FlowchartElement(cr){}
-    DecisionElement(int x1, int y1, int x2, int y2, QWidget *parent = nullptr,PaintChartType type = PaintChartType::DIAMOND) : FlowchartElement(x1,y1,x2,y2,parent,type){}
     ~DecisionElement(){}
 };
 

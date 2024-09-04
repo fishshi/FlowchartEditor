@@ -8,7 +8,6 @@
 
 #include <QWidget>
 #include <QPoint>
-#include <QDebug>
 #include <QMouseEvent>
 #include <QLabel>
 #include <QLineEdit>
@@ -37,7 +36,6 @@ class FlowchartElement :public QWidget
         fout.writeRawData(reinterpret_cast<const char*>(&cb.ID),sizeof(int));
         fout<<cb.chartText;//<<cb.magPoint;
         fout<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
-        qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
         return fout;
     }
     friend QDataStream &operator>>(QDataStream &fin, FlowchartElement &cb)
@@ -45,7 +43,6 @@ class FlowchartElement :public QWidget
         fin.readRawData(reinterpret_cast<char*>(&cb.ID),sizeof(int));
         fin>>cb.chartText;//>>cb.magPoint;
         fin>>cb.paintStart>>cb.paintEnd>>cb.widgetStart>>cb.widgetEnd>>cb.paintChartDrawPen>>cb.paintChartFillPen;
-        qDebug()<<"Chart Base Info:"<<cb.paintStart<<cb.paintEnd<<cb.widgetStart<<cb.widgetEnd<<cb.paintChartDrawPen<<cb.paintChartFillPen;
         return fin;
     }
 
@@ -63,7 +60,7 @@ private:
     bool showAll = true;    // 显示大小控制点和磁力点
     bool showMag = false;   // 显示磁力点
     MOUSE_EVENT_TYPE curFlag = MOUSE_EVENT_TYPE::NONE;  // 鼠标事件类型
-    ORIENTION curIndex = ORIENTION::NONE;               // 当前选中大小点、磁力点方向
+    DIRECTION curIndex = DIRECTION::NONE;               // 当前选中大小点、磁力点方向
     PaintChartType chartType = PaintChartType::NONE;    // 图形类型
     int ID;         // 图形编号
 
@@ -80,7 +77,6 @@ private:
     virtual void specialPaintUpdate(QPoint &s, QPoint &e){}             // 特殊绘图边界范围设置函数
     virtual void updateSizePointInfo(); // 更新大小点位置信息
     virtual void updateMagPointInfo();  // 更新磁力点的位置信息
-    void adjustPointInfo();             // 调整磁力点和大小点的位置信息
     void updateSizePointPath();         // 更新大小点绘制范围信息
     void updateMagPointPath();          // 更新磁力点的绘制范围信息
     virtual void updateMagPointLine();  // 更新磁力点上连线的位置信息
@@ -93,8 +89,8 @@ private:
 
     bool inPath(const QPointF &p);                                                                              // 是否可选的图形范围内，调用了下方3个函数
     virtual bool inGraphisPath(const QPointF &p) {if(graphPath)return graphPath->contains(p);else return false;}// 是否在图形范围内
-    bool inMagPath(const QPointF &p, ORIENTION &b, int &index) const;                                           // 是否在磁力点范围内
-    bool inSizePath(const QPointF &p, ORIENTION &b) const;                                                      // 是否在大小点范围内
+    bool inMagPath(const QPointF &p, DIRECTION &b, int &index) const;                                           // 是否在磁力点范围内
+    bool inSizePath(const QPointF &p, DIRECTION &b) const;                                                      // 是否在大小点范围内
 
     void setStartPos(int x,int y);
     void setEndPos(int x,int y);
@@ -147,9 +143,9 @@ protected:
     public:
         QPoint *i_pos = nullptr;            // 点位置
         QPainterPath *i_path = nullptr;     // 点范围
-        ORIENTION rotate = ORIENTION::NONE; // 点方向
+        DIRECTION rotate = DIRECTION::NONE; // 点方向
 
-        i_pointbase():i_pos(nullptr),i_path(nullptr),rotate(ORIENTION::NONE){
+        i_pointbase():i_pos(nullptr),i_path(nullptr),rotate(DIRECTION::NONE){
         }
         ~i_pointbase(){
             if(i_pos){
@@ -166,8 +162,8 @@ protected:
         void setY(int y){i_pos->setY(y);}
         int getX() const{return i_pos->rx();}
         int getY() const{return i_pos->ry();}
-        void setRotate(ORIENTION r){rotate = r;}
-        const ORIENTION & getRotate()const {return rotate;}
+        void setRotate(DIRECTION r){rotate = r;}
+        const DIRECTION & getRotate()const {return rotate;}
         void setPath(const QPainterPath& p){if(i_path) delete i_path;i_path = new QPainterPath(p);}
         QPainterPath* newPath(){if(i_path) delete i_path;i_path = new QPainterPath;return i_path;}
         QPainterPath* getPath() const{return i_path;}
@@ -227,8 +223,6 @@ protected:
 
 public:
     explicit FlowchartElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::NONE, int mpc=4, int spc=4);
-    FlowchartElement( int x, int y, int w, int h, QWidget *parent = nullptr, PaintChartType type = PaintChartType::NONE);
-    explicit FlowchartElement(FlowchartElement &);
     virtual ~FlowchartElement()
     {
         if(graphPath)
@@ -239,7 +233,7 @@ public:
     }
 
     void setXY(int x, int y);                           // 设置位置
-    void setWidthHeight(int x, int y, ORIENTION type);  // 设置大小、更新数据
+    void setWidthHeight(int x, int y, DIRECTION type);  // 设置大小、更新数据
     void applyWidthHeight();                            // 更新数据，用于读取时
     bool autoSetMagi(int &x, int &y, int &index);   // 磁力点吸附函数
     int getMagiPointAbsX(int i){;return magPoint.i_point[i]->getX() + x();} // 获取磁力点坐标
@@ -251,9 +245,7 @@ public:
         {
             if((*it) == cb)
             {
-                qDebug()<<"test1"<<magPoint.i_point[i]->i_lineStart.size();
                 magPoint.i_point[i]->i_lineStart.erase(it);
-                qDebug()<<"test2"<<magPoint.i_point[i]->i_lineStart.size();
                 break;
             }
         }
@@ -270,7 +262,7 @@ public:
             }
         }
     }
-    ORIENTION getMagiPointDirect(int i){return magPoint.i_point[i]->getRotate();}       // 获取磁力点的索引位置
+    DIRECTION getMagiPointDirect(int i){return magPoint.i_point[i]->getRotate();}       // 获取磁力点的索引位置
     void overlapChartMousePressed(QMouseEvent *event);  // 鼠标点击事件Z-index检测
     void overlapChartMouseMove(QMouseEvent *event);     // 鼠标移动事件Z-index检测
     int & getID(void){return ID;}       // 获得唯一ID值
@@ -278,8 +270,8 @@ public:
 signals:
     void sendThisClass(FlowchartElement *,int x,int y);       // 发送自己给画布
 
-    void setTypeChangeSize(ORIENTION i);                            // 设置画布中的鼠标状态为改变大小
-    void setTypeCreateMagPoint(FlowchartElement *,ORIENTION d, int i);    // 设置画布中的鼠标状态为创建连线
+    void setTypeChangeSize(DIRECTION i);                            // 设置画布中的鼠标状态为改变大小
+    void setTypeCreateMagPoint(FlowchartElement *,DIRECTION d, int i);    // 设置画布中的鼠标状态为创建连线
 
 public slots:
 

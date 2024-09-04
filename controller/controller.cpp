@@ -84,18 +84,8 @@ void Controller::initConnections()
     connect(w->ui->actionPaste, &QAction::triggered, this, &Controller::on_paste);
     connect(w->ui->actionSearch, &QAction::triggered, this, &Controller::on_search);
     connect(w->ui->actionReplace, &QAction::triggered, this, &Controller::on_replace);
-    connect(w->ui->actionFillColor, &QAction::triggered, [=](){
-        if(canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
-            return;
-        QColor color = QColorDialog::getColor(Qt::white, w,tr("设置填充颜色"));
-        updater->setSelChartFillColor(color);
-    });
-    connect(w->ui->actionLineColor, &QAction::triggered, [=](){
-        if(canvas->curSelecChart == nullptr)
-            return;
-        QColor color = QColorDialog::getColor(Qt::white, w,tr("设置线条颜色"));
-        updater->setSelChartLineColor(color);
-    });
+    connect(w->ui->actionFillColor, &QAction::triggered, this, &Controller::on_setFillColor);
+    connect(w->ui->actionLineColor, &QAction::triggered, this, &Controller::on_setLineColor);
 }
 
 void Controller::showRrightClickMenu(const QPoint &pos)
@@ -116,19 +106,29 @@ void Controller::showRrightClickMenu(const QPoint &pos)
             menu.addAction(w->ui->actionCut);
             if(drawer->curPasteChart != nullptr)
                 menu.addAction(w->ui->actionPaste);
-            QAction *changeFillColor = menu.addAction("更换填充颜色");
-            connect(changeFillColor, &QAction::triggered, [=](){
-                QColor color = QColorDialog::getColor(Qt::white, w,tr("设置填充颜色"));
-                updater->setSelChartFillColor(color);
-            });
+            menu.addAction(w->ui->actionFillColor);
         }
-        QAction *changeLineColor = menu.addAction("更换线条颜色");
-        connect(changeLineColor, &QAction::triggered, [=](){
-            QColor color = QColorDialog::getColor(Qt::white, w,tr("设置线条颜色"));
-            updater->setSelChartLineColor(color);
-        });
+        menu.addAction(w->ui->actionLineColor);
         menu.exec(canvas->mapToGlobal(pos));
     }
+}
+
+void Controller::on_setFillColor()
+{
+    if(canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
+        return;
+    QColor color = QColorDialog::getColor(Qt::white, w,tr("设置填充颜色"));
+    updater->setSelChartFillColor(color);
+    to_saveChange(redoUndoer->reNo+1);
+}
+
+void Controller::on_setLineColor()
+{
+    if(canvas->curSelecChart == nullptr)
+        return;
+    QColor color = QColorDialog::getColor(Qt::white, w,tr("设置线条颜色"));
+    updater->setSelChartLineColor(color);
+    to_saveChange(redoUndoer->reNo+1);
 }
 
 void Controller::on_escPressed()
@@ -196,7 +196,7 @@ void Controller::on_leftPressed(QMouseEvent *event)
 void Controller::on_leftClickToSelect(FlowchartElement * fce, int x, int y)
 {
     updater->setSelecChart(fce, x, y);
-    mouseEventType = MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS;
+    mouseEventType = MOUSE_EVENT_TYPE::CHANGE_POS;
 }
 
 void Controller::on_mouseMoved(QMouseEvent *event)
@@ -210,11 +210,11 @@ void Controller::on_mouseMoved(QMouseEvent *event)
     {
         on_moveToChangeSize(event->pos().rx(), event->pos().ry());
     }
-    else if (mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
+    else if (mouseEventType == MOUSE_EVENT_TYPE::CREATE_MAGPOINT)
     {
         on_moveToLink(event->pos().rx(), event->pos().ry());
     }
-    else if (mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS)
+    else if (mouseEventType == MOUSE_EVENT_TYPE::CHANGE_POS)
     {
         on_moveToChangePos(event->pos().rx(), event->pos().ry());
     }
@@ -275,7 +275,7 @@ void Controller::on_moveToLink(int x, int y)
     if(drawer->moveToLink(x, y) == 1)
     {
         connect(drawer->newLineChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-        connect(drawer->newLineChart,SIGNAL(setTypeChangeSize(ORIENTION)), this,SLOT(setTypeChangeSize(ORIENTION)));
+        connect(drawer->newLineChart,SIGNAL(setTypeChangeSize(DIRECTION)), this,SLOT(setTypeChangeSize(DIRECTION)));
     }
 }
 
@@ -284,9 +284,9 @@ void Controller::on_mouseReleased(QMouseEvent *event)
     if(mouseEventType == MOUSE_EVENT_TYPE::CREATING)
     {
         connect(drawer->curPaintChart,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-        connect(drawer->curPaintChart,SIGNAL(setTypeChangeSize(ORIENTION)), this, SLOT(setTypeChangeSize(ORIENTION)));
+        connect(drawer->curPaintChart,SIGNAL(setTypeChangeSize(DIRECTION)), this, SLOT(setTypeChangeSize(DIRECTION)));
         if(drawer->curPaintChart->chartType != PaintChartType::LINE)
-            connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+            connect(drawer->curPaintChart,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)));
         on_doneCreate();
         to_saveChange(redoUndoer->reNo+1);
     }
@@ -295,12 +295,12 @@ void Controller::on_mouseReleased(QMouseEvent *event)
         on_doneChangeSize();
         to_saveChange(redoUndoer->reNo + 1);
     }
-    else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CREATE_MAGPOINT)
+    else if(mouseEventType == MOUSE_EVENT_TYPE::CREATE_MAGPOINT)
     {
         on_doneLink();
         to_saveChange(redoUndoer->reNo+1);
     }
-    else if(mouseEventType == MOUSE_EVENT_TYPE::RUNTIME_CHANGE_POS)
+    else if(mouseEventType == MOUSE_EVENT_TYPE::CHANGE_POS)
         to_saveChange(redoUndoer->reNo+1);
     else if(mouseEventType == MOUSE_EVENT_TYPE::NONE)
         event->ignore();
@@ -354,13 +354,13 @@ void Controller::connectAll(){
     for(auto x : canvas->charts)
     {
         connect(x, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-        connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
-        connect(x,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+        connect(x,SIGNAL(setTypeChangeSize(DIRECTION)),this,SLOT(setTypeChangeSize(DIRECTION)));
+        connect(x,SIGNAL(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)));
     }
     for(auto x : canvas->line)
     {
         connect(x,&FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-        connect(x,SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
+        connect(x,SIGNAL(setTypeChangeSize(DIRECTION)),this,SLOT(setTypeChangeSize(DIRECTION)));
     }
 }
 void Controller::on_newFile(){
@@ -432,8 +432,8 @@ void Controller::on_cut(){
 void Controller::on_paste(){
     drawer->paste(mousePos.rx(), mousePos.ry());
     connect(canvas->curSelecChart, &FlowchartElement::sendThisClass, this, &Controller::on_leftClickToSelect);
-    connect(canvas->curSelecChart, SIGNAL(setTypeChangeSize(ORIENTION)),this,SLOT(setTypeChangeSize(ORIENTION)));
-    connect(canvas->curSelecChart, SIGNAL(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,ORIENTION,int)));
+    connect(canvas->curSelecChart, SIGNAL(setTypeChangeSize(DIRECTION)),this,SLOT(setTypeChangeSize(DIRECTION)));
+    connect(canvas->curSelecChart, SIGNAL(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)),this,SLOT(setTypeCreateMagPoint(FlowchartElement *,DIRECTION,int)));
     to_saveChange(redoUndoer->reNo+1);
 }
 
