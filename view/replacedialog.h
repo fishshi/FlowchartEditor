@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QMouseEvent>
 
 class ReplaceDialog : public QDialog {
     Q_OBJECT
@@ -36,6 +37,7 @@ public:
         layout->addWidget(okButton);
         layout->addWidget(cancelButton);
         setLayout(layout);
+
     }
 
     // 获取输入文本的函数
@@ -45,6 +47,7 @@ public:
 private:
     QLineEdit *findLineEdit;
     QLineEdit *replaceLineEdit;
+
 };
 
 

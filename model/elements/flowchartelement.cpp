@@ -857,16 +857,3 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
     }
 }
 
-void FlowchartElement::keyPressEvent(QKeyEvent *event)
-{
-    // 检查 tmpEdit 是否存在，并且已经聚焦
-    if (chartText.tmpEdit && chartText.tmpEdit->hasFocus()) {
-        // 如果事件是回车键，发射编辑完成信号
-        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            chartText.tmpEdit->editingFinished();  // 失去焦点，以触发 editingFinished 信号
-            return;  // 返回，避免事件进一步传播
-        }
-    }
-    // 确保事件继续传递
-    QWidget::keyPressEvent(event);
-}
