@@ -54,17 +54,6 @@ void Canvas::paintEvent(QPaintEvent *event)
     }
 }
 
-void Canvas::clearChartsLine(){
-    for(auto it = charts.begin();it!=charts.end();it++) {
-        if(*it) delete *it;
-        *it = nullptr;
-    }
-    for(auto it = line.begin();it!=line.end();it++) {
-        if(*it) delete *it;
-        *it = nullptr;
-    }
-}
-
 void Canvas::hideMagSizeAll()
 {
     for(auto it = charts.begin();it!=charts.end();it++)

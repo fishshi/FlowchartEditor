@@ -8,8 +8,8 @@ class Line : public FlowchartElement
     friend QDataStream &operator<<(QDataStream &fout, const Line &cl)
     {
         fout<<cl.startPos<<cl.endPos;
-        fout.writeRawData(reinterpret_cast<const char*>(&cl.startDirect),sizeof(ORIENTION));
-        fout.writeRawData(reinterpret_cast<const char*>(&cl.endDirect),sizeof(ORIENTION));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.startDirect),sizeof(DIRECTION));
+        fout.writeRawData(reinterpret_cast<const char*>(&cl.endDirect),sizeof(DIRECTION));
         fout.writeRawData(reinterpret_cast<const char*>(&cl.startMagIndex),sizeof(int));
         fout.writeRawData(reinterpret_cast<const char*>(&cl.endMagIndex),sizeof(int));
         fout.writeRawData(reinterpret_cast<const char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
@@ -32,8 +32,8 @@ class Line : public FlowchartElement
     friend QDataStream &operator>>(QDataStream &fin, Line &cl)
     {
         fin>>cl.startPos>>cl.endPos;
-        fin.readRawData(reinterpret_cast<char*>(&cl.startDirect),sizeof(ORIENTION));
-        fin.readRawData(reinterpret_cast<char*>(&cl.endDirect),sizeof(ORIENTION));
+        fin.readRawData(reinterpret_cast<char*>(&cl.startDirect),sizeof(DIRECTION));
+        fin.readRawData(reinterpret_cast<char*>(&cl.endDirect),sizeof(DIRECTION));
         fin.readRawData(reinterpret_cast<char*>(&cl.startMagIndex),sizeof(int));
         fin.readRawData(reinterpret_cast<char*>(&cl.endMagIndex),sizeof(int));
         fin.readRawData(reinterpret_cast<char*>(&cl.startLineHeadType),sizeof(LINE_HEAD_TYPE));
@@ -59,8 +59,8 @@ private:
     QPoint startPos;    // 开始坐标
     QPoint endPos;      // 结束坐标
 
-    ORIENTION startDirect = ORIENTION::STARTPOINT;  // 开始点方向
-    ORIENTION endDirect = ORIENTION::ENDPOINT;      // 结束点方向
+    DIRECTION startDirect = DIRECTION::STARTPOINT;  // 开始点方向
+    DIRECTION endDirect = DIRECTION::ENDPOINT;      // 结束点方向
     int startMagIndex = 0;                  // 起始点索引值
     int endMagIndex = 0;                    // 结束点索引值
     FlowchartElement *startChartMag = nullptr;    // 起始图形
@@ -68,26 +68,12 @@ private:
     LINE_HEAD_TYPE startLineHeadType = LINE_HEAD_TYPE::ARROW0;   // 起始点线头方向
     LINE_HEAD_TYPE endLineHeadType = LINE_HEAD_TYPE::ARROW1;     // 结束点线头方向
 
-    void drawLineHead(const ORIENTION o,const LINE_HEAD_TYPE lht,const int x,const int y,QPainter & p,QPainterPath &linePath, QPainterPath &graphPath); // 绘制线头
+    void drawLineHead(const DIRECTION o,const LINE_HEAD_TYPE lht,const int x,const int y,QPainter & p,QPainterPath &linePath, QPainterPath &graphPath); // 绘制线头
     void drawStraightLine(int sx, int sy, int ex, int ey,QPainterPath &linePath, QPainterPath &graphPath);          // 直连线绘制
 
 public:
-    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,0,2){}
-
-    Line(Line &cr):FlowchartElement(cr)
-    {
-        chartText.text->setAttribute(Qt::WA_StyledBackground,true);
-        chartText.text->setAutoFillBackground(true);
-        chartText.text->setPalette(QPalette(QPalette::Window, QColor(255,255,255,150)));
-        chartText.text->setStyleSheet("QLabel{background:#00FF00;}");
-    }
-
-    Line(int x1, int y1, int x2, int y2, QWidget *parent = nullptr,PaintChartType type = PaintChartType::LINE) : FlowchartElement(x1,y1,x2,y2,parent,type)
-    {
-        chartText.text->setAttribute(Qt::WA_StyledBackground,true);
-        chartText.text->setAutoFillBackground(true);
-        chartText.text->setPalette(QPalette(QPalette::Window, QColor(255,255,255,150)));
-        chartText.text->setStyleSheet("QLabel{background:#00FF00;}");
+    Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent,type,0,2){
+        chartText.text->setText("");
     }
     ~Line(){}
 
@@ -120,10 +106,10 @@ public:
     void setEndMagIndex(int i){endMagIndex = i;}            // 设置终点指向的图形的磁力点索引
     int getEndMagIndex(){return endMagIndex;}               // 获取终点指向的图形的磁力点索引
 
-    void setStartDirect(ORIENTION direct){startDirect = direct;}    // 设置连线起点的朝向
-    void resetStartDirect(){startDirect = ORIENTION::NONE;}         // 重置连线起点的朝向
-    void setEndDirect(ORIENTION direct){endDirect = direct;}        // 设置连线终点的朝向
-    void resetEndDirect(){endDirect = ORIENTION::NONE;}             // 重置连线终点的朝向
+    void setStartDirect(DIRECTION direct){startDirect = direct;}    // 设置连线起点的朝向
+    void resetStartDirect(){startDirect = DIRECTION::NONE;}         // 重置连线起点的朝向
+    void setEndDirect(DIRECTION direct){endDirect = direct;}        // 设置连线终点的朝向
+    void resetEndDirect(){endDirect = DIRECTION::NONE;}             // 重置连线终点的朝向
 
 signals:
     void sendLineStyle(QPen &qp, QBrush &qb, LINE_HEAD_TYPE &startLineHeadType, LINE_HEAD_TYPE &endLineHeadType);   // 发送连线信息

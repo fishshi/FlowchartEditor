@@ -54,7 +54,7 @@ void Updater::doneChangeSize()
         Line *cl = reinterpret_cast<Line *>(canvas->curSelecChart);
         if(canvas->lineSelectChart)
         {
-            if(sizePointDirect == ORIENTION::STARTPOINT)
+            if(sizePointDirect == DIRECTION::STARTPOINT)
             {
                 cl->resetStartChart();
                 canvas->lineSelectChart->addMagiPointStartLine(canvas->magPointIndex, canvas->curSelecChart);
@@ -62,7 +62,7 @@ void Updater::doneChangeSize()
                 cl->setStartChart(canvas->lineSelectChart);
                 cl->setStartMagIndex(canvas->magPointIndex);
                 cl->setStartDirect(canvas->lineSelectChart->getMagiPointDirect(canvas->magPointIndex));
-            }else if(sizePointDirect == ORIENTION::ENDPOINT)
+            }else if(sizePointDirect == DIRECTION::ENDPOINT)
             {
                 cl->resetEndChart();
                 canvas->lineSelectChart->addMagiPointEndLine(canvas->magPointIndex, canvas->curSelecChart);
@@ -74,10 +74,10 @@ void Updater::doneChangeSize()
             cl->update();
         }else
         {
-            if(sizePointDirect == ORIENTION::STARTPOINT)
+            if(sizePointDirect == DIRECTION::STARTPOINT)
             {
                 cl->resetStartChart();
-            }else if(sizePointDirect == ORIENTION::ENDPOINT)
+            }else if(sizePointDirect == DIRECTION::ENDPOINT)
             {
                 cl->resetEndChart();
             }

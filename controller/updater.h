@@ -38,7 +38,7 @@ private:
 
     QPoint curSelecChartPos;                // 选中时指针在图像对象上的位置信息
     Canvas *canvas;
-    ORIENTION sizePointDirect = ORIENTION::NONE;    // 选中时要改变大小的大小点的方向类型
+    DIRECTION sizePointDirect = DIRECTION::NONE;    // 选中时要改变大小的大小点的方向类型
 };
 
 #endif // UPDATER_H

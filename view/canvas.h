@@ -38,7 +38,6 @@ private:
     FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
     FlowchartElement *lineSelectChart = nullptr;  // 线的吸附到的图形的指针
     int magPointIndex;                      // 线吸附到的图形的磁力点的索引
-    void clearChartsLine();                      // 释放图形、连线内存
 
     QPixmap backgroundImage;                // 背景图片
 
