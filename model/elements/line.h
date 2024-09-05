@@ -74,7 +74,7 @@ private:
 public:
     Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent, type, 0, 2)
     {
-        chartText.text->setText("1");
+        chartText.text->setText("");
     }
     ~Line() {}
 
