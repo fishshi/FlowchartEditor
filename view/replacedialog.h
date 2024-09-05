@@ -6,12 +6,15 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QEvent>
 
-class ReplaceDialog : public QDialog {
+class ReplaceDialog : public QDialog
+{
     Q_OBJECT
 
 public:
-    ReplaceDialog(QWidget *parent = nullptr) : QDialog(parent) {
+    ReplaceDialog(QWidget *parent = nullptr) : QDialog(parent)
+    {
         setWindowTitle(tr("查找和替换"));
 
         // 创建输入框
@@ -49,6 +52,5 @@ private:
     QLineEdit *replaceLineEdit;
 
 };
-
 
 #endif // REPLACEDIALOG_H

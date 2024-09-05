@@ -1,17 +1,18 @@
 ﻿#include "startendelement.h"
 
-void StartEndElement::paintChart(QPainter & p)
+void StartEndElement::paintChart(QPainter &p)
 {
     QPen tmp = p.pen();
     p.setPen(paintChartDrawPen);
 
-    int sx = paintStart.rx(),sy = paintStart.ry(),ex = paintEnd.rx(),ey = paintEnd.ry();
+    int sx = paintStart.rx(), sy = paintStart.ry(), ex = paintEnd.rx(), ey = paintEnd.ry();
 
-    if(graphPath) delete graphPath;
+    if (graphPath)
+        delete graphPath;
     graphPath = new QPainterPath;
-    graphPath->addRoundedRect(sx,sy,ex-sx,ey-sy,20,20);
+    graphPath->addRoundedRect(sx, sy, ex - sx, ey - sy, 20, 20);
 
-    p.fillPath(*graphPath,paintChartFillPen);
+    p.fillPath(*graphPath, paintChartFillPen);
     p.drawPath(*graphPath);
 
     p.setPen(tmp);

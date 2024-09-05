@@ -5,14 +5,16 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
     friend class Controller;
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
