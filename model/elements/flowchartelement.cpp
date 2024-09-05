@@ -4,10 +4,10 @@ int FlowchartElement::sizePointWidth = 9;
 int FlowchartElement::pointLineWidth = 2;
 int FlowchartElement::chartIDCount = 0;
 
-QPen FlowchartElement::paintDrawPen  = QPen(QColor(150,80,80),pointLineWidth);
-QBrush FlowchartElement::paintFillPen  = QBrush(QColor(255,255,255));
+QPen FlowchartElement::paintDrawPen = QPen(QColor(150, 80, 80), pointLineWidth);
+QBrush FlowchartElement::paintFillPen = QBrush(QColor(255, 255, 255));
 
-FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc, int spc):QWidget(parent),magPoint(mpc),sizePoint(spc),chartText()
+FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc, int spc) : QWidget(parent), magPoint(mpc), sizePoint(spc), chartText()
 {
     chartType = type;
     widgetPosInit();
@@ -20,18 +20,18 @@ FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc
     this->installEventFilter(this);
 }
 
-void FlowchartElement::widgetPosInit(int x,int y,int w,int h)
+void FlowchartElement::widgetPosInit(int x, int y, int w, int h)
 {
-    if(this->chartType == PaintChartType::ELLIPSE)
+    if (this->chartType == PaintChartType::ELLIPSE)
         w = minSizeW;
     widgetStart.setX(x);
     widgetStart.setY(y);
-    widgetEnd.setX(x+w);
-    widgetEnd.setY(y+h);
+    widgetEnd.setX(x + w);
+    widgetEnd.setY(y + h);
     updateWidgetPosInof();
 }
 
-void FlowchartElement::varInit(int mpw,int spw,int plw,bool sa,bool smo)
+void FlowchartElement::varInit(int mpw, int spw, int plw, bool sa, bool smo)
 {
     ID = chartIDCount++;
     FlowchartElement::magPointWidth = mpw;
@@ -48,12 +48,12 @@ void FlowchartElement::paintInit()
 
 void FlowchartElement::pointInit()
 {
-    for(auto it = magPoint.i_point.begin();it != magPoint.i_point.end(); it++)
+    for (auto it = magPoint.i_point.begin(); it != magPoint.i_point.end(); it++)
     {
         (*it) = new i_magpointbase;
         (*it)->i_pos = new QPoint;
     }
-    for(auto it = sizePoint.i_point.begin();it != sizePoint.i_point.end(); it++)
+    for (auto it = sizePoint.i_point.begin(); it != sizePoint.i_point.end(); it++)
     {
         (*it) = new i_pointbase;
         (*it)->i_pos = new QPoint;
@@ -70,22 +70,22 @@ void FlowchartElement::textInit()
     chartText.text = new Label(this);
     chartText.text->setText("双击输入");
     chartText.text->setWordWrap(true);
-    chartText.text->move(paintStart.rx() + sizePointWidth,paintStart.ry() + sizePointWidth);
+    chartText.text->move(paintStart.rx() + sizePointWidth, paintStart.ry() + sizePointWidth);
     chartText.text->adjustSize();
-    connect(chartText.text,SIGNAL(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)),this,SLOT(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE,int,int)));
+    connect(chartText.text, SIGNAL(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE, int, int)), this, SLOT(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE, int, int)));
 }
 
 void FlowchartElement::colorInit()
 {
-    paintChartDrawPen  = QPen(QColor(0,0,0),2);
-    paintChartFillPen  = QBrush(QColor(255,255,255));
+    paintChartDrawPen = QPen(QColor(0, 0, 0), 2);
+    paintChartFillPen = QBrush(QColor(255, 255, 255));
 }
 
 void FlowchartElement::updateWidgetPosInof()
 {
     int w, h;
     int x, y;
-    if(widgetEnd.rx() < widgetStart.rx())
+    if (widgetEnd.rx() < widgetStart.rx())
     {
         x = widgetEnd.rx() - borderWidth;
         w = widgetStart.rx() - widgetEnd.rx() + borderWidth + borderWidth;
@@ -93,20 +93,20 @@ void FlowchartElement::updateWidgetPosInof()
     else
     {
         x = widgetStart.rx() - borderWidth;
-        w = widgetEnd.rx() - widgetStart.rx()  + borderWidth + borderWidth;
+        w = widgetEnd.rx() - widgetStart.rx() + borderWidth + borderWidth;
     }
-    if(widgetEnd.ry() < widgetStart.ry())
+    if (widgetEnd.ry() < widgetStart.ry())
     {
         y = widgetEnd.ry() - borderWidth;
-        h = widgetStart.ry() - widgetEnd.ry()  + borderWidth + borderWidth;
+        h = widgetStart.ry() - widgetEnd.ry() + borderWidth + borderWidth;
     }
     else
     {
         y = widgetStart.ry() - borderWidth;
-        h = widgetEnd.ry() - widgetStart.ry()  + borderWidth + borderWidth;
+        h = widgetEnd.ry() - widgetStart.ry() + borderWidth + borderWidth;
     }
-    specialWidgetUpdate(x,y,w,h);
-    setGeometry(x,y,w,h);
+    specialWidgetUpdate(x, y, w, h);
+    setGeometry(x, y, w, h);
 }
 void FlowchartElement::updatePaintInfo()
 {
@@ -114,15 +114,15 @@ void FlowchartElement::updatePaintInfo()
     paintStart.setY(borderWidth);
     paintEnd.setX(borderWidth + abs(widgetEnd.rx() - widgetStart.rx()));
     paintEnd.setY(borderWidth + abs(widgetEnd.ry() - widgetStart.ry()));
-    specialPaintUpdate(paintStart,paintEnd);
+    specialPaintUpdate(paintStart, paintEnd);
 }
 
 void FlowchartElement::updateSizePointInfo()
 {
-    if(sizePoint.i_point.size()>=4)
+    if (sizePoint.i_point.size() >= 4)
     {
-        int x1 = paintStart.rx(),y1 = paintStart.ry();
-        int x2 = paintEnd.rx(),y2 = paintEnd.ry();
+        int x1 = paintStart.rx(), y1 = paintStart.ry();
+        int x2 = paintEnd.rx(), y2 = paintEnd.ry();
         sizePoint.i_point[0]->setX(x1);
         sizePoint.i_point[0]->setY(y1);
         sizePoint.i_point[0]->setRotate(DIRECTION::NORTHWEST);
@@ -140,12 +140,12 @@ void FlowchartElement::updateSizePointInfo()
 
 void FlowchartElement::updateMagPointInfo()
 {
-    if(magPoint.i_point.size()==4)
+    if (magPoint.i_point.size() == 4)
     {
-        int x1 = paintStart.rx(),y1 = paintStart.ry();
-        int x2 = paintEnd.rx(),y2 = paintEnd.ry();
-        int midx = ((paintStart.rx() + paintEnd.rx())>>1);
-        int midy = ((paintStart.ry() + paintEnd.ry())>>1);
+        int x1 = paintStart.rx(), y1 = paintStart.ry();
+        int x2 = paintEnd.rx(), y2 = paintEnd.ry();
+        int midx = ((paintStart.rx() + paintEnd.rx()) >> 1);
+        int midy = ((paintStart.ry() + paintEnd.ry()) >> 1);
 
         magPoint.i_point[0]->setX(midx);
         magPoint.i_point[0]->setY(y1);
@@ -164,28 +164,28 @@ void FlowchartElement::updateMagPointInfo()
 
 void FlowchartElement::updateMagPointPath()
 {
-    for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end();it != end;it++)
+    for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++)
     {
-        (*it)->newPath()->addEllipse((*it)->getX() - sizePointWidth / 2,(*it)->getY() - sizePointWidth / 2,sizePointWidth,sizePointWidth);
+        (*it)->newPath()->addEllipse((*it)->getX() - sizePointWidth / 2, (*it)->getY() - sizePointWidth / 2, sizePointWidth, sizePointWidth);
     }
 }
 
 void FlowchartElement::updateSizePointPath()
 {
-    for(auto it = sizePoint.i_point.begin(),end = sizePoint.i_point.end();it != end;it++)
+    for (auto it = sizePoint.i_point.begin(), end = sizePoint.i_point.end(); it != end; it++)
     {
-        (*it)->newPath()->addRect((*it)->getX() - sizePointWidth / 2,(*it)->getY() - sizePointWidth / 2,sizePointWidth,sizePointWidth);
+        (*it)->newPath()->addRect((*it)->getX() - sizePointWidth / 2, (*it)->getY() - sizePointWidth / 2, sizePointWidth, sizePointWidth);
     }
 }
 void FlowchartElement::updateMagPointLine()
 {
-    for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end();it != end;it++)
+    for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++)
     {
-        for(auto l_it = (*it)->i_lineStart.begin(),l_end = (*it)->i_lineStart.end();l_it != l_end;l_it++)
+        for (auto l_it = (*it)->i_lineStart.begin(), l_end = (*it)->i_lineStart.end(); l_it != l_end; l_it++)
         {
-            if( (*l_it)->widgetStart.rx() != (*it)->getX() + x() || (*l_it)->widgetStart.ry() != (*it)->getY() + y())
+            if ((*l_it)->widgetStart.rx() != (*it)->getX() + x() || (*l_it)->widgetStart.ry() != (*it)->getY() + y())
             {
-                (*l_it)->setStartPos((*it)->getX() + x(),(*it)->getY() + y());
+                (*l_it)->setStartPos((*it)->getX() + x(), (*it)->getY() + y());
 
                 (*l_it)->updateWidgetPosInof();
                 (*l_it)->updatePaintInfo();
@@ -194,11 +194,11 @@ void FlowchartElement::updateMagPointLine()
                 (*l_it)->updateTextInfo();
             }
         }
-        for(auto l_it = (*it)->i_lineEnd.begin(),l_end = (*it)->i_lineEnd.end();l_it != l_end;l_it++)
+        for (auto l_it = (*it)->i_lineEnd.begin(), l_end = (*it)->i_lineEnd.end(); l_it != l_end; l_it++)
         {
-            if( (*l_it)->widgetEnd.rx() != (*it)->getX() + x() || (*l_it)->widgetEnd.ry() != (*it)->getY() + y())
+            if ((*l_it)->widgetEnd.rx() != (*it)->getX() + x() || (*l_it)->widgetEnd.ry() != (*it)->getY() + y())
             {
-                (*l_it)->setEndPos((*it)->getX() + x(),(*it)->getY() + y());
+                (*l_it)->setEndPos((*it)->getX() + x(), (*it)->getY() + y());
 
                 (*l_it)->updateWidgetPosInof();
                 (*l_it)->updatePaintInfo();
@@ -217,58 +217,58 @@ void FlowchartElement::updateTextInfo()
     chartText.text->setMaximumWidth(w);
     chartText.text->setMaximumHeight(w);
     chartText.text->adjustSize();
-    if(chartText.text->x() + chartText.text->width() >paintEnd.rx())
+    if (chartText.text->x() + chartText.text->width() > paintEnd.rx())
     {
-        if(paintEnd.rx() - chartText.text->width()<paintStart.rx())
-            chartText.text->move(paintStart.rx(),chartText.text->y());
+        if (paintEnd.rx() - chartText.text->width() < paintStart.rx())
+            chartText.text->move(paintStart.rx(), chartText.text->y());
         else
-            chartText.text->move(paintEnd.rx() - chartText.text->width(),chartText.text->y());
+            chartText.text->move(paintEnd.rx() - chartText.text->width(), chartText.text->y());
     }
-    if(chartText.text->y() + chartText.text->height() >paintEnd.ry())
+    if (chartText.text->y() + chartText.text->height() > paintEnd.ry())
     {
-        if(paintEnd.ry() - chartText.text->height()<paintStart.ry())
-            chartText.text->move(chartText.text->x(),paintStart.ry());
+        if (paintEnd.ry() - chartText.text->height() < paintStart.ry())
+            chartText.text->move(chartText.text->x(), paintStart.ry());
         else
-            chartText.text->move(chartText.text->x(),paintEnd.ry() - chartText.text->height());
+            chartText.text->move(chartText.text->x(), paintEnd.ry() - chartText.text->height());
     }
 }
 
-void FlowchartElement::paintMagPoint(QPainter & p)
+void FlowchartElement::paintMagPoint(QPainter &p)
 {
     QPen tmp = p.pen();
     p.setPen(paintDrawPen);
-    QPainterPath* tmpPath;
-    for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end(); it != end;it++)
+    QPainterPath *tmpPath;
+    for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++)
     {
         tmpPath = (*it)->getPath();
         p.drawPath(*tmpPath);
-        p.fillPath(*tmpPath,paintFillPen);
+        p.fillPath(*tmpPath, paintFillPen);
     }
     p.setPen(tmp);
 }
 
-void FlowchartElement::paintSizePoint(QPainter & p)
+void FlowchartElement::paintSizePoint(QPainter &p)
 {
     QPen tmp = p.pen();
     p.setPen(paintDrawPen);
 
-    for(auto it = sizePoint.i_point.begin(),end = sizePoint.i_point.end(); it != end;it++)
+    for (auto it = sizePoint.i_point.begin(), end = sizePoint.i_point.end(); it != end; it++)
     {
-        QPainterPath* tmpPath = (*it)->getPath();
+        QPainterPath *tmpPath = (*it)->getPath();
         p.drawPath(*tmpPath);
-        p.fillPath(*tmpPath,paintFillPen);
+        p.fillPath(*tmpPath, paintFillPen);
     }
     p.setPen(tmp);
 }
 
-void FlowchartElement::paintSizeEdge(QPainter & p)
+void FlowchartElement::paintSizeEdge(QPainter &p)
 {
     QPen tmp = p.pen();
     p.setPen(paintDrawPen);
 
-    int sx = paintStart.rx(),sy = paintStart.ry(),ex = paintEnd.rx(), ey = paintEnd.ry();
-    int sx2 = sx+sizePointWidth / 2, sy2 = sy+sizePointWidth / 2;
-    int ex1 = ex-sizePointWidth / 2, ey1 = ey-sizePointWidth / 2;
+    int sx = paintStart.rx(), sy = paintStart.ry(), ex = paintEnd.rx(), ey = paintEnd.ry();
+    int sx2 = sx + sizePointWidth / 2, sy2 = sy + sizePointWidth / 2;
+    int ex1 = ex - sizePointWidth / 2, ey1 = ey - sizePointWidth / 2;
 
     p.drawLine(sx2, sy, ex1, sy);
     p.drawLine(ex, sy2, ex, ey1);
@@ -280,22 +280,24 @@ void FlowchartElement::paintSizeEdge(QPainter & p)
 
 bool FlowchartElement::inPath(const QPointF &p)
 {
-    for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end();it!=end;it++)
+    for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++)
     {
-        if((*it)->inPath(p))return true;
+        if ((*it)->inPath(p))
+            return true;
     }
-    for(auto it = sizePoint.i_point.begin(),end = sizePoint.i_point.end();it!=end;it++)
+    for (auto it = sizePoint.i_point.begin(), end = sizePoint.i_point.end(); it != end; it++)
     {
-        if((*it)->inPath(p))return true;
+        if ((*it)->inPath(p))
+            return true;
     }
     return inGraphisPath(p);
 }
 bool FlowchartElement::inMagPath(const QPointF &p, DIRECTION &b, int &index) const
 {
     int i = 0;
-    for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end();it!=end;it++,i++)
+    for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++, i++)
     {
-        if((*it)->inPath(p))
+        if ((*it)->inPath(p))
         {
             b = (*it)->getRotate();
             index = i;
@@ -306,9 +308,9 @@ bool FlowchartElement::inMagPath(const QPointF &p, DIRECTION &b, int &index) con
 }
 bool FlowchartElement::inSizePath(const QPointF &p, DIRECTION &b) const
 {
-    for(auto it = sizePoint.i_point.begin(),end = sizePoint.i_point.end();it!=end;it++)
+    for (auto it = sizePoint.i_point.begin(), end = sizePoint.i_point.end(); it != end; it++)
     {
-        if((*it)->inPath(p))
+        if ((*it)->inPath(p))
         {
             b = (*it)->getRotate();
             return true;
@@ -316,12 +318,12 @@ bool FlowchartElement::inSizePath(const QPointF &p, DIRECTION &b) const
     }
     return false;
 }
-void FlowchartElement::setStartPos(int x,int y)
+void FlowchartElement::setStartPos(int x, int y)
 {
     widgetStart.setX(x);
     widgetStart.setY(y);
 }
-void FlowchartElement::setEndPos(int x,int y)
+void FlowchartElement::setEndPos(int x, int y)
 {
     widgetEnd.setX(x);
     widgetEnd.setY(y);
@@ -329,21 +331,25 @@ void FlowchartElement::setEndPos(int x,int y)
 
 void FlowchartElement::setXY(int x, int y)
 {
-    int *x1,*y1;
-    int *x2,*y2;
-    if(widgetEnd.rx()<widgetStart.rx())
+    int *x1, *y1;
+    int *x2, *y2;
+    if (widgetEnd.rx() < widgetStart.rx())
     {
         x1 = &widgetEnd.rx();
         x2 = &widgetStart.rx();
-    }else{
+    }
+    else
+    {
         x1 = &widgetStart.rx();
         x2 = &widgetEnd.rx();
     }
-    if(widgetEnd.ry()<widgetStart.ry())
+    if (widgetEnd.ry() < widgetStart.ry())
     {
         y1 = &widgetEnd.ry();
         y2 = &widgetStart.ry();
-    }else{
+    }
+    else
+    {
         y1 = &widgetStart.ry();
         y2 = &widgetEnd.ry();
     }
@@ -360,76 +366,105 @@ void FlowchartElement::setXY(int x, int y)
 
 void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
 {
-    int *x1,*y1;
-    int *x2,*y2;
-    if(widgetEnd.rx()<widgetStart.rx())
+    int *x1, *y1;
+    int *x2, *y2;
+    if (widgetEnd.rx() < widgetStart.rx())
     {
         x1 = &widgetEnd.rx();
         x2 = &widgetStart.rx();
-    } else {
+    }
+    else
+    {
         x1 = &widgetStart.rx();
         x2 = &widgetEnd.rx();
     }
-    if(widgetEnd.ry()<widgetStart.ry())
+    if (widgetEnd.ry() < widgetStart.ry())
     {
         y1 = &widgetEnd.ry();
         y2 = &widgetStart.ry();
-    } else {
+    }
+    else
+    {
         y1 = &widgetStart.ry();
         y2 = &widgetEnd.ry();
     }
-    switch(type)
+    switch (type)
     {
-        case DIRECTION::NORTHWEST:
-        {
-            if(*x2-x<minSizeW) *x1 = *x2-minSizeW;
-            else *x1 = x;
-            if(*y2-y<minSizeH) *y1 = *y2-minSizeH;
-            else *y1 = y;
-        }break;
-        case DIRECTION::NORTHEAST:
-        {
-            if(x-*x1<minSizeW) *x2 = *x1+minSizeW;
-            else *x2 = x;
-            if(*y2-y<minSizeH) *y1 = *y2-minSizeH;
-            else *y1 = y;
-        }break;
-        case DIRECTION::SOUTHEAST:
-        {
-            if(x-*x1<minSizeW) *x2 = *x1+minSizeW;
-            else *x2 = x;
-            if(y-*y1<minSizeH) *y2 = *y1+minSizeH;
-            else *y2 = y;
-        }break;
-        case DIRECTION::SOUTHWEST:
-        {
-            if(*x2-x<minSizeW) *x1 = *x2-minSizeW;
-            else *x1 = x;
-            if(y-*y1<minSizeH) *y2 = *y1+minSizeH;
-            else *y2 = y;
-        }break;
-        case DIRECTION::STARTPOINT:{
-            if(x<widgetEnd.rx())
-                widgetStart.setX(x );
-            else
-                widgetStart.setX(x );
-            if(y<widgetEnd.ry())
-                widgetStart.setY(y );
-            else
-                widgetStart.setY(y );
-        }break;
-        case DIRECTION::ENDPOINT:{
-            if(x<widgetStart.rx())
-                widgetEnd.setX(x );
-            else
-                widgetEnd.setX(x );
-            if(y<widgetStart.ry())
-                widgetEnd.setY(y );
-            else
-                widgetEnd.setY(y );
-        }break;
-        default:{
-        }
+    case DIRECTION::NORTHWEST:
+    {
+        if (*x2 - x < minSizeW)
+            *x1 = *x2 - minSizeW;
+        else
+            *x1 = x;
+        if (*y2 - y < minSizeH)
+            *y1 = *y2 - minSizeH;
+        else
+            *y1 = y;
+    }
+    break;
+    case DIRECTION::NORTHEAST:
+    {
+        if (x - *x1 < minSizeW)
+            *x2 = *x1 + minSizeW;
+        else
+            *x2 = x;
+        if (*y2 - y < minSizeH)
+            *y1 = *y2 - minSizeH;
+        else
+            *y1 = y;
+    }
+    break;
+    case DIRECTION::SOUTHEAST:
+    {
+        if (x - *x1 < minSizeW)
+            *x2 = *x1 + minSizeW;
+        else
+            *x2 = x;
+        if (y - *y1 < minSizeH)
+            *y2 = *y1 + minSizeH;
+        else
+            *y2 = y;
+    }
+    break;
+    case DIRECTION::SOUTHWEST:
+    {
+        if (*x2 - x < minSizeW)
+            *x1 = *x2 - minSizeW;
+        else
+            *x1 = x;
+        if (y - *y1 < minSizeH)
+            *y2 = *y1 + minSizeH;
+        else
+            *y2 = y;
+    }
+    break;
+    case DIRECTION::STARTPOINT:
+    {
+        if (x < widgetEnd.rx())
+            widgetStart.setX(x);
+        else
+            widgetStart.setX(x);
+        if (y < widgetEnd.ry())
+            widgetStart.setY(y);
+        else
+            widgetStart.setY(y);
+    }
+    break;
+    case DIRECTION::ENDPOINT:
+    {
+        if (x < widgetStart.rx())
+            widgetEnd.setX(x);
+        else
+            widgetEnd.setX(x);
+        if (y < widgetStart.ry())
+            widgetEnd.setY(y);
+        else
+            widgetEnd.setY(y);
+    }
+    break;
+    default:
+    {
+    }
     }
 
     updateWidgetPosInof();
@@ -454,22 +489,22 @@ void FlowchartElement::applyWidthHeight()
     updateTextInfo();
 }
 
-bool FlowchartElement::autoSetMagi(int &abcx,int &abcy, int &index)
+bool FlowchartElement::autoSetMagi(int &abcx, int &abcy, int &index)
 {
     int mx = abcx;
     int my = abcy;
-    if(mx >= x() && my >= y() && mx-x()<=width() && my-y()<=width())
+    if (mx >= x() && my >= y() && mx - x() <= width() && my - y() <= width())
     {
         showMagOnly();
-        int x1,y1;
+        int x1, y1;
         mx -= x();
         my -= y();
         int i = 0;
-        for(auto it = magPoint.i_point.begin(),end = magPoint.i_point.end();it != end;it++,i++)
+        for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++, i++)
         {
-            x1 = (*it)->getX() +  magPointWidth / 2;
-            y1 = (*it)->getY() +  magPointWidth / 2;
-            if(abs(x1-mx) <= magPointAutoMagiRange && abs(y1-my) <= magPointAutoMagiRange)
+            x1 = (*it)->getX() + magPointWidth / 2;
+            y1 = (*it)->getY() + magPointWidth / 2;
+            if (abs(x1 - mx) <= magPointAutoMagiRange && abs(y1 - my) <= magPointAutoMagiRange)
             {
                 abcx = x() + (*it)->getX();
                 abcy = y() + (*it)->getY();
@@ -489,14 +524,14 @@ void FlowchartElement::overlapChartMousePressed(QMouseEvent *event)
 {
     int mx = event->pos().rx();
     int my = event->pos().ry();
-    if(mx >= x() && my >= y() && mx-x()<=width() && my-y()<=width())
+    if (mx >= x() && my >= y() && mx - x() <= width() && my - y() <= width())
     {
-        QPointF tmp(mx-this->x(),my-this->y());
+        QPointF tmp(mx - this->x(), my - this->y());
         DIRECTION direct = DIRECTION::NONE;
 
-        if(inGraphisPath(tmp))
+        if (inGraphisPath(tmp))
         {
-            emit sendThisClass(this,tmp.rx()-borderWidth,tmp.ry()-borderWidth);
+            emit sendThisClass(this, tmp.rx() - borderWidth, tmp.ry() - borderWidth);
             curFlag = MOUSE_EVENT_TYPE::CHANGE_POS;
             event->accept();
             raise();
@@ -509,20 +544,20 @@ void FlowchartElement::overlapChartMouseMove(QMouseEvent *event)
     int mx = event->pos().rx();
     int my = event->pos().ry();
 
-    if( mx >= x() && my >= y() && mx-x()<=width() && my-y()<=height())
+    if (mx >= x() && my >= y() && mx - x() <= width() && my - y() <= height())
     {
         DIRECTION direct = DIRECTION::NONE;
         int index;
-        QPointF tmp(mx-this->x(),my-this->y());
-        if(showMag)
+        QPointF tmp(mx - this->x(), my - this->y());
+        if (showMag)
         {
-            if(inMagPath(tmp,direct,index))
+            if (inMagPath(tmp, direct, index))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 event->accept();
                 raise();
             }
-            else if(inGraphisPath(tmp))
+            else if (inGraphisPath(tmp))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 event->accept();
@@ -536,7 +571,7 @@ void FlowchartElement::overlapChartMouseMove(QMouseEvent *event)
         }
         else
         {
-            if(inGraphisPath(tmp))
+            if (inGraphisPath(tmp))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 event->accept();
@@ -559,12 +594,12 @@ void FlowchartElement::showMagSize()
 
 void FlowchartElement::hideMagSize()
 {
-    if(showAll)
+    if (showAll)
     {
         this->releaseKeyboard();
         showAll = false;
 
-        if(chartText.tmpEdit)
+        if (chartText.tmpEdit)
         {
             chartText.text->setText(chartText.tmpEdit->text());
             chartText.text->adjustSize();
@@ -577,7 +612,7 @@ void FlowchartElement::hideMagSize()
 
 void FlowchartElement::showMagOnly()
 {
-    if(showMag == false)
+    if (showMag == false)
     {
         showMag = true;
         showAll = false;
@@ -586,11 +621,11 @@ void FlowchartElement::showMagOnly()
 }
 void FlowchartElement::hideMagOnly()
 {
-    if(showMag)
+    if (showMag)
     {
         this->releaseKeyboard();
         showMag = false;
-        if(chartText.tmpEdit)
+        if (chartText.tmpEdit)
         {
             chartText.text->setText(chartText.tmpEdit->text());
             chartText.text->adjustSize();
@@ -605,12 +640,13 @@ void FlowchartElement::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
     paintChart(p);
-    if(showAll)
+    if (showAll)
     {
         paintSizeEdge(p);
         paintMagPoint(p);
         paintSizePoint(p);
-    }else if(showMag)
+    }
+    else if (showMag)
     {
         paintMagPoint(p);
     }
@@ -622,25 +658,24 @@ void FlowchartElement::mousePressEvent(QMouseEvent *event)
     DIRECTION direct = DIRECTION::NONE;
     int index;
 
-    if(showAll&&inSizePath(event->pos(),direct))
+    if (showAll && inSizePath(event->pos(), direct))
     {
         emit setTypeChangeSize(direct);
         curFlag = MOUSE_EVENT_TYPE::CHANGE_SIZE;
         curIndex = direct;
         raise();
-
     }
-    else if((showAll||showMag)&&inMagPath(event->pos(),direct,index))
+    else if ((showAll || showMag) && inMagPath(event->pos(), direct, index))
     {
-        emit setTypeCreateMagPoint(this,direct,index);
+        emit setTypeCreateMagPoint(this, direct, index);
         curFlag = MOUSE_EVENT_TYPE::CREATE_MAGPOINT;
         curIndex = direct;
         showMagOnly();
         raise();
     }
-    else if(inGraphisPath(event->pos()) )
+    else if (inGraphisPath(event->pos()))
     {
-        emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
+        emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
         curFlag = MOUSE_EVENT_TYPE::CHANGE_POS;
         curIndex = direct;
         raise();
@@ -655,37 +690,46 @@ void FlowchartElement::mousePressEvent(QMouseEvent *event)
 
 void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
 {
-    if(curFlag == MOUSE_EVENT_TYPE::NONE)
+    if (curFlag == MOUSE_EVENT_TYPE::NONE)
     {
         DIRECTION direct = DIRECTION::NONE;
         int index;
 
-        if(showAll)
+        if (showAll)
         {
-            if(inSizePath(event->pos(),direct))
+            if (inSizePath(event->pos(), direct))
             {
-                switch(DIRECTION(direct))
+                switch (DIRECTION(direct))
                 {
-                    case DIRECTION::NORTHWEST:case DIRECTION::SOUTHEAST:{
-                        setCursor(QCursor(Qt::SizeFDiagCursor));
-                    }break;
-                    case DIRECTION::NORTHEAST:case DIRECTION::SOUTHWEST:{
-                        setCursor(QCursor(Qt::SizeBDiagCursor));
-                    }break;
-                    case DIRECTION::STARTPOINT:case DIRECTION::ENDPOINT:{
-                        setCursor(QCursor(Qt::SizeAllCursor));
-                    }break;
-                    default:
-                        break;
+                case DIRECTION::NORTHWEST:
+                case DIRECTION::SOUTHEAST:
+                {
+                    setCursor(QCursor(Qt::SizeFDiagCursor));
+                }
+                break;
+                case DIRECTION::NORTHEAST:
+                case DIRECTION::SOUTHWEST:
+                {
+                    setCursor(QCursor(Qt::SizeBDiagCursor));
+                }
+                break;
+                case DIRECTION::STARTPOINT:
+                case DIRECTION::ENDPOINT:
+                {
+                    setCursor(QCursor(Qt::SizeAllCursor));
+                }
+                break;
+                default:
+                    break;
                 }
                 raise();
             }
-            else if(inMagPath(event->pos(),direct,index))
+            else if (inMagPath(event->pos(), direct, index))
             {
                 setCursor(QCursor(Qt::CrossCursor));
                 raise();
             }
-            else if(inGraphisPath(event->pos()))
+            else if (inGraphisPath(event->pos()))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 raise();
@@ -693,14 +737,14 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
             else
                 event->ignore();
         }
-        else if(showMag)
+        else if (showMag)
         {
-            if(inMagPath(event->pos(),direct,index))
+            if (inMagPath(event->pos(), direct, index))
             {
                 setCursor(QCursor(Qt::CrossCursor));
                 raise();
             }
-            else if(inGraphisPath(event->pos()))
+            else if (inGraphisPath(event->pos()))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 raise();
@@ -713,7 +757,7 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
         }
         else
         {
-            if(inGraphisPath(event->pos()))
+            if (inGraphisPath(event->pos()))
             {
                 setCursor(QCursor(Qt::SizeAllCursor));
                 showMagOnly();
@@ -722,11 +766,11 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
             else
                 event->ignore();
         }
-        if(chartText.textMouseType == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
+        if (chartText.textMouseType == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
         {
-            emit sendThisClass(this,event->pos().rx()-borderWidth,event->pos().ry()-borderWidth);
+            emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
 
-            chartText.text->move(event->pos().rx()-chartText.chartTextMousePos.rx(),event->pos().ry()-chartText.chartTextMousePos.ry());
+            chartText.text->move(event->pos().rx() - chartText.chartTextMousePos.rx(), event->pos().ry() - chartText.chartTextMousePos.ry());
             chartText.text->adjustSize();
         }
     }
@@ -753,36 +797,36 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
 
         // 创建 QLineEdit 控件，用于输入文字
         chartText.tmpEdit = new QLineEdit(chartText.text->text(), this);
-        chartText.tmpEdit->setFrame(false);  // 去除边框
-        chartText.text->setText("");         // 清空 QLabel 的文字
+        chartText.tmpEdit->setFrame(false); // 去除边框
+        chartText.text->setText("");        // 清空 QLabel 的文字
 
         // 设置 QLineEdit 的大小和位置
         chartText.tmpEdit->adjustSize();
-        chartText.tmpEdit->setStyleSheet("background:transparent;");  // 设置透明背景
+        chartText.tmpEdit->setStyleSheet("background:transparent;"); // 设置透明背景
         chartText.tmpEdit->setGeometry(
             chartText.text->x(),
             chartText.text->y(),
             chartText.text->width() + (textBorderWidth << 1),
-            chartText.text->height() + (textBorderWidth << 1)
-        );
+            chartText.text->height() + (textBorderWidth << 1));
 
         // 显示 QLineEdit 并使其获得焦点
         chartText.tmpEdit->show();
-        chartText.tmpEdit->setFocus();  // 确保 QLineEdit 获得输入焦点
-        chartText.tmpEdit->setCursorPosition(chartText.tmpEdit->text().length());  // 将光标移动到文本末尾
+        chartText.tmpEdit->setFocus();                                            // 确保 QLineEdit 获得输入焦点
+        chartText.tmpEdit->setCursorPosition(chartText.tmpEdit->text().length()); // 将光标移动到文本末尾
 
         // 捕获键盘输入事件
         chartText.tmpEdit->grabKeyboard();
 
         // 连接 QLineEdit 的信号槽
-        connect(chartText.tmpEdit, &QLineEdit::editingFinished, [this]() {
-            chartText.tmpEdit->releaseKeyboard();//似乎没用？
-            // 将输入文本设置回 QLabel 并销毁 QLineEdit
-            chartText.text->setText(chartText.tmpEdit->text());
-            chartText.text->adjustSize();
-            delete chartText.tmpEdit;  // 删除 QLineEdit
-            chartText.tmpEdit = nullptr;       // 重置指针
-        });
+        connect(chartText.tmpEdit, &QLineEdit::editingFinished, [this]()
+                {
+                    chartText.tmpEdit->releaseKeyboard(); // 似乎没用？
+                    // 将输入文本设置回 QLabel 并销毁 QLineEdit
+                    chartText.text->setText(chartText.tmpEdit->text());
+                    chartText.text->adjustSize();
+                    delete chartText.tmpEdit;    // 删除 QLineEdit
+                    chartText.tmpEdit = nullptr; // 重置指针
+                });
     }
     else
         event->ignore();
@@ -791,11 +835,13 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
 void FlowchartElement::keyPressEvent(QKeyEvent *event)
 {
     // 检查 tmpEdit 是否存在，并且已经聚焦
-    if (chartText.tmpEdit && chartText.tmpEdit->hasFocus()) {
+    if (chartText.tmpEdit && chartText.tmpEdit->hasFocus())
+    {
         // 如果事件是回车键，发射编辑完成信号
-        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            chartText.tmpEdit->editingFinished();  // 失去焦点，以触发 editingFinished 信号
-            return;  // 返回，避免事件进一步传播
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+        {
+            chartText.tmpEdit->editingFinished(); // 失去焦点，以触发 editingFinished 信号
+            return;                               // 返回，避免事件进一步传播
         }
     }
     // 确保事件继续传递

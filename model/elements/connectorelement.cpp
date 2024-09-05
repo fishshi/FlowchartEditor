@@ -1,17 +1,18 @@
 ﻿#include "connectorelement.h"
 
-void ConnectorElement::paintChart(QPainter & p)
+void ConnectorElement::paintChart(QPainter &p)
 {
     QPen tmp = p.pen();
     p.setPen(paintChartDrawPen);
 
-    int sx = paintStart.rx(),sy = paintStart.ry(),ex = paintEnd.rx(),ey = paintEnd.ry();
+    int sx = paintStart.rx(), sy = paintStart.ry(), ex = paintEnd.rx(), ey = paintEnd.ry();
 
-    if(graphPath) delete graphPath;
+    if (graphPath)
+        delete graphPath;
     graphPath = new QPainterPath;
-    graphPath->addEllipse(sx,sy,ex-sx,ey-sy);
+    graphPath->addEllipse(sx, sy, ex - sx, ey - sy);
 
-    p.fillPath(*graphPath,paintChartFillPen);
+    p.fillPath(*graphPath, paintChartFillPen);
     p.drawPath(*graphPath);
 
     p.setPen(tmp);

@@ -1,6 +1,7 @@
 #include "filer.h"
 
-Filer::Filer(Canvas *canvas) {
+Filer::Filer(Canvas *canvas)
+{
     this->canvas = canvas;
 }
 
@@ -9,16 +10,16 @@ void Filer::openFile(QString filePath)
     QFile file(filePath);
     file.open(QIODevice::ReadOnly);
     QDataStream fin(&file);
-    std::map<int,FlowchartElement*> chartMap;
+    std::map<int, FlowchartElement *> chartMap;
 
     unsigned long long cnt;
-    fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    for(unsigned long long i = 0;i<cnt;i++)
+    fin.readRawData(reinterpret_cast<char *>(&cnt), sizeof(unsigned long long));
+    for (unsigned long long i = 0; i < cnt; i++)
     {
         PaintChartType tmp;
         FlowchartElement *cb;
-        fin.readRawData(reinterpret_cast<char*>(&tmp),sizeof(PaintChartType));
-        switch(tmp)
+        fin.readRawData(reinterpret_cast<char *>(&tmp), sizeof(PaintChartType));
+        switch (tmp)
         {
         case PaintChartType::RECT:
             cb = new ProcessElement(canvas);
@@ -43,39 +44,39 @@ void Filer::openFile(QString filePath)
             break;
         }
         cb->chartType = tmp;
-        fin>>(*cb);
+        fin >> (*cb);
         canvas->charts.push_back(cb);
         cb->applyWidthHeight();
         cb->update();
         cb->show();
         chartMap[cb->getID()] = cb;
     }
-    fin.readRawData(reinterpret_cast<char*>(&cnt),sizeof(unsigned long long));
-    for(unsigned long long i = 0;i<cnt;i++)
+    fin.readRawData(reinterpret_cast<char *>(&cnt), sizeof(unsigned long long));
+    for (unsigned long long i = 0; i < cnt; i++)
     {
         PaintChartType tmp;
         FlowchartElement *cb;
         Line *cl;
         int id;
-        fin.readRawData(reinterpret_cast<char*>(&tmp),sizeof(PaintChartType));
+        fin.readRawData(reinterpret_cast<char *>(&tmp), sizeof(PaintChartType));
         cb = new Line(canvas);
         canvas->line.push_back(cb);
-        cl = dynamic_cast<Line*>(cb);
-        fin>>(*cb)>>(*cl);
+        cl = dynamic_cast<Line *>(cb);
+        fin >> (*cb) >> (*cl);
 
-        fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-        if(id>=0)
+        fin.readRawData(reinterpret_cast<char *>(&id), sizeof(int));
+        if (id >= 0)
         {
             FlowchartElement *cbs = chartMap.at(id);
-            cbs->addMagiPointStartLine(cl->getStartMagIndex(),cl);
+            cbs->addMagiPointStartLine(cl->getStartMagIndex(), cl);
             cl->setStartChart(cbs);
         }
 
-        fin.readRawData(reinterpret_cast<char*>(&id),sizeof(int));
-        if(id>=0)
+        fin.readRawData(reinterpret_cast<char *>(&id), sizeof(int));
+        if (id >= 0)
         {
             FlowchartElement *cbe = chartMap.at(id);
-            cbe->addMagiPointEndLine(cl->getEndMagIndex(),cl);
+            cbe->addMagiPointEndLine(cl->getEndMagIndex(), cl);
             cl->setEndChart(cbe);
         }
 
@@ -93,30 +94,31 @@ void Filer::saveFile(QString filePath)
     QDataStream fout(&file);
     unsigned long long i;
     i = canvas->charts.size();
-    fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(unsigned long long));
-    for(auto it = canvas->charts.begin(); it!= canvas->charts.end(); it++)
+    fout.writeRawData(reinterpret_cast<const char *>(&i), sizeof(unsigned long long));
+    for (auto it = canvas->charts.begin(); it != canvas->charts.end(); it++)
     {
-        fout<<*(*it);
+        fout << *(*it);
     }
     i = canvas->line.size();
-    fout.writeRawData(reinterpret_cast<const char*>(&i),sizeof(unsigned long long));
-    for(auto it = canvas->line.begin(); it!= canvas->line.end(); it++)
+    fout.writeRawData(reinterpret_cast<const char *>(&i), sizeof(unsigned long long));
+    for (auto it = canvas->line.begin(); it != canvas->line.end(); it++)
     {
-        fout<<*(*it)<<*(reinterpret_cast<const Line*>(*it));
+        fout << *(*it) << *(reinterpret_cast<const Line *>(*it));
     }
     file.close();
 }
 
-void Filer::saveAsSVG(QString filename) {
+void Filer::saveAsSVG(QString filename)
+{
     // 创建 QSvgGenerator 对象
     QSvgGenerator generator;
     generator.setFileName(filename);
     int width = 0, height = 0;
-    for(auto x : canvas->charts)
+    for (auto x : canvas->charts)
     {
-        if(x->widgetEnd.rx() > width)
+        if (x->widgetEnd.rx() > width)
             width = x->widgetEnd.rx();
-        if(x->widgetEnd.ry() > height)
+        if (x->widgetEnd.ry() > height)
             height = x->widgetEnd.ry();
     }
     generator.setSize(QSize(width + 50, height + 50));

@@ -1,6 +1,6 @@
 ﻿#include "canvas.h"
 
-Canvas::Canvas(QWidget *parent, Qt::WindowFlags f) : QWidget(parent,f)
+Canvas::Canvas(QWidget *parent, Qt::WindowFlags f) : QWidget(parent, f)
 {
     this->grabKeyboard();
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -37,16 +37,17 @@ void Canvas::paintEvent(QPaintEvent *event)
     QPainter p = QPainter(this);
 
     // 绘制背景图片
-    if (!backgroundImage.isNull()) {
+    if (!backgroundImage.isNull())
+    {
         p.drawPixmap(0, 0, backgroundImage);
     }
 
-    p.setPen(QColor(0,0,0));
+    p.setPen(QColor(0, 0, 0));
     const int gap = 30;
-    for(int i = 0;i * gap < width(); ++i)
-        for(int j = 0; j * gap < height(); ++j)
+    for (int i = 0; i * gap < width(); ++i)
+        for (int j = 0; j * gap < height(); ++j)
             p.drawPoint(i * gap, j * gap);
-    if(isframe)
+    if (isframe)
     {
         p.setPen(QPen(Qt::DashLine));
         QRect rect(x1, y1, x2 - x1, y2 - y1);
@@ -56,9 +57,9 @@ void Canvas::paintEvent(QPaintEvent *event)
 
 void Canvas::hideMagSizeAll()
 {
-    for(auto it = charts.begin();it!=charts.end();it++)
+    for (auto it = charts.begin(); it != charts.end(); it++)
         (*it)->hideMagSize();
-    for(auto it = line.begin();it!=line.end();it++)
+    for (auto it = line.begin(); it != line.end(); it++)
         (*it)->hideMagSize();
     curSelecChart = nullptr;
 }
@@ -66,7 +67,7 @@ void Canvas::hideMagSizeAll()
 void Canvas::mousePressEvent(QMouseEvent *event)
 {
     event->ignore();
-    if(event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton)
         emit leftPressed(event);
 }
 
@@ -88,6 +89,5 @@ void Canvas::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key_Delete)
         emit delPressed();
     else
-        QWidget::keyPressEvent(event);  // 调用基类的处理函数，确保传递事件
+        QWidget::keyPressEvent(event); // 调用基类的处理函数，确保传递事件
 }
-

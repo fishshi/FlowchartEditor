@@ -1,30 +1,29 @@
 #include "remover.h"
-#include <QDir>
-#include <QDebug>
 
-Remover::Remover(Canvas *canvas) {
+Remover::Remover(Canvas *canvas)
+{
     this->canvas = canvas;
 }
 
 void Remover::delChart(FlowchartElement *&fce)
 {
-    for(int i = 0; i < canvas->charts.size(); ++i)
+    for (int i = 0; i < canvas->charts.size(); ++i)
     {
-        if(canvas->charts[i] == fce)
+        if (canvas->charts[i] == fce)
         {
             FlowchartElement *tmp = fce;
             canvas->charts.erase(canvas->charts.begin() + i);
             --i;
-            for(auto magit = tmp->magPoint.i_point.begin();magit!=tmp->magPoint.i_point.end();magit++)
+            for (auto magit = tmp->magPoint.i_point.begin(); magit != tmp->magPoint.i_point.end(); magit++)
             {
-                for(auto magLineStIt = (*magit)->i_lineStart.begin();magLineStIt != (*magit)->i_lineStart.end();magLineStIt++)
+                for (auto magLineStIt = (*magit)->i_lineStart.begin(); magLineStIt != (*magit)->i_lineStart.end(); magLineStIt++)
                 {
-                    dynamic_cast<Line*>(*magLineStIt) ->resetEndChart();
+                    dynamic_cast<Line *>(*magLineStIt)->resetEndChart();
                     delLine(*magLineStIt);
                 }
-                for(auto magLineEnIt = (*magit)->i_lineEnd.begin();magLineEnIt != (*magit)->i_lineEnd.end();magLineEnIt++)
+                for (auto magLineEnIt = (*magit)->i_lineEnd.begin(); magLineEnIt != (*magit)->i_lineEnd.end(); magLineEnIt++)
                 {
-                    dynamic_cast<Line*>(*magLineEnIt) ->resetStartChart();
+                    dynamic_cast<Line *>(*magLineEnIt)->resetStartChart();
                     delLine(*magLineEnIt);
                 }
             }
@@ -36,11 +35,11 @@ void Remover::delChart(FlowchartElement *&fce)
 
 void Remover::delLine(FlowchartElement *&fce)
 {
-    for(auto it = canvas->line.begin();it != canvas->line.end();it++)
+    for (auto it = canvas->line.begin(); it != canvas->line.end(); it++)
     {
-        if(*it == fce)
+        if (*it == fce)
         {
-            Line *tmp = dynamic_cast<Line*>(*it);
+            Line *tmp = dynamic_cast<Line *>(*it);
             fce = nullptr;
             canvas->line.erase(it);
             tmp->resetEndChart();
@@ -53,34 +52,36 @@ void Remover::delLine(FlowchartElement *&fce)
 
 void Remover::clear()
 {
-    for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++) {
-        if(*it) delete *it;
+    for (auto it = canvas->charts.begin(); it != canvas->charts.end(); it++)
+    {
+        if (*it)
+            delete *it;
         *it = nullptr;
     }
-    for(auto it = canvas->line.begin();it!= canvas->line.end();it++) {
-        if(*it) delete *it;
+    for (auto it = canvas->line.begin(); it != canvas->line.end(); it++)
+    {
+        if (*it)
+            delete *it;
         *it = nullptr;
     }
     canvas->charts.clear();
-     qDebug()<<6;
-    //qDebug() << "Redo directory:" << QDir::current().filePath("assets/cache/Redo");
-    //qDebug() << "Undo directory:" << QDir::current().filePath("assets/cache/Uedo");
     canvas->line.clear();
 }
 
 void Remover::clearCacheRe()
 {
     QDir dir(QDir::current().filePath("assets/cache/Redo"));
-    foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+    foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+    {
         QFile::remove(file.absoluteFilePath());
     }
-
 }
 
 void Remover::clearCacheUn()
 {
     QDir dir2(QDir::current().filePath("assets/cache/Undo"));
-    foreach (QFileInfo file, dir2.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
+    foreach (QFileInfo file, dir2.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+    {
         QFile::remove(file.absoluteFilePath());
     }
 }

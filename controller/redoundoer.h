@@ -1,14 +1,15 @@
 #ifndef REDOUNDOER_H
 #define REDOUNDOER_H
 
-#include<QFile>
-#include<QDir>
+#include <QFile>
+#include <QDir>
 
 #include "view/canvas.h"
 
 class RedoUndoer
 {
     friend class Controller;
+
 public:
     RedoUndoer(Canvas *canvas);
 
@@ -17,8 +18,8 @@ public:
 
 private:
     Canvas *canvas;
-    int reNo=-1;
-    int unNo=-1;
+    int reNo = -1;
+    int unNo = -1;
 };
 
 #endif // REDOUNDOER_H

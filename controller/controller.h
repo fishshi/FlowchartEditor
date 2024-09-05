@@ -8,9 +8,7 @@
 
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
-
 #include "../view/canvas.h"
-
 #include "Drawer.h"
 #include "updater.h"
 #include "Remover.h"
@@ -23,7 +21,8 @@ class Controller : public QObject
     Q_OBJECT
 public:
     Controller(MainWindow *w);
-    ~Controller(){
+    ~Controller()
+    {
         remover->clearCacheRe();
         remover->clearCacheUn();
         delete drawer;
@@ -32,10 +31,12 @@ public:
         delete filer;
         delete redoUndoer;
     }
-
-public slots:
-    void setTypeChangeSize(DIRECTION i){mouseEventType = MOUSE_EVENT_TYPE::CHANGE_SIZE; updater->sizePointDirect = i; }                                                                                                       // 设置鼠标事件类型为改变大小
-    void setTypeCreateMagPoint(FlowchartElement *cb,DIRECTION d,int i) // 设置鼠标事件类型为创建线段
+    void setTypeChangeSize(DIRECTION i)
+    {
+        mouseEventType = MOUSE_EVENT_TYPE::CHANGE_SIZE;
+        updater->sizePointDirect = i;
+    } // 设置鼠标事件类型为改变大小
+    void setTypeCreateMagPoint(FlowchartElement *cb, DIRECTION d, int i) // 设置鼠标事件类型为创建线段
     {
         drawer->newLineFromSelectChart = cb;
         mouseEventType = MOUSE_EVENT_TYPE::CREATE_MAGPOINT;
@@ -56,18 +57,15 @@ private:
     Filer *filer;
     RedoUndoer *redoUndoer;
     QPoint mousePos;
-    //int ReNo=0;
-    //int UnNo=0;
-    //int NowSta=0;
 
-    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE;   // 当前鼠标事件类型
+    MOUSE_EVENT_TYPE mouseEventType = MOUSE_EVENT_TYPE::NONE; // 当前鼠标事件类型
 
     void showRrightClickMenu(const QPoint &pos);
     void on_escPressed();
     void on_delPressed();
 
     void on_leftPressed(QMouseEvent *event);
-    void on_leftClickToSelect(FlowchartElement * cb, int x, int y);
+    void on_leftClickToSelect(FlowchartElement *cb, int x, int y);
 
     void on_mouseMoved(QMouseEvent *event);
     void on_moveToCreate(int x, int y);
@@ -80,14 +78,14 @@ private:
     void on_doneChangeSize();
     void on_doneLink();
 
-    //文件操作
+    // 文件操作
     void on_saveFile();
     void on_openFile();
     void on_newFile();
     void on_saveAsSVG();
     void on_setBack();
 
-    //编辑操作
+    // 编辑操作
     void on_redo();
     void on_undo();
     void on_copy();
@@ -100,7 +98,6 @@ private:
 
     void to_saveChange(int now);
     void connectAll();
-
 };
 
 #endif // CONTROLLER_H

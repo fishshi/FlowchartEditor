@@ -1,14 +1,15 @@
 #include "drawer.h"
 
-Drawer::Drawer(Canvas *canvas) {
+Drawer::Drawer(Canvas *canvas)
+{
     this->canvas = canvas;
 }
 
 void Drawer::setPaintChart()
 {
-    if(curPaintChart != nullptr)
+    if (curPaintChart != nullptr)
         delete curPaintChart;
-    switch(curPaintChartType)
+    switch (curPaintChartType)
     {
     case PaintChartType::RECT:
         curPaintChart = new ProcessElement(canvas);
@@ -40,7 +41,7 @@ void Drawer::setPaintChart()
 void Drawer::moveToCreate(int x, int y)
 {
     curPaintChart->setXY(x, y);
-    if(!curPaintChart->isVisible())
+    if (!curPaintChart->isVisible())
         curPaintChart->show();
     else
         curPaintChart->update();
@@ -49,14 +50,14 @@ void Drawer::moveToCreate(int x, int y)
 int Drawer::moveToLink(int x, int y)
 {
     int flag = 0;
-    if(newLineChart == nullptr)
+    if (newLineChart == nullptr)
     {
         newLineChart = new Line(canvas);
-        if(canvas->curSelecChart)
+        if (canvas->curSelecChart)
             canvas->curSelecChart->hideMagSize();
         canvas->curSelecChart = newLineChart;
         canvas->line.push_back(newLineChart);
-        newLineChart->setXY(newLineFromSelectChart->getMagiPointAbsX(magPointFromIndex),newLineFromSelectChart->getMagiPointAbsY(magPointFromIndex));
+        newLineChart->setXY(newLineFromSelectChart->getMagiPointAbsX(magPointFromIndex), newLineFromSelectChart->getMagiPointAbsY(magPointFromIndex));
         newLineChart->setStartChart(newLineFromSelectChart);
         newLineChart->setStartMagIndex(magPointFromIndex);
         newLineChart->setStartDirect(magPointDirect);
@@ -66,17 +67,19 @@ int Drawer::moveToLink(int x, int y)
         flag = 1;
     }
 
-    for(auto it = canvas->charts.begin();it!= canvas->charts.end();it++)
+    for (auto it = canvas->charts.begin(); it != canvas->charts.end(); it++)
     {
-        if((*it)->autoSetMagi(x,y, magPointToIndex))
+        if ((*it)->autoSetMagi(x, y, magPointToIndex))
         {
             newLineToSelectChart = *it;
             break;
-        }else{
+        }
+        else
+        {
             newLineToSelectChart = nullptr;
         }
     }
-    newLineChart->setWidthHeight(x,y,DIRECTION::ENDPOINT);
+    newLineChart->setWidthHeight(x, y, DIRECTION::ENDPOINT);
     return flag;
 }
 
@@ -91,7 +94,7 @@ void Drawer::doneCreate()
 
 void Drawer::doneLink()
 {
-    if(newLineToSelectChart)
+    if (newLineToSelectChart)
     {
         newLineToSelectChart->addMagiPointEndLine(magPointToIndex, newLineChart);
         newLineToSelectChart->hideMagOnly();
@@ -99,9 +102,9 @@ void Drawer::doneLink()
         newLineChart->setEndMagIndex(magPointToIndex);
         newLineChart->setEndDirect(newLineToSelectChart->getMagiPointDirect(magPointToIndex));
         newLineChart->update();
-    }else
-        if(newLineChart)
-            newLineChart->resetEndChart();
+    }
+    else if (newLineChart)
+        newLineChart->resetEndChart();
     newLineChart = nullptr;
     newLineFromSelectChart = nullptr;
     newLineToSelectChart = nullptr;
@@ -109,9 +112,9 @@ void Drawer::doneLink()
 
 void Drawer::copy()
 {
-    if(canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
+    if (canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
         return;
-    switch(canvas->curSelecChart->chartType)
+    switch (canvas->curSelecChart->chartType)
     {
     case PaintChartType::RECT:
         curPasteChart = new ProcessElement(canvas);
@@ -149,7 +152,7 @@ void Drawer::copy()
 
 void Drawer::paste(int x, int y)
 {
-    if(curPasteChart == nullptr)
+    if (curPasteChart == nullptr)
         return;
     curPasteChart->setXY(x, y);
     curPasteChart->show();

@@ -1,12 +1,12 @@
 #ifndef FLOWCHART_H
 #define FLOWCHART_H
+
 #include <QWidget>
 #include <QPainter>
 #include <vector>
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QStyleOption>
-
 #include <QPushButton>
 #include <QFileDialog>
 #include <QColorDialog>
@@ -20,7 +20,6 @@
 #include "../model/elements/dataelement.h"
 #include "../model/elements/subprocesselement.h"
 #include "../model/elements/documentelement.h"
-
 #include "../model/config.h"
 
 class Canvas : public QWidget
@@ -32,18 +31,10 @@ class Canvas : public QWidget
     friend class Remover;
     friend class Filer;
     friend class RedoUndoer;
-private:
-    std::vector<FlowchartElement*> charts;    // 画板上图形的集合
-    std::vector<FlowchartElement*> line;      // 画板上线的集合
-    FlowchartElement *curSelecChart = nullptr;    // 选中的画板上的图形
-    FlowchartElement *lineSelectChart = nullptr;  // 线的吸附到的图形的指针
-    int magPointIndex;                      // 线吸附到的图形的磁力点的索引
-
-    QPixmap backgroundImage;                // 背景图片
 
 public:
-    explicit Canvas(QWidget *parent = nullptr , Qt::WindowFlags f = Qt::WindowFlags());
-    void hideMagSizeAll();              // 隐藏所有大小、磁力点
+    explicit Canvas(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    void hideMagSizeAll(); // 隐藏所有大小、磁力点
 
     bool isframe = false;
     int x1, y1, x2, y2;
@@ -57,6 +48,14 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
+
+private:
+    std::vector<FlowchartElement *> charts;      // 画板上图形的集合
+    std::vector<FlowchartElement *> line;        // 画板上线的集合
+    FlowchartElement *curSelecChart = nullptr;   // 选中的画板上的图形
+    FlowchartElement *lineSelectChart = nullptr; // 线的吸附到的图形的指针
+    int magPointIndex;                           // 线吸附到的图形的磁力点的索引
+    QPixmap backgroundImage;                     // 背景图片
 
 signals:
     void leftPressed(QMouseEvent *event);
