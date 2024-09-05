@@ -827,7 +827,3 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
     else
         event->ignore();
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 536cfedfc65af48b2a13baa6205b5a09d5309d64
