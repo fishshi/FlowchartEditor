@@ -93,6 +93,9 @@ void Controller::initConnections()
     connect(w->ui->actionSaveTool,&QAction::triggered, this, &Controller::on_saveFile);
 
     connect(w->ui->actionFontBold, &QAction::triggered, this, &Controller::on_setFontBold);
+    connect(w->ui->actionFontItalic, &QAction::triggered, this, &Controller::on_setFontItalic);
+    connect(w->ui->actionFontUnder, &QAction::triggered, this, &Controller::on_setFontUnder);
+    connect(w->ui->actionFontThrou, &QAction::triggered, this, &Controller::on_setFontThrou);
     connect(w->ui->actionFontColor, &QAction::triggered, this, &Controller::on_setFontColor);
     connect(w->ui->actionFontFamily,&QAction::triggered, this, &Controller::on_setFontFamily);
 
@@ -126,6 +129,7 @@ void Controller::showRrightClickMenu(const QPoint &pos)
             menu.addAction(w->ui->actionFillColor);
         }
         menu.addAction(w->ui->actionLineColor);
+        menu.addAction(w->ui->actionFontFamily);
         menu.exec(canvas->mapToGlobal(pos));
     }
 }
@@ -134,7 +138,8 @@ void Controller::on_setFillColor()
 {
     if (canvas->curSelecChart == nullptr || canvas->curSelecChart->chartType == PaintChartType::LINE)
         return;
-    QColor color = QColorDialog::getColor(Qt::white, w, tr("设置填充颜色"));
+    QColor curcolor= canvas->curSelecChart->paintChartFillPen.color();
+    QColor color = QColorDialog::getColor(curcolor, w, tr("设置填充颜色"));
     updater->setSelChartFillColor(color);
     to_saveChange(redoUndoer->reNo + 1);
 }
@@ -145,6 +150,36 @@ void Controller::on_setFontBold()
         return;
     QFont font = canvas->curSelecChart->chartText.text->font();
     font.setBold(!font.bold());  // 切换粗体状态
+    canvas->curSelecChart->chartText.text->setFont(font);     // 应用新的字体状态
+    to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontItalic()
+{
+    if (canvas->curSelecChart == nullptr )
+        return;
+    QFont font = canvas->curSelecChart->chartText.text->font();
+    font.setItalic(!font.italic());  // 切换斜体状态
+    canvas->curSelecChart->chartText.text->setFont(font);     // 应用新的字体状态
+    to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontUnder()
+{
+    if (canvas->curSelecChart == nullptr )
+        return;
+    QFont font = canvas->curSelecChart->chartText.text->font();
+    font.setUnderline(!font.underline());  // 切换下划线状态
+    canvas->curSelecChart->chartText.text->setFont(font);     // 应用新的字体状态
+    to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontThrou()
+{
+    if (canvas->curSelecChart == nullptr )
+        return;
+    QFont font = canvas->curSelecChart->chartText.text->font();
+    font.setStrikeOut(!font.strikeOut());  // 切换下划线状态
     canvas->curSelecChart->chartText.text->setFont(font);     // 应用新的字体状态
     to_saveChange(redoUndoer->reNo + 1);
 }
@@ -164,6 +199,24 @@ void Controller::on_setFontColor()
 
 void Controller::on_setFontFamily()
 {
+    if (canvas->curSelecChart == nullptr)
+        return;
+
+    // 获取当前选中图形的字体
+    QFont currentFont = canvas->curSelecChart->chartText.text->font();
+
+    // 打开字体选择对话框，只修改字体种类
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, currentFont, w);
+
+    if (ok)
+    {
+        canvas->curSelecChart->chartText.text->setFont(font);
+
+        // 保存更改
+        to_saveChange(redoUndoer->reNo + 1);
+    }
+
 
 }
 
@@ -171,7 +224,8 @@ void Controller::on_setLineColor()
 {
     if (canvas->curSelecChart == nullptr)
         return;
-    QColor color = QColorDialog::getColor(Qt::white, w, tr("设置线条颜色"));
+    QColor curcolor= canvas->curSelecChart->paintChartDrawPen.color();
+    QColor color = QColorDialog::getColor(curcolor, w, tr("设置线条颜色"));
     updater->setSelChartLineColor(color);
     to_saveChange(redoUndoer->reNo + 1);
 }

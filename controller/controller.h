@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QDir>
+#include <QFontDialog>
 
 #include "../mainwindow.h"
 #include "../ui_mainwindow.h"
@@ -99,6 +100,9 @@ private:
 
     //ToolBar
     void on_setFontBold();
+    void on_setFontItalic();
+    void on_setFontUnder();
+    void on_setFontThrou();
     void on_setFontColor();
     void on_setFontFamily();
 

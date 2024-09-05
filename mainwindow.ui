@@ -319,7 +319,6 @@ background-position: center;</string>
    <addaction name="actionToolPaste"/>
    <addaction name="separator"/>
    <addaction name="actionFontFamily"/>
-   <addaction name="actionFontSize"/>
    <addaction name="actionFontBold"/>
    <addaction name="actionFontItalic"/>
    <addaction name="actionFontUnder"/>
@@ -627,25 +626,10 @@ background-position: center;</string>
      <normaloff>:/assets/toolbaricon/FontFamily.png</normaloff>:/assets/toolbaricon/FontFamily.png</iconset>
    </property>
    <property name="text">
-    <string>FontFamily</string>
+    <string>设置字体</string>
    </property>
    <property name="toolTip">
-    <string>设置字体种类</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionFontSize">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/assets/toolbaricon/FontSize.png</normaloff>:/assets/toolbaricon/FontSize.png</iconset>
-   </property>
-   <property name="text">
-    <string>FontSize</string>
-   </property>
-   <property name="toolTip">
-    <string>设置字体大小</string>
+    <string>设置字体</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
