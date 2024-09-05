@@ -761,7 +761,7 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
         if (chartText.textMouseType == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
         {
             emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
-            if(paintStart.rx() < event->pos().rx() - chartText.chartTextMousePos.rx() && paintEnd.rx() > event->pos().rx() - chartText.chartTextMousePos.rx() + chartText.text->width() && paintStart.ry() < event->pos().ry() - chartText.chartTextMousePos.ry() && paintEnd.ry() > event->pos().ry() - chartText.chartTextMousePos.ry() + chartText.text->height())
+            if(paintStart.rx() - borderWidth < event->pos().rx() - chartText.chartTextMousePos.rx() && paintEnd.rx() + borderWidth > event->pos().rx() - chartText.chartTextMousePos.rx() + chartText.text->width() && paintStart.ry() - borderWidth < event->pos().ry() - chartText.chartTextMousePos.ry() && paintEnd.ry() + borderWidth > event->pos().ry() - chartText.chartTextMousePos.ry() + chartText.text->height())
                 chartText.text->move(event->pos().rx() - chartText.chartTextMousePos.rx(), event->pos().ry() - chartText.chartTextMousePos.ry());
             chartText.text->adjustSize();
         }
