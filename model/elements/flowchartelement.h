@@ -58,16 +58,8 @@ public:
     void setWidthHeight(int x, int y, DIRECTION type); // 设置大小、更新数据
     void applyWidthHeight();                           // 更新数据，用于读取时
     bool autoSetMagi(int &x, int &y, int &index);      // 磁力点吸附函数
-    int getMagiPointAbsX(int i)
-    {
-        ;
-        return magPoint.i_point[i]->getX() + x();
-    } // 获取磁力点坐标
-    int getMagiPointAbsY(int i)
-    {
-        ;
-        return magPoint.i_point[i]->getY() + y();
-    }                                                                                                           // 获取磁力点坐标
+    int getMagiPointAbsX(int i) { return magPoint.i_point[i]->getX() + x(); } // 获取磁力点坐标
+    int getMagiPointAbsY(int i) { return magPoint.i_point[i]->getY() + y(); }                                                                                                           // 获取磁力点坐标
     void addMagiPointStartLine(int i, FlowchartElement *cb) { magPoint.i_point[i]->i_lineStart.push_back(cb); } // 增加连线到相应的磁力点的起始连线容器
     void delMagiPointStartLine(int i, FlowchartElement *cb)                                                     // 删除磁力点的起始连线容器中相应的连线
     {

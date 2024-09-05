@@ -598,6 +598,14 @@ void FlowchartElement::hideMagSize()
     if (showAll)
     {
         showAll = false;
+        if(chartText.tmpEdit)
+        {
+            // 将输入文本设置回 QLabel 并销毁 QLineEdit
+            chartText.text->setText(chartText.tmpEdit->text());
+            chartText.text->adjustSize();
+            delete chartText.tmpEdit;    // 删除 QLineEdit
+            chartText.tmpEdit = nullptr; // 重置指针
+        }
         update();
     }
 }
@@ -753,8 +761,8 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
         if (chartText.textMouseType == CHART_LABEL_MOUSE_TYPE::CHANGE_POS)
         {
             emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
-
-            chartText.text->move(event->pos().rx() - chartText.chartTextMousePos.rx(), event->pos().ry() - chartText.chartTextMousePos.ry());
+            if(paintStart.rx() < event->pos().rx() - chartText.chartTextMousePos.rx() && paintEnd.rx() > event->pos().rx() - chartText.chartTextMousePos.rx() + chartText.text->width() && paintStart.ry() < event->pos().ry() - chartText.chartTextMousePos.ry() && paintEnd.ry() > event->pos().ry() - chartText.chartTextMousePos.ry() + chartText.text->height())
+                chartText.text->move(event->pos().rx() - chartText.chartTextMousePos.rx(), event->pos().ry() - chartText.chartTextMousePos.ry());
             chartText.text->adjustSize();
         }
     }
@@ -806,11 +814,14 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
         // 连接 QLineEdit 的信号槽
         connect(chartText.tmpEdit, &QLineEdit::editingFinished, [this]()
                 {
-                    // 将输入文本设置回 QLabel 并销毁 QLineEdit
-                    chartText.text->setText(chartText.tmpEdit->text());
-                    chartText.text->adjustSize();
-                    delete chartText.tmpEdit;    // 删除 QLineEdit
-                    chartText.tmpEdit = nullptr; // 重置指针
+                    if(chartText.tmpEdit)
+                    {
+                        // 将输入文本设置回 QLabel 并销毁 QLineEdit
+                        chartText.text->setText(chartText.tmpEdit->text());
+                        chartText.text->adjustSize();
+                        delete chartText.tmpEdit;    // 删除 QLineEdit
+                        chartText.tmpEdit = nullptr; // 重置指针
+                    }
                 });
     }
     else
