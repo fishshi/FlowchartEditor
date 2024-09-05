@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QEvent>
 
 class ReplaceDialog : public QDialog
 {

@@ -2,7 +2,6 @@
 
 Canvas::Canvas(QWidget *parent, Qt::WindowFlags f) : QWidget(parent, f)
 {
-    this->grabKeyboard();
     setContextMenuPolicy(Qt::CustomContextMenu);
     setMouseTracking(true);
 }

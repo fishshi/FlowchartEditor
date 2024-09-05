@@ -45,7 +45,7 @@ class Line : public FlowchartElement
 private:
     const static int containsWidth = 20;                    // 可选范围长度
     const static int containsWidth1_2 = containsWidth >> 1; // 可选范围一般长度
-    const static int extendWidth = 30;                      // 边界线段延伸长度
+    const static int extendWidth = 20;                      // 边界线段延伸长度
     const static int arrayLength = 18;                      // 线头绘制范围 - 长度
     const static int arrayWidth = 9;                        // 线头绘制范围 - 宽度
 
@@ -65,16 +65,16 @@ private:
     int endMagIndex = 0;                                       // 结束点索引值
     FlowchartElement *startChartMag = nullptr;                 // 起始图形
     FlowchartElement *endChartMag = nullptr;                   // 终止图形
-    LINE_HEAD_TYPE startLineHeadType = LINE_HEAD_TYPE::ARROW0; // 起始点线头方向
-    LINE_HEAD_TYPE endLineHeadType = LINE_HEAD_TYPE::ARROW1;   // 结束点线头方向
+    LINE_HEAD_TYPE startLineHeadType = LINE_HEAD_TYPE::NOARROW; // 起始点线头
+    LINE_HEAD_TYPE endLineHeadType = LINE_HEAD_TYPE::ARROW;   // 结束点线头
 
-    void drawLineHead(const DIRECTION o, const LINE_HEAD_TYPE lht, const int x, const int y, QPainter &p, QPainterPath &linePath, QPainterPath &graphPath); // 绘制线头
+    void drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, const int x, const int y, QPainter &p, QPainterPath &linePath, QPainterPath &graphPath); // 绘制线头
     void drawStraightLine(int sx, int sy, int ex, int ey, QPainterPath &linePath, QPainterPath &graphPath);                                                 // 直连线绘制
 
 public:
     Line(QWidget *parent = nullptr, PaintChartType type = PaintChartType::LINE) : FlowchartElement(parent, type, 0, 2)
     {
-        chartText.text->setText("");
+        chartText.text->setText("1");
     }
     ~Line() {}
 
@@ -82,9 +82,7 @@ public:
     void resetStartChart()                                           // 重置起点指向的图形
     {
         if (startChartMag)
-        {
             startChartMag->delMagiPointStartLine(startMagIndex, this);
-        }
         startChartMag = nullptr;
     }
     FlowchartElement *getStartChart() { return startChartMag; }  // 获取起点指向的图形
@@ -98,17 +96,8 @@ public:
     FlowchartElement *getEndChart() { return endChartMag; } // 获取终点指向的图形
 
     LINE_HEAD_TYPE &getStartLineHeadType() { return startLineHeadType; } // 获取起点线头类型
-    void setStartLineHeadType(LINE_HEAD_TYPE l)
-    {
-        startLineHeadType = l;
-        update();
-    }                                                                // 设置起点线头类型
     LINE_HEAD_TYPE &getEndLineHeadType() { return endLineHeadType; } // 获取终点线头类型
-    void setEndLineHeadType(LINE_HEAD_TYPE l)
-    {
-        endLineHeadType = l;
-        update();
-    } // 设置终点线头类型
+
 
     void setStartMagIndex(int i) { startMagIndex = i; } // 设置起点指向的图形的磁力点索引
     int getStartMagIndex() { return startMagIndex; }    // 获取起点指向的图形的磁力点索引

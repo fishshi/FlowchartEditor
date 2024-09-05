@@ -161,6 +161,7 @@ void Controller::on_delPressed()
 
 void Controller::on_leftPressed(QMouseEvent *event)
 {
+    canvas->grabKeyboard();
     if (updater->isFrameSelected == false && canvas->curSelecChart == nullptr)
     {
         mouseEventType = MOUSE_EVENT_TYPE::FRAME_SELECTING;
@@ -460,17 +461,19 @@ void Controller::on_paste()
 
 void Controller::on_search()
 {
+    canvas->releaseKeyboard();
     bool ok;
     QString searchText = QInputDialog::getText(w, tr("查找"),
                                                tr("请输入查找内容:"), QLineEdit::Normal, "", &ok);
     if (ok && !searchText.isEmpty())
         updater->search(searchText);
+    canvas->grabKeyboard();
 }
 
 void Controller::on_replace()
 {
+    canvas->releaseKeyboard();
     ReplaceDialog dialog(w);
-
     if (dialog.exec() == QDialog::Accepted)
     {
         QString findText = dialog.getFindText();       // 获取查找内容
@@ -478,6 +481,7 @@ void Controller::on_replace()
         if (!findText.isEmpty())
             updater->replace(findText, replaceText);
     }
+    canvas->grabKeyboard();
     to_saveChange(redoUndoer->reNo + 1);
 }
 

@@ -7,7 +7,6 @@ Updater::Updater(Canvas *canvas)
 
 void Updater::setSelecChart(FlowchartElement *cb, int x, int y)
 {
-    canvas->grabKeyboard();
     if (canvas->curSelecChart != nullptr)
         canvas->curSelecChart->hideMagSize();
     canvas->curSelecChart = cb;
@@ -102,6 +101,11 @@ void Updater::frameSelect(int x, int y)
 
 void Updater::doneFrameSelect()
 {
+    if(frameSelCharts.empty())
+    {
+        clearFrameSelect();
+        return;
+    }
     isFrameSelected = true;
 }
 

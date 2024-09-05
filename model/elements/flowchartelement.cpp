@@ -17,7 +17,6 @@ FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc
     colorInit();
     textInit();
     setMouseTracking(true);
-    this->installEventFilter(this);
 }
 
 void FlowchartElement::widgetPosInit(int x, int y, int w, int h)
@@ -50,12 +49,12 @@ void FlowchartElement::pointInit()
 {
     for (auto it = magPoint.i_point.begin(); it != magPoint.i_point.end(); it++)
     {
-        (*it) = new i_magpointbase;
+        (*it) = new MagPointElement;
         (*it)->i_pos = new QPoint;
     }
     for (auto it = sizePoint.i_point.begin(); it != sizePoint.i_point.end(); it++)
     {
-        (*it) = new i_pointbase;
+        (*it) = new PointElement;
         (*it)->i_pos = new QPoint;
     }
 
@@ -72,7 +71,7 @@ void FlowchartElement::textInit()
     chartText.text->setWordWrap(true);
     chartText.text->move(paintStart.rx() + sizePointWidth, paintStart.ry() + sizePointWidth);
     chartText.text->adjustSize();
-    connect(chartText.text, SIGNAL(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE, int, int)), this, SLOT(setTypeChangeTextPos(CHART_LABEL_MOUSE_TYPE, int, int)));
+    connect(chartText.text, &Label::setTypeChangeTextPos, this, &FlowchartElement::setTypeChangeTextPos);
 }
 
 void FlowchartElement::colorInit()
@@ -209,11 +208,13 @@ void FlowchartElement::updateMagPointLine()
         }
     }
 }
+
 void FlowchartElement::updateTextInfo()
 {
     int w = paintEnd.rx() - paintStart.rx();
     w = w > 0 ? w : 0;
-
+    if(this->chartType == PaintChartType::LINE)
+        w += 20;
     chartText.text->setMaximumWidth(w);
     chartText.text->setMaximumHeight(w);
     chartText.text->adjustSize();
@@ -596,16 +597,7 @@ void FlowchartElement::hideMagSize()
 {
     if (showAll)
     {
-        this->releaseKeyboard();
         showAll = false;
-
-        if (chartText.tmpEdit)
-        {
-            chartText.text->setText(chartText.tmpEdit->text());
-            chartText.text->adjustSize();
-            delete chartText.tmpEdit;
-            chartText.tmpEdit = nullptr;
-        }
         update();
     }
 }
@@ -623,15 +615,7 @@ void FlowchartElement::hideMagOnly()
 {
     if (showMag)
     {
-        this->releaseKeyboard();
         showMag = false;
-        if (chartText.tmpEdit)
-        {
-            chartText.text->setText(chartText.tmpEdit->text());
-            chartText.text->adjustSize();
-            delete chartText.tmpEdit;
-            chartText.tmpEdit = nullptr;
-        }
         update();
     }
 }
@@ -795,6 +779,9 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
         // 发送信号，传递当前对象和点击位置
         emit sendThisClass(this, event->pos().rx() - borderWidth, event->pos().ry() - borderWidth);
 
+        if(chartText.tmpEdit)
+            return;
+
         // 创建 QLineEdit 控件，用于输入文字
         chartText.tmpEdit = new QLineEdit(chartText.text->text(), this);
         chartText.tmpEdit->setFrame(false); // 去除边框
@@ -811,8 +798,7 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
 
         // 显示 QLineEdit 并使其获得焦点
         chartText.tmpEdit->show();
-        chartText.tmpEdit->setFocus();                                            // 确保 QLineEdit 获得输入焦点
-        chartText.tmpEdit->setCursorPosition(chartText.tmpEdit->text().length()); // 将光标移动到文本末尾
+        chartText.tmpEdit->setFocus();
 
         // 捕获键盘输入事件
         chartText.tmpEdit->grabKeyboard();
@@ -820,7 +806,6 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
         // 连接 QLineEdit 的信号槽
         connect(chartText.tmpEdit, &QLineEdit::editingFinished, [this]()
                 {
-                    chartText.tmpEdit->releaseKeyboard(); // 似乎没用？
                     // 将输入文本设置回 QLabel 并销毁 QLineEdit
                     chartText.text->setText(chartText.tmpEdit->text());
                     chartText.text->adjustSize();
@@ -830,20 +815,4 @@ void FlowchartElement::mouseDoubleClickEvent(QMouseEvent *event)
     }
     else
         event->ignore();
-}
-
-void FlowchartElement::keyPressEvent(QKeyEvent *event)
-{
-    // 检查 tmpEdit 是否存在，并且已经聚焦
-    if (chartText.tmpEdit && chartText.tmpEdit->hasFocus())
-    {
-        // 如果事件是回车键，发射编辑完成信号
-        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-        {
-            chartText.tmpEdit->editingFinished(); // 失去焦点，以触发 editingFinished 信号
-            return;                               // 返回，避免事件进一步传播
-        }
-    }
-    // 确保事件继续传递
-    QWidget::keyPressEvent(event);
 }

@@ -98,11 +98,11 @@ public:
     int &getID(void) { return ID; }                                                  // 获得唯一ID值
 
 protected:
-    class TextBase
+    class TextElement
     {
     public:
-        TextBase() {}
-        ~TextBase()
+        TextElement() {}
+        ~TextElement()
         {
             if (text)
             {
@@ -122,14 +122,14 @@ protected:
         // 鼠标移动标识符
         CHART_LABEL_MOUSE_TYPE textMouseType = CHART_LABEL_MOUSE_TYPE::NONE;
         // 重写输入输出操作符
-        friend QDataStream &operator<<(QDataStream &fout, const TextBase &tb)
+        friend QDataStream &operator<<(QDataStream &fout, const TextElement &tb)
         {
             QLabel *ql = tb.text;
             fout << ql->geometry() << ql->text().toUtf8().length();
             fout.writeRawData(ql->text().toUtf8().data(), ql->text().toUtf8().length());
             return fout;
         }
-        friend QDataStream &operator>>(QDataStream &fin, TextBase &tb)
+        friend QDataStream &operator>>(QDataStream &fin, TextElement &tb)
         {
             QRect tmpqr;
             fin >> tmpqr;
@@ -144,17 +144,17 @@ protected:
         }
     } chartText; // 文本控件
 
-    class i_pointbase // 点基本信息
+    class PointElement // 点基本信息
     {
     public:
         QPoint *i_pos = nullptr;            // 点位置
         QPainterPath *i_path = nullptr;     // 点范围
         DIRECTION rotate = DIRECTION::NONE; // 点方向
 
-        i_pointbase() : i_pos(nullptr), i_path(nullptr), rotate(DIRECTION::NONE)
+        PointElement() : i_pos(nullptr), i_path(nullptr), rotate(DIRECTION::NONE)
         {
         }
-        ~i_pointbase()
+        ~PointElement()
         {
             if (i_pos)
             {
@@ -190,21 +190,21 @@ protected:
         QPainterPath *getPath() const { return i_path; }
         bool inPath(const QPointF a) { return i_path->contains(a); }
     };
-    class i_magpointbase : public i_pointbase // 磁力点信息类结构基础
+    class MagPointElement : public PointElement // 磁力点信息类结构基础
     {
     public:
         std::vector<FlowchartElement *> i_lineStart; // 每个磁力点连接的线的指针容器
         std::vector<FlowchartElement *> i_lineEnd;   // 每个磁力点连接的线的指针容器
-        i_magpointbase() : i_pointbase() {}
+        MagPointElement() : PointElement() {}
     };
 
-    class i_sizepoint
+    class SizePoint
     { // 大小点信息类结构
     public:
-        std::vector<i_pointbase *> i_point; // 大小点指针容器
+        std::vector<PointElement *> i_point; // 大小点指针容器
 
-        explicit i_sizepoint(int c = 0) : i_point(c) {}
-        ~i_sizepoint()
+        explicit SizePoint(int c = 0) : i_point(c) {}
+        ~SizePoint()
         {
             for (auto it = i_point.begin(); it != i_point.end(); it++)
             {
@@ -215,13 +215,13 @@ protected:
         }
     };
 
-    class i_magpoint
+    class MagPoint
     { // 磁力点信息类结构
     public:
-        std::vector<i_magpointbase *> i_point; // 磁力点指针容器
+        std::vector<MagPointElement *> i_point; // 磁力点指针容器
 
-        explicit i_magpoint(int c = 0) : i_point(c) {}
-        ~i_magpoint()
+        explicit MagPoint(int c = 0) : i_point(c) {}
+        ~MagPoint()
         {
             for (auto it = i_point.begin(); it != i_point.end(); it++)
             {
@@ -232,8 +232,8 @@ protected:
         }
     };
 
-    i_magpoint magPoint;   // 磁力点信息
-    i_sizepoint sizePoint; // 大小点信息
+    MagPoint magPoint;   // 磁力点信息
+    SizePoint sizePoint; // 大小点信息
 
     QPainterPath *graphPath = nullptr; // 图形绘制范围
 
@@ -257,7 +257,7 @@ private:
     static const int borderWidth = 20;           // 禁止绘画区域宽度
     static const int minSizeW = 40;              // 图形最小宽高
     static const int minSizeH = 40;              // 图形最小宽高
-    static const int textBorderWidth = 10;       // 文件边界最小宽高
+    static const int textBorderWidth = 10;       // 文本边界最小宽高
 
     bool showAll = true;                               // 显示大小控制点和磁力点
     bool showMag = false;                              // 显示磁力点
@@ -329,6 +329,5 @@ protected:                                       // 事件
     virtual void mouseMoveEvent(QMouseEvent *event);        // 鼠标移动事件
     virtual void mouseReleaseEvent(QMouseEvent *event);     // 鼠标释放事件
     virtual void mouseDoubleClickEvent(QMouseEvent *event); // 鼠标双击事件
-    virtual void keyPressEvent(QKeyEvent *event);
 };
 #endif // FLOWCHARTELEMENT_H

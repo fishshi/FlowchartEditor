@@ -29,8 +29,8 @@ enum class DIRECTION
 
 enum class LINE_HEAD_TYPE
 {
-    ARROW0,
-    ARROW1
+    NOARROW,
+    ARROW
 };
 
 enum class PaintChartType

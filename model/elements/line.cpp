@@ -11,20 +11,16 @@ void Line::drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, con
         graphPath.addRect(x - containsWidth1_2, y, containsWidth, -extendWidth);
         switch (lht)
         {
-        case LINE_HEAD_TYPE::ARROW1:
-        {
+        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayWidth, y - arrayLength);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayWidth, y - arrayLength);
             linePath.moveTo(x, y);
-        }
-        break;
-        case LINE_HEAD_TYPE::ARROW0:
-        {
+            break;
+        case LINE_HEAD_TYPE::NOARROW:
             linePath.lineTo(x, y);
-        }
-        break;
+            break;
         }
     }
     break;
@@ -35,20 +31,16 @@ void Line::drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, con
         graphPath.addRect(x, y - containsWidth1_2, extendWidth, containsWidth);
         switch (lht)
         {
-        case LINE_HEAD_TYPE::ARROW1:
-        {
+        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x + arrayLength, y + arrayWidth);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayLength, y - arrayWidth);
             linePath.moveTo(x, y);
-        }
-        break;
-        case LINE_HEAD_TYPE::ARROW0:
-        {
+            break;
+        case LINE_HEAD_TYPE::NOARROW:
             linePath.lineTo(x, y);
-        }
-        break;
+            break;
         }
     }
     break;
@@ -59,20 +51,16 @@ void Line::drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, con
         graphPath.addRect(x - containsWidth1_2, y, containsWidth, extendWidth);
         switch (lht)
         {
-        case LINE_HEAD_TYPE::ARROW1:
-        {
+        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayWidth, y + arrayLength);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayWidth, y + arrayLength);
             linePath.moveTo(x, y);
-        }
-        break;
-        case LINE_HEAD_TYPE::ARROW0:
-        {
+            break;
+        case LINE_HEAD_TYPE::NOARROW:
             linePath.lineTo(x, y);
-        }
-        break;
+            break;
         }
     }
     break;
@@ -83,25 +71,22 @@ void Line::drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, con
         graphPath.addRect(x, y - containsWidth1_2, -extendWidth, containsWidth);
         switch (lht)
         {
-        case LINE_HEAD_TYPE::ARROW1:
-        {
+        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayLength, y + arrayWidth);
             linePath.moveTo(x, y);
             linePath.lineTo(x - arrayLength, y - arrayWidth);
             linePath.moveTo(x, y);
-        }
-        break;
-        case LINE_HEAD_TYPE::ARROW0:
-        {
+            break;
+        case LINE_HEAD_TYPE::NOARROW:
             linePath.lineTo(x, y);
-        }
-        break;
+            break;
         }
     }
     break;
     }
 }
+
 void Line::drawStraightLine(int sx, int sy, int ex, int ey, QPainterPath &linePath, QPainterPath &graphPath)
 {
     linePath.moveTo(sx, sy);
@@ -909,8 +894,8 @@ void Line::specialWidgetUpdate(int &x, int &y, int &w, int &h)
 {
     x -= extendWidth;
     y -= extendWidth;
-    w += extendWidth + extendWidth;
-    h += extendWidth + extendWidth;
+    w += extendWidth << 1;
+    h += extendWidth << 1;
 }
 
 void Line::specialPaintUpdate(QPoint &s, QPoint &e)
