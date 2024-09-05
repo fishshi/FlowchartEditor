@@ -4,6 +4,8 @@
 #include "../view/canvas.h"
 #include <QFile>
 #include <QSvgGenerator>
+#include <QMessageBox>
+#include <QString>
 
 class Filer
 {
@@ -13,6 +15,7 @@ public:
     void saveFile(QString filePath);
     void saveAsSVG(QString filePath);
     void saveAsPNG(QString filePath);
+    void saveAsElse(QString filePath);
 
 private:
     Canvas *canvas;

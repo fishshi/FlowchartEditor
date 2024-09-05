@@ -264,6 +264,7 @@ background-position: center;</string>
      </property>
      <addaction name="actionSaveAsSVG"/>
      <addaction name="actionSaveAsPNG"/>
+     <addaction name="actionSaveAsElse"/>
     </widget>
     <addaction name="actionNewFile"/>
     <addaction name="actionOpenFile"/>
@@ -288,6 +289,8 @@ background-position: center;</string>
     <addaction name="separator"/>
     <addaction name="actionFillColor"/>
     <addaction name="actionLineColor"/>
+    <addaction name="actionFont"/>
+    <addaction name="actionFontColor_2"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
@@ -633,6 +636,30 @@ background-position: center;</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="text">
+    <string>设置字体</string>
+   </property>
+   <property name="toolTip">
+    <string>设置字体</string>
+   </property>
+  </action>
+  <action name="actionFontColor_2">
+   <property name="text">
+    <string>设置字体颜色</string>
+   </property>
+   <property name="toolTip">
+    <string>设置字体颜色</string>
+   </property>
+  </action>
+  <action name="actionSaveAsElse">
+   <property name="text">
+    <string>导出为其他</string>
+   </property>
+   <property name="toolTip">
+    <string>导出为其他格式</string>
    </property>
   </action>
  </widget>

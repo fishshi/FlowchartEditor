@@ -68,6 +68,7 @@ void Controller::initConnections()
     connect(w->ui->actionNewFile, &QAction::triggered, this, &Controller::on_newFile);
     connect(w->ui->actionSaveAsSVG, &QAction::triggered, this, &Controller::on_saveAsSVG);
     connect(w->ui->actionSaveAsPNG, &QAction::triggered, this, &Controller::on_saveAsPNG);
+    connect(w->ui->actionSaveAsElse, &QAction::triggered, this,&Controller::on_saveAsElse);
     connect(w->ui->actionSetBack, &QAction::triggered, this, &Controller::on_setBack);
 
     // 编辑操作
@@ -80,9 +81,11 @@ void Controller::initConnections()
     connect(w->ui->actionReplace, &QAction::triggered, this, &Controller::on_replace);
     connect(w->ui->actionFillColor, &QAction::triggered, this, &Controller::on_setFillColor);
     connect(w->ui->actionLineColor, &QAction::triggered, this, &Controller::on_setLineColor);
+    connect(w->ui->actionFont, &QAction::triggered, this, &Controller::on_setFontFamily);
+    connect(w->ui->actionFontColor_2, &QAction::triggered, this, &Controller::on_setFontColor);
 
     //ToolBar
-    connect(w->ui->actionToolNew,&QAction::triggered, this, &Controller::on_newFile);
+    connect(w->ui->actionToolNew,&QAction::triggered, this, &Controller::on_openFile);
     connect(w->ui->actionSaveTool,&QAction::triggered, this, &Controller::on_saveFile);
 
     connect(w->ui->actionFontBold, &QAction::triggered, this, &Controller::on_setFontBold);
@@ -123,6 +126,7 @@ void Controller::showRrightClickMenu(const QPoint &pos)
         }
         menu.addAction(w->ui->actionLineColor);
         menu.addAction(w->ui->actionFontFamily);
+        menu.addAction(w->ui->actionFontColor);
         menu.exec(canvas->mapToGlobal(pos));
     }
 }
@@ -472,7 +476,7 @@ void Controller::on_newFile()
 
 void Controller::on_saveAsSVG()
 {
-    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("保存文件"), "C:", tr("SVG文件(*.svg)"));
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("导出文件"), "C:", tr("SVG文件(*.svg)"));
     if (tmpFilePath == "")
         return;
     filer->saveAsSVG(tmpFilePath);
@@ -480,10 +484,18 @@ void Controller::on_saveAsSVG()
 
 void Controller::on_saveAsPNG()
 {
-    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("保存文件"), "C:", tr("PNG文件(*.png)"));
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("导出文件"), "C:", tr("PNG文件(*.png)"));
     if (tmpFilePath == "")
         return;
     filer->saveAsPNG(tmpFilePath);
+}
+
+void Controller::on_saveAsElse()
+{
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("导出文件"), "C:", tr("Images (*.png *.jpg *.bmp *.gif *.tiff *.xpm *.jpeg)"));
+    if (tmpFilePath == "")
+        return;
+    filer->saveAsElse(tmpFilePath);
 }
 
 void Controller::on_setBack()

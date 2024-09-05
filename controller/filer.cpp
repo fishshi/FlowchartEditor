@@ -162,3 +162,44 @@ void Filer::saveAsPNG(QString filename)
     // 结束绘图
     painter.end();
 }
+
+void Filer::saveAsElse(QString filePath)
+{
+    // 打开文件对话框，允许用户选择保存的文件名和格式
+    QString filename = filePath;
+
+    // 如果用户取消了文件选择，直接返回
+    if (filename.isEmpty()) {
+        return;
+    }
+
+    // 计算要保存的图片的宽度和高度
+    int width = 0, height = 0;
+    for (auto x : canvas->charts)
+    {
+        if (x->widgetEnd.rx() > width)
+            width = x->widgetEnd.rx();
+        if (x->widgetEnd.ry() > height)
+            height = x->widgetEnd.ry();
+    }
+
+    // 增加边界大小
+    QSize imageSize(width + 50, height + 50);
+
+    // 创建 QPixmap 对象，设置大小和格式
+    QPixmap pixmap(imageSize);
+    pixmap.fill(Qt::white); // 填充背景颜色为白色
+
+    // 创建 QPainter 并设置到 pixmap 上
+    QPainter painter(&pixmap);
+
+    // 渲染父部件及其子部件到 QPixmap
+    canvas->render(&painter);
+
+    // 结束绘图
+    painter.end();
+
+    // 从文件名中提取扩展名（文件格式）
+    QFileInfo fileInfo(filename);
+    QString format = fileInfo.suffix().toLower(); // 获取文件扩展名并转为小写
+}
