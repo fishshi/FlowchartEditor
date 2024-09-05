@@ -83,6 +83,7 @@ private:
     void on_openFile();
     void on_newFile();
     void on_saveAsSVG();
+    void on_saveAsPNG();
     void on_setBack();
 
     // 编辑操作
@@ -95,6 +96,11 @@ private:
     void on_replace();
     void on_setFillColor();
     void on_setLineColor();
+
+    //ToolBar
+    void on_setFontBold();
+    void on_setFontColor();
+    void on_setFontFamily();
 
     void to_saveChange(int now);
     void connectAll();

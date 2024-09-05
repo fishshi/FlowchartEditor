@@ -12,6 +12,7 @@ public:
     void openFile(QString filePath);
     void saveFile(QString filePath);
     void saveAsSVG(QString filePath);
+    void saveAsPNG(QString filePath);
 
 private:
     Canvas *canvas;

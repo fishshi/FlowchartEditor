@@ -130,3 +130,35 @@ void Filer::saveAsSVG(QString filename)
     // 结束绘图
     painter.end();
 }
+
+void Filer::saveAsPNG(QString filename)
+{
+    // 计算要保存的图片的宽度和高度
+    int width = 0, height = 0;
+    for (auto x : canvas->charts)
+    {
+        if (x->widgetEnd.rx() > width)
+            width = x->widgetEnd.rx();
+        if (x->widgetEnd.ry() > height)
+            height = x->widgetEnd.ry();
+    }
+
+    // 增加边界大小
+    QSize imageSize(width + 50, height + 50);
+
+    // 创建 QPixmap 对象，设置大小和格式
+    QPixmap pixmap(imageSize);
+    pixmap.fill(Qt::white); // 填充背景颜色为白色（可以根据需要更改）
+
+    // 创建 QPainter 并设置到 pixmap 上
+    QPainter painter(&pixmap);
+
+    // 渲染父部件及其子部件到 QPixmap
+    canvas->render(&painter);
+
+    // 保存 pixmap 到 PNG 文件
+    pixmap.save(filename, "PNG");
+
+    // 结束绘图
+    painter.end();
+}

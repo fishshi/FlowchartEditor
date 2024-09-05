@@ -74,6 +74,7 @@ void Controller::initConnections()
     connect(w->ui->actionOpenFile, &QAction::triggered, this, &Controller::on_openFile);
     connect(w->ui->actionNewFile, &QAction::triggered, this, &Controller::on_newFile);
     connect(w->ui->actionSaveAsSVG, &QAction::triggered, this, &Controller::on_saveAsSVG);
+    connect(w->ui->actionSaveAsPNG, &QAction::triggered, this, &Controller::on_saveAsPNG);
     connect(w->ui->actionSetBack, &QAction::triggered, this, &Controller::on_setBack);
 
     // 编辑操作
@@ -86,6 +87,21 @@ void Controller::initConnections()
     connect(w->ui->actionReplace, &QAction::triggered, this, &Controller::on_replace);
     connect(w->ui->actionFillColor, &QAction::triggered, this, &Controller::on_setFillColor);
     connect(w->ui->actionLineColor, &QAction::triggered, this, &Controller::on_setLineColor);
+
+    //ToolBar
+    connect(w->ui->actionToolNew,&QAction::triggered, this, &Controller::on_newFile);
+    connect(w->ui->actionSaveTool,&QAction::triggered, this, &Controller::on_saveFile);
+
+    connect(w->ui->actionFontBold, &QAction::triggered, this, &Controller::on_setFontBold);
+    connect(w->ui->actionFontColor, &QAction::triggered, this, &Controller::on_setFontColor);
+    connect(w->ui->actionFontFamily,&QAction::triggered, this, &Controller::on_setFontFamily);
+
+    connect(w->ui->actionToolRedo,&QAction::triggered, this, &Controller::on_redo);
+    connect(w->ui->actionToolUndo,&QAction::triggered, this, &Controller::on_undo);
+
+    connect(w->ui->actionToolCopy,&QAction::triggered, this, &Controller::on_copy);
+    connect(w->ui->actionToolCut,&QAction::triggered, this, &Controller::on_cut);
+    connect(w->ui->actionToolPaste,&QAction::triggered, this, &Controller::on_paste);
 }
 
 void Controller::showRrightClickMenu(const QPoint &pos)
@@ -121,6 +137,34 @@ void Controller::on_setFillColor()
     QColor color = QColorDialog::getColor(Qt::white, w, tr("设置填充颜色"));
     updater->setSelChartFillColor(color);
     to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontBold()
+{
+    if (canvas->curSelecChart == nullptr )
+        return;
+    QFont font = canvas->curSelecChart->chartText.text->font();
+    font.setBold(!font.bold());  // 切换粗体状态
+    canvas->curSelecChart->chartText.text->setFont(font);     // 应用新的字体状态
+    to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontColor()
+{
+    if (canvas->curSelecChart == nullptr )
+        return;
+    QColor color = QColorDialog::getColor(Qt::white, w, tr("设置字体颜色"));
+    if (color.isValid()) {
+        // 设置字体颜色
+        QString colorStyle = QString("color: %1").arg(color.name());
+        canvas->curSelecChart->chartText.text->setStyleSheet(colorStyle);
+    }
+    to_saveChange(redoUndoer->reNo + 1);
+}
+
+void Controller::on_setFontFamily()
+{
+
 }
 
 void Controller::on_setLineColor()
@@ -386,6 +430,14 @@ void Controller::on_saveAsSVG()
     if (tmpFilePath == "")
         return;
     filer->saveAsSVG(tmpFilePath);
+}
+
+void Controller::on_saveAsPNG()
+{
+    QString tmpFilePath = QFileDialog::getSaveFileName(w, tr("保存文件"), "C:", tr("PNG文件(*.png)"));
+    if (tmpFilePath == "")
+        return;
+    filer->saveAsPNG(tmpFilePath);
 }
 
 void Controller::on_setBack()

@@ -119,6 +119,15 @@ protected:
             QLabel *ql = tb.text;
             fout << ql->geometry() << ql->text().toUtf8().length();
             fout.writeRawData(ql->text().toUtf8().data(), ql->text().toUtf8().length());
+
+            // 保存 QLabel 的字体
+            fout << ql->font();
+
+            // 保存 QLabel 的字体颜色
+            QPalette palette = ql->palette();
+            QColor fontColor = palette.color(QPalette::WindowText);
+            fout << fontColor;
+
             return fout;
         }
         friend QDataStream &operator>>(QDataStream &fin, TextElement &tb)
@@ -132,6 +141,19 @@ protected:
             QByteArray tmp(len, '\0');
             fin.readRawData(tmp.data(), len);
             ql->setText(QString(tmp));
+
+            // 恢复 QLabel 的字体
+            QFont font;
+            fin >> font;
+            ql->setFont(font);
+
+            // 恢复 QLabel 的字体颜色
+            QColor fontColor;
+            fin >> fontColor;
+            QPalette palette = ql->palette();
+            palette.setColor(QPalette::WindowText, fontColor);
+            ql->setPalette(palette);
+
             return fin;
         }
     } chartText; // 文本控件
