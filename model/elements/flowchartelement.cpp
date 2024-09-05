@@ -12,7 +12,7 @@ FlowchartElement::FlowchartElement(QWidget *parent, PaintChartType type, int mpc
     chartType = type;
     widgetPosInit();
     varInit();
-    paintInit();
+    updatePaintInfo();
     pointInit();
     colorInit();
     textInit();
@@ -40,11 +40,6 @@ void FlowchartElement::varInit(int mpw, int spw, int plw, bool sa, bool smo)
     showMag = smo;
 }
 
-void FlowchartElement::paintInit()
-{
-    updatePaintInfo();
-}
-
 void FlowchartElement::pointInit()
 {
     for (auto it = magPoint.i_point.begin(); it != magPoint.i_point.end(); it++)
@@ -57,7 +52,6 @@ void FlowchartElement::pointInit()
         (*it) = new PointElement;
         (*it)->i_pos = new QPoint;
     }
-
     updateSizePointInfo();
     updateSizePointPath();
     updateMagPointInfo();
@@ -118,7 +112,7 @@ void FlowchartElement::updatePaintInfo()
 
 void FlowchartElement::updateSizePointInfo()
 {
-    if (sizePoint.i_point.size() >= 4)
+    if (sizePoint.i_point.size() == 4)
     {
         int x1 = paintStart.rx(), y1 = paintStart.ry();
         int x2 = paintEnd.rx(), y2 = paintEnd.ry();
@@ -164,17 +158,13 @@ void FlowchartElement::updateMagPointInfo()
 void FlowchartElement::updateMagPointPath()
 {
     for (auto it = magPoint.i_point.begin(), end = magPoint.i_point.end(); it != end; it++)
-    {
         (*it)->newPath()->addEllipse((*it)->getX() - sizePointWidth / 2, (*it)->getY() - sizePointWidth / 2, sizePointWidth, sizePointWidth);
-    }
 }
 
 void FlowchartElement::updateSizePointPath()
 {
     for (auto it = sizePoint.i_point.begin(), end = sizePoint.i_point.end(); it != end; it++)
-    {
         (*it)->newPath()->addRect((*it)->getX() - sizePointWidth / 2, (*it)->getY() - sizePointWidth / 2, sizePointWidth, sizePointWidth);
-    }
 }
 void FlowchartElement::updateMagPointLine()
 {
@@ -185,7 +175,6 @@ void FlowchartElement::updateMagPointLine()
             if ((*l_it)->widgetStart.rx() != (*it)->getX() + x() || (*l_it)->widgetStart.ry() != (*it)->getY() + y())
             {
                 (*l_it)->setStartPos((*it)->getX() + x(), (*it)->getY() + y());
-
                 (*l_it)->updateWidgetPosInof();
                 (*l_it)->updatePaintInfo();
                 (*l_it)->updateSizePointInfo();
@@ -198,7 +187,6 @@ void FlowchartElement::updateMagPointLine()
             if ((*l_it)->widgetEnd.rx() != (*it)->getX() + x() || (*l_it)->widgetEnd.ry() != (*it)->getY() + y())
             {
                 (*l_it)->setEndPos((*it)->getX() + x(), (*it)->getY() + y());
-
                 (*l_it)->updateWidgetPosInof();
                 (*l_it)->updatePaintInfo();
                 (*l_it)->updateSizePointInfo();
@@ -389,9 +377,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         y1 = &widgetStart.ry();
         y2 = &widgetEnd.ry();
     }
-    switch (type)
-    {
-    case DIRECTION::NORTHWEST:
+    if (type == DIRECTION::NORTHWEST)
     {
         if (*x2 - x < minSizeW)
             *x1 = *x2 - minSizeW;
@@ -402,8 +388,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             *y1 = y;
     }
-    break;
-    case DIRECTION::NORTHEAST:
+    else if (type == DIRECTION::NORTHEAST)
     {
         if (x - *x1 < minSizeW)
             *x2 = *x1 + minSizeW;
@@ -414,8 +399,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             *y1 = y;
     }
-    break;
-    case DIRECTION::SOUTHEAST:
+    else if (type == DIRECTION::SOUTHEAST)
     {
         if (x - *x1 < minSizeW)
             *x2 = *x1 + minSizeW;
@@ -426,8 +410,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             *y2 = y;
     }
-    break;
-    case DIRECTION::SOUTHWEST:
+    else if (type == DIRECTION::SOUTHWEST)
     {
         if (*x2 - x < minSizeW)
             *x1 = *x2 - minSizeW;
@@ -438,8 +421,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             *y2 = y;
     }
-    break;
-    case DIRECTION::STARTPOINT:
+    else if (type == DIRECTION::STARTPOINT)
     {
         if (x < widgetEnd.rx())
             widgetStart.setX(x);
@@ -450,8 +432,7 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             widgetStart.setY(y);
     }
-    break;
-    case DIRECTION::ENDPOINT:
+    else if (type == DIRECTION::ENDPOINT)
     {
         if (x < widgetStart.rx())
             widgetEnd.setX(x);
@@ -462,12 +443,6 @@ void FlowchartElement::setWidthHeight(int x, int y, DIRECTION type)
         else
             widgetEnd.setY(y);
     }
-    break;
-    default:
-    {
-    }
-    }
-
     updateWidgetPosInof();
     updatePaintInfo();
     updateSizePointInfo();
@@ -515,9 +490,7 @@ bool FlowchartElement::autoSetMagi(int &abcx, int &abcy, int &index)
         }
     }
     else
-    {
         hideMagOnly();
-    }
     return false;
 }
 
@@ -528,8 +501,6 @@ void FlowchartElement::overlapChartMousePressed(QMouseEvent *event)
     if (mx >= x() && my >= y() && mx - x() <= width() && my - y() <= width())
     {
         QPointF tmp(mx - this->x(), my - this->y());
-        DIRECTION direct = DIRECTION::NONE;
-
         if (inGraphisPath(tmp))
         {
             emit sendThisClass(this, tmp.rx() - borderWidth, tmp.ry() - borderWidth);
@@ -579,9 +550,7 @@ void FlowchartElement::overlapChartMouseMove(QMouseEvent *event)
                 raise();
             }
             else
-            {
                 setCursor(QCursor(Qt::ArrowCursor));
-            }
         }
     }
 }
@@ -639,9 +608,7 @@ void FlowchartElement::paintEvent(QPaintEvent *event)
         paintSizePoint(p);
     }
     else if (showMag)
-    {
         paintMagPoint(p);
-    }
     event->accept();
 }
 
@@ -691,29 +658,12 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
         {
             if (inSizePath(event->pos(), direct))
             {
-                switch (DIRECTION(direct))
-                {
-                case DIRECTION::NORTHWEST:
-                case DIRECTION::SOUTHEAST:
-                {
+                if (DIRECTION(direct) == DIRECTION::NORTHWEST || DIRECTION(direct) == DIRECTION::SOUTHEAST)
                     setCursor(QCursor(Qt::SizeFDiagCursor));
-                }
-                break;
-                case DIRECTION::NORTHEAST:
-                case DIRECTION::SOUTHWEST:
-                {
+                else if (DIRECTION(direct) == DIRECTION::NORTHEAST || DIRECTION(direct) == DIRECTION::SOUTHWEST)
                     setCursor(QCursor(Qt::SizeBDiagCursor));
-                }
-                break;
-                case DIRECTION::STARTPOINT:
-                case DIRECTION::ENDPOINT:
-                {
+                else if (DIRECTION(direct) == DIRECTION::STARTPOINT || DIRECTION(direct) == DIRECTION::ENDPOINT)
                     setCursor(QCursor(Qt::SizeAllCursor));
-                }
-                break;
-                default:
-                    break;
-                }
                 raise();
             }
             else if (inMagPath(event->pos(), direct, index))
@@ -773,9 +723,7 @@ void FlowchartElement::mouseMoveEvent(QMouseEvent *event)
 void FlowchartElement::mouseReleaseEvent(QMouseEvent *event)
 {
     chartText.textMouseType = CHART_LABEL_MOUSE_TYPE::NONE;
-
     curFlag = MOUSE_EVENT_TYPE::NONE;
-
     event->ignore();
 }
 

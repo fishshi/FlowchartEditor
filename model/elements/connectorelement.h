@@ -7,7 +7,6 @@ class ConnectorElement : public FlowchartElement
 {
 public:
     ConnectorElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::ELLIPSE) : FlowchartElement(parent, type) {}
-    ~ConnectorElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

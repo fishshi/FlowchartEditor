@@ -7,7 +7,6 @@ class SubprocessElement : public FlowchartElement
 {
 public:
     SubprocessElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::SUBPROCESSELEMENT) : FlowchartElement(parent, type) {}
-    ~SubprocessElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

@@ -7,7 +7,6 @@ class DataElement : public FlowchartElement
 {
 public:
     DataElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::PARALLELOGRAM) : FlowchartElement(parent, type) {}
-    ~DataElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

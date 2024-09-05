@@ -32,9 +32,6 @@ void Drawer::setPaintChart()
     case PaintChartType::DOCUMENTELEMENT:
         curPaintChart = new DocumentElement(canvas);
         break;
-    case PaintChartType::NONE:
-        curPaintChart = nullptr;
-        break;
     }
 }
 
@@ -75,9 +72,7 @@ int Drawer::moveToLink(int x, int y)
             break;
         }
         else
-        {
             newLineToSelectChart = nullptr;
-        }
     }
     newLineChart->setWidthHeight(x, y, DIRECTION::ENDPOINT);
     return flag;
@@ -148,6 +143,8 @@ void Drawer::copy()
     curPasteChart->paintChartFillPen = canvas->curSelecChart->paintChartFillPen;
     curPasteChart->chartText.text->setText(canvas->curSelecChart->chartText.text->text());
     curPasteChart->chartText.text->setGeometry(canvas->curSelecChart->chartText.text->geometry());
+    curPasteChart->chartText.text->setFont(canvas->curSelecChart->chartText.text->font());
+    curPasteChart->chartText.text->setStyleSheet(canvas->curSelecChart->chartText.text->styleSheet());
 }
 
 void Drawer::paste(int x, int y)

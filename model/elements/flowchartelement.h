@@ -282,7 +282,6 @@ private:
 
     void varInit(int mpw = 7, int spw = 9, int plw = 2, bool sa = true, bool smo = false); // 变量默认初始化函数
     void widgetPosInit(int x = 0, int y = 0, int w = 100, int h = minSizeH);               // 窗体位置信息默认初始化函数
-    void paintInit();                                                                      // 图形绘制信息默认初始化
     void pointInit();                                                                      // 大小点和控制点默认初始化
     void textInit();                                                                       // 文字内容默认初始化
     void colorInit();                                                                      // 颜色默认初始化

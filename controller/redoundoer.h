@@ -9,7 +9,6 @@
 class RedoUndoer
 {
     friend class Controller;
-
 public:
     RedoUndoer(Canvas *canvas);
 

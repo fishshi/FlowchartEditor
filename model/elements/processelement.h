@@ -7,7 +7,6 @@ class ProcessElement : public FlowchartElement
 {
 public:
     ProcessElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::RECT) : FlowchartElement(parent, type) {}
-    ~ProcessElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

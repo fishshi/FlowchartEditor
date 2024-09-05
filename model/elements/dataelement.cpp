@@ -22,8 +22,7 @@ void DataElement::updateMagPointInfo()
 {
     int x1 = paintStart.rx(), y1 = paintStart.ry();
     int x2 = paintEnd.rx(), y2 = paintEnd.ry();
-    int midx = ((paintStart.rx() + paintEnd.rx()) >> 1);
-    int midy = ((paintStart.ry() + paintEnd.ry()) >> 1);
+    int midx = ((paintStart.rx() + paintEnd.rx()) >> 1), midy = ((paintStart.ry() + paintEnd.ry()) >> 1);
     int ext = (x2 - x1) >> 2;
 
     magPoint.i_point[0]->setX(midx);

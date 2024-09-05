@@ -2,88 +2,69 @@
 
 void Line::drawLineHead(const DIRECTION direction, const LINE_HEAD_TYPE lht, const int x, const int y, QPainter &p, QPainterPath &linePath, QPainterPath &graphPath)
 {
-    switch (direction)
-    {
-    case DIRECTION::NORTH:
+    if (direction == DIRECTION::NORTH)
     {
         linePath.moveTo(x, y - extendWidth);
         linePath.lineTo(x, y - arrayLength);
         graphPath.addRect(x - containsWidth1_2, y, containsWidth, -extendWidth);
-        switch (lht)
+        if (lht == LINE_HEAD_TYPE::ARROW)
         {
-        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayWidth, y - arrayLength);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayWidth, y - arrayLength);
             linePath.moveTo(x, y);
-            break;
-        case LINE_HEAD_TYPE::NOARROW:
-            linePath.lineTo(x, y);
-            break;
         }
+        else
+            linePath.lineTo(x, y);
     }
-    break;
-    case DIRECTION::EAST:
+    else if (direction == DIRECTION::EAST)
     {
         linePath.moveTo(x + extendWidth, y);
         linePath.lineTo(x + arrayLength, y);
         graphPath.addRect(x, y - containsWidth1_2, extendWidth, containsWidth);
-        switch (lht)
+        if (lht == LINE_HEAD_TYPE::ARROW)
         {
-        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x + arrayLength, y + arrayWidth);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayLength, y - arrayWidth);
             linePath.moveTo(x, y);
-            break;
-        case LINE_HEAD_TYPE::NOARROW:
-            linePath.lineTo(x, y);
-            break;
         }
+        else
+            linePath.lineTo(x, y);
     }
-    break;
-    case DIRECTION::SOUTH:
+    else if (direction == DIRECTION::SOUTH)
     {
         linePath.moveTo(x, y + extendWidth);
         linePath.lineTo(x, y + arrayLength);
         graphPath.addRect(x - containsWidth1_2, y, containsWidth, extendWidth);
-        switch (lht)
+        if (lht == LINE_HEAD_TYPE::ARROW)
         {
-        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayWidth, y + arrayLength);
             linePath.moveTo(x, y);
             linePath.lineTo(x + arrayWidth, y + arrayLength);
             linePath.moveTo(x, y);
-            break;
-        case LINE_HEAD_TYPE::NOARROW:
-            linePath.lineTo(x, y);
-            break;
         }
+        else
+            linePath.lineTo(x, y);
     }
-    break;
-    case DIRECTION::WEST:
+    else if (direction == DIRECTION::WEST)
     {
         linePath.moveTo(x - extendWidth, y);
         linePath.lineTo(x - arrayLength, y);
         graphPath.addRect(x, y - containsWidth1_2, -extendWidth, containsWidth);
-        switch (lht)
+        if (lht == LINE_HEAD_TYPE::ARROW)
         {
-        case LINE_HEAD_TYPE::ARROW:
             linePath.lineTo(x, y);
             linePath.lineTo(x - arrayLength, y + arrayWidth);
             linePath.moveTo(x, y);
             linePath.lineTo(x - arrayLength, y - arrayWidth);
             linePath.moveTo(x, y);
-            break;
-        case LINE_HEAD_TYPE::NOARROW:
-            linePath.lineTo(x, y);
-            break;
         }
-    }
-    break;
+        else
+            linePath.lineTo(x, y);
     }
 }
 
@@ -91,30 +72,16 @@ void Line::drawStraightLine(int sx, int sy, int ex, int ey, QPainterPath &linePa
 {
     linePath.moveTo(sx, sy);
     linePath.lineTo(ex, ey);
+    QPolygonF tmp;
     if (sx < ex && sy < ey)
-    {
-        QPolygonF tmp;
         tmp << QPointF(sx, sy) << QPointF(sx + containsWidth1_2, sy) << QPointF(ex, ey - containsWidth1_2) << QPointF(ex, ey) << QPointF(ex - containsWidth1_2, ey) << QPointF(sx, sy + containsWidth1_2) << QPointF(sx, sy);
-        graphPath.addPolygon(tmp);
-    }
     else if (sx > ex && sy > ey)
-    {
-        QPolygonF tmp;
         tmp << QPointF(ex, ey) << QPointF(ex + containsWidth1_2, ey) << QPointF(sx, sy - containsWidth1_2) << QPointF(sx, sy) << QPointF(sx - containsWidth1_2, sy) << QPointF(ex, ey + containsWidth1_2) << QPointF(ex, ey);
-        graphPath.addPolygon(tmp);
-    }
     else if (sx < ex)
-    {
-        QPolygonF tmp;
         tmp << QPointF(sx, sy) << QPointF(sx + containsWidth1_2, sy) << QPointF(ex, ey + containsWidth1_2) << QPointF(ex, ey) << QPointF(ex - containsWidth1_2, ey) << QPointF(sx, sy - containsWidth1_2) << QPointF(sx, sy);
-        graphPath.addPolygon(tmp);
-    }
     else
-    {
-        QPolygonF tmp;
         tmp << QPointF(ex, ey) << QPointF(ex + containsWidth1_2, ey) << QPointF(sx, sy + containsWidth1_2) << QPointF(sx, sy) << QPointF(sx - containsWidth1_2, sy) << QPointF(ex, ey - containsWidth1_2) << QPointF(ex, ey);
-        graphPath.addPolygon(tmp);
-    }
+    graphPath.addPolygon(tmp);
 }
 
 void Line::paintChart(QPainter &p)
@@ -130,17 +97,12 @@ void Line::paintChart(QPainter &p)
         delete graphPath;
     graphPath = new QPainterPath;
 
-    switch (startDirect)
+    if (startDirect == DIRECTION::NORTH)
     {
-    case DIRECTION::NORTH:
-    {
-        sx = startPos.rx();
-        sy = startPos.ry() - extendWidth;
+        sx = startPos.rx(), sy = startPos.ry() - extendWidth;
         drawLineHead(startDirect, startLineHeadType, startPos.rx(), startPos.ry(), p, linePath, *graphPath);
         linePath.moveTo(sx, sy);
-        switch (endDirect)
-        {
-        case DIRECTION::NORTH:
+        if (endDirect == DIRECTION::NORTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() - extendWidth;
@@ -160,8 +122,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::EAST:
+        else if (endDirect == DIRECTION::EAST)
         {
             ex = endPos.rx() + extendWidth;
             ey = endPos.ry();
@@ -207,8 +168,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::SOUTH:
+        else if (endDirect == DIRECTION::SOUTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() + extendWidth;
@@ -234,8 +194,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::WEST:
+        else if (endDirect == DIRECTION::WEST)
         {
             ex = endPos.rx() - extendWidth;
             ey = endPos.ry();
@@ -281,26 +240,16 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::ENDPOINT:
-        {
+        else if (endDirect == DIRECTION::ENDPOINT)
             drawStraightLine(sx, sy, endPos.rx(), endPos.ry(), linePath, *graphPath);
-        }
-        break;
-        }
     }
-    break;
-    case DIRECTION::EAST:
+    else if (startDirect == DIRECTION::EAST)
     {
-
         sx = startPos.rx() + extendWidth;
         sy = startPos.ry();
         drawLineHead(startDirect, startLineHeadType, startPos.rx(), startPos.ry(), p, linePath, *graphPath);
         linePath.moveTo(sx, sy);
-
-        switch (endDirect)
-        {
-        case DIRECTION::NORTH:
+        if (endDirect == DIRECTION::NORTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() - extendWidth;
@@ -348,8 +297,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::EAST:
+        else if (endDirect == DIRECTION::EAST)
         {
             ex = endPos.rx() + extendWidth;
             ey = endPos.ry();
@@ -369,8 +317,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::SOUTH:
+        else if (endDirect == DIRECTION::SOUTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() + extendWidth;
@@ -416,8 +363,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::WEST:
+        else if (endDirect == DIRECTION::WEST)
         {
             ex = endPos.rx() - extendWidth;
             ey = endPos.ry();
@@ -443,24 +389,16 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::ENDPOINT:
-        {
+        else if (endDirect == DIRECTION::ENDPOINT)
             drawStraightLine(sx, sy, endPos.rx(), endPos.ry(), linePath, *graphPath);
-        }
-        break;
-        }
     }
-    break;
-    case DIRECTION::SOUTH:
+    else if (startDirect == DIRECTION::SOUTH)
     {
         sx = startPos.rx();
         sy = startPos.ry() + extendWidth;
         drawLineHead(startDirect, startLineHeadType, startPos.rx(), startPos.ry(), p, linePath, *graphPath);
         linePath.moveTo(sx, sy);
-        switch (endDirect)
-        {
-        case DIRECTION::NORTH:
+        if (endDirect == DIRECTION::NORTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() - extendWidth;
@@ -486,8 +424,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::EAST:
+        else if (endDirect == DIRECTION::EAST)
         {
             ex = endPos.rx() + extendWidth;
             ey = endPos.ry();
@@ -533,8 +470,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::SOUTH:
+        else if (endDirect == DIRECTION::SOUTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() + extendWidth;
@@ -554,8 +490,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::WEST:
+        else if (endDirect == DIRECTION::WEST)
         {
             ex = endPos.rx() - extendWidth;
             ey = endPos.ry();
@@ -601,24 +536,16 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::ENDPOINT:
-        {
+        else if (endDirect == DIRECTION::ENDPOINT)
             drawStraightLine(sx, sy, endPos.rx(), endPos.ry(), linePath, *graphPath);
-        }
-        break;
-        }
     }
-    break;
-    case DIRECTION::WEST:
+    else if (startDirect == DIRECTION::WEST)
     {
         sx = startPos.rx() - extendWidth;
         sy = startPos.ry();
         drawLineHead(startDirect, startLineHeadType, startPos.rx(), startPos.ry(), p, linePath, *graphPath);
         linePath.moveTo(sx, sy);
-        switch (endDirect)
-        {
-        case DIRECTION::NORTH:
+        if (endDirect == DIRECTION::NORTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() - extendWidth;
@@ -664,8 +591,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::EAST:
+        else if (endDirect == DIRECTION::EAST)
         {
             ex = endPos.rx() + extendWidth;
             ey = endPos.ry();
@@ -691,8 +617,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::SOUTH:
+        else if (endDirect == DIRECTION::SOUTH)
         {
             ex = endPos.rx();
             ey = endPos.ry() + extendWidth;
@@ -738,8 +663,7 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::WEST:
+        else if (endDirect == DIRECTION::WEST)
         {
             ex = endPos.rx() - extendWidth;
             ey = endPos.ry();
@@ -759,24 +683,13 @@ void Line::paintChart(QPainter &p)
             }
             drawLineHead(endDirect, endLineHeadType, endPos.rx(), endPos.ry(), p, linePath, *graphPath);
         }
-        break;
-        case DIRECTION::ENDPOINT:
-        {
+        else if (endDirect == DIRECTION::ENDPOINT)
             drawStraightLine(sx, sy, endPos.rx(), endPos.ry(), linePath, *graphPath);
-        }
-        break;
-        default:
-        {
-        }
-        }
     }
-    break;
-    case DIRECTION::STARTPOINT:
+    else if(startDirect == DIRECTION::STARTPOINT)
     {
-        sx = startPos.rx();
-        sy = startPos.ry();
-        ex = endPos.rx();
-        ey = endPos.ry();
+        sx = startPos.rx(), sy = startPos.ry();
+        ex = endPos.rx(), ey = endPos.ry();
         if (endDirect == DIRECTION::NORTH)
         {
             drawStraightLine(sx, sy, ex, ey - extendWidth, linePath, *graphPath);
@@ -801,7 +714,6 @@ void Line::paintChart(QPainter &p)
         {
             drawStraightLine(sx, sy, ex, ey, linePath, *graphPath);
         }
-    }
     }
     p.drawPath(linePath);
     p.setPen(QPen(QColor(0, 0, 0, 0), 0));

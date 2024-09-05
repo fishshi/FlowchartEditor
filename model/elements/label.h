@@ -11,7 +11,6 @@ class Label : public QLabel
     Q_OBJECT
 public:
     Label(QWidget *parent = nullptr) : QLabel(parent) {}
-    virtual ~Label() {}
 
 protected:
     virtual void mousePressEvent(QMouseEvent *event);

@@ -7,7 +7,6 @@ class DecisionElement : public FlowchartElement
 {
 public:
     DecisionElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::DIAMOND) : FlowchartElement(parent, type) {}
-    ~DecisionElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

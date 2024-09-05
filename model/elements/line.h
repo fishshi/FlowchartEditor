@@ -76,7 +76,6 @@ public:
     {
         chartText.text->setText("");
     }
-    ~Line() {}
 
     void setStartChart(FlowchartElement *cb) { startChartMag = cb; } // 设置起点指向的图形
     void resetStartChart()                                           // 重置起点指向的图形

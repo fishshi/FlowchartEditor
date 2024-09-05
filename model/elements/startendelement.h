@@ -7,7 +7,6 @@ class StartEndElement : public FlowchartElement
 {
 public:
     StartEndElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::ROUNDRECT) : FlowchartElement(parent, type) {}
-    ~StartEndElement() {}
 
 private:
     virtual void paintChart(QPainter &p);

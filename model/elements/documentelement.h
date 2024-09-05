@@ -5,13 +5,12 @@
 
 class DocumentElement : public FlowchartElement
 {
+public:
+    DocumentElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::DOCUMENTELEMENT) : FlowchartElement(parent, type) {}
+
 private:
     virtual void paintChart(QPainter &p);
     virtual void updateMagPointInfo();
-
-public:
-    DocumentElement(QWidget *parent = nullptr, PaintChartType type = PaintChartType::DOCUMENTELEMENT) : FlowchartElement(parent, type) {}
-    ~DocumentElement() {}
 };
 
 #endif // DOCUMENTELEMENT_H

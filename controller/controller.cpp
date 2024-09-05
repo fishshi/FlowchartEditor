@@ -20,44 +20,37 @@ void Controller::initConnections()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintProcessElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->decisionElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintDecisionElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->startEndElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintStartEndElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->connectorElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintConnectorElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->dataElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintDataElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->subprocessElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintSubprocessElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
     connect(w->ui->documentElementBtn, &QPushButton::clicked, [=]()
             {
         canvas->hideMagSizeAll();
         drawer->setPaintDocumentElement();
-        if(drawer->curPaintChart)
-            mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
+        mouseEventType = MOUSE_EVENT_TYPE::CREATING; });
 
     // 鼠标事件
     connect(canvas, &Canvas::leftPressed, this, &Controller::on_leftPressed);
@@ -146,7 +139,7 @@ void Controller::on_setFillColor()
 
 void Controller::on_setFontBold()
 {
-    if (canvas->curSelecChart == nullptr )
+    if (canvas->curSelecChart == nullptr)
         return;
     QFont font = canvas->curSelecChart->chartText.text->font();
     font.setBold(!font.bold());  // 切换粗体状态
@@ -156,7 +149,7 @@ void Controller::on_setFontBold()
 
 void Controller::on_setFontItalic()
 {
-    if (canvas->curSelecChart == nullptr )
+    if (canvas->curSelecChart == nullptr)
         return;
     QFont font = canvas->curSelecChart->chartText.text->font();
     font.setItalic(!font.italic());  // 切换斜体状态
@@ -166,7 +159,7 @@ void Controller::on_setFontItalic()
 
 void Controller::on_setFontUnder()
 {
-    if (canvas->curSelecChart == nullptr )
+    if (canvas->curSelecChart == nullptr)
         return;
     QFont font = canvas->curSelecChart->chartText.text->font();
     font.setUnderline(!font.underline());  // 切换下划线状态
@@ -176,7 +169,7 @@ void Controller::on_setFontUnder()
 
 void Controller::on_setFontThrou()
 {
-    if (canvas->curSelecChart == nullptr )
+    if (canvas->curSelecChart == nullptr)
         return;
     QFont font = canvas->curSelecChart->chartText.text->font();
     font.setStrikeOut(!font.strikeOut());  // 切换下划线状态
@@ -186,7 +179,7 @@ void Controller::on_setFontThrou()
 
 void Controller::on_setFontColor()
 {
-    if (canvas->curSelecChart == nullptr )
+    if (canvas->curSelecChart == nullptr)
         return;
     QColor color = QColorDialog::getColor(Qt::white, w, tr("设置字体颜色"));
     if (color.isValid()) {
@@ -212,7 +205,6 @@ void Controller::on_setFontFamily()
     if (ok)
     {
         canvas->curSelecChart->chartText.text->setFont(font);
-
         // 保存更改
         to_saveChange(redoUndoer->reNo + 1);
     }
@@ -617,16 +609,12 @@ void Controller::initCache()
     // 检查文件夹是否存在，如果不存在则创建
     QDir dir(folderPath);
     if (!dir.exists())
-    {
         dir.mkpath(".");
-    }
     QString folderPath2 = QDir::current().filePath("assets/cache/Undo/");
 
     // 检查文件夹是否存在，如果不存在则创建
     QDir dir2(folderPath2);
     if (!dir2.exists())
-    {
         dir2.mkpath(".");
-    }
     to_saveChange(0);
 }
