@@ -12,5 +12,6 @@
         <file>assets/toolbaricon/FontColor.png</file>
         <file>assets/toolbaricon/FontFamily.png</file>
         <file>assets/toolbaricon/FontSize.png</file>
+        <file>assets/ico.ico</file>
     </qresource>
 </RCC>
